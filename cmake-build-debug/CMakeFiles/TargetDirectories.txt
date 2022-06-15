@@ -1,0 +1,3 @@
+/home/zan/CLionProjects/matrix_operations/cmake-build-debug/CMakeFiles/matrix_operations.dir
+/home/zan/CLionProjects/matrix_operations/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/zan/CLionProjects/matrix_operations/cmake-build-debug/CMakeFiles/rebuild_cache.dir
