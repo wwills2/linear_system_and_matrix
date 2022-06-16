@@ -3,4 +3,5 @@ project(matrix_operations)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(matrix_operations main.cpp)
+add_executable(matrix_operations main.cpp LinearSystem.h LinearSystem.cpp)
+
