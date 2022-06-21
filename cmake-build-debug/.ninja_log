@@ -1,0 +1,5 @@
+# ninja log v5
+170	211	1655251535048920297	matrix_operations	88be515d3ea4e90e
+0	170	1655251535008919828	CMakeFiles/matrix_operations.dir/main.cpp.o	a5cc7e802a6e960f
+1	331	1655774992220429494	CMakeFiles/testLinearSystem.dir/LinearSystem.cpp.o	bf1ba87e97c1cd6e
+0	298	1655775310390477446	CMakeFiles/testLinearSystem.dir/LinearSystem.cpp.o	bf1ba87e97c1cd6e
