@@ -9,8 +9,10 @@
 ***********************************************/
 
 
-#include <iostream>
 #include <string>
+#include <iostream>
+
+#include "LinearSystem.h"
 
 int main(int arg, char **argv) {
 

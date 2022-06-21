@@ -77,6 +77,43 @@ build matrix_operations: CXX_EXECUTABLE_LINKER__matrix_operations_Debug CMakeFil
   TARGET_FILE = matrix_operations
   TARGET_PDB = matrix_operations.dbg
 
+# =============================================================================
+# Object build statements for EXECUTABLE target testLinearSystem
+
+
+#############################################
+# Order-only phony target for testLinearSystem
+
+build cmake_object_order_depends_target_testLinearSystem: phony || CMakeFiles/testLinearSystem.dir
+
+build CMakeFiles/testLinearSystem.dir/LinearSystem.cpp.o: CXX_COMPILER__testLinearSystem_Debug /home/zan/CLionProjects/matrix_operations/LinearSystem.cpp || cmake_object_order_depends_target_testLinearSystem
+  DEP_FILE = CMakeFiles/testLinearSystem.dir/LinearSystem.cpp.o.d
+  FLAGS = -g
+  OBJECT_DIR = CMakeFiles/testLinearSystem.dir
+  OBJECT_FILE_DIR = CMakeFiles/testLinearSystem.dir
+
+build CMakeFiles/testLinearSystem.dir/test/TestLinearSystem.cpp.o: CXX_COMPILER__testLinearSystem_Debug /home/zan/CLionProjects/matrix_operations/test/TestLinearSystem.cpp || cmake_object_order_depends_target_testLinearSystem
+  DEP_FILE = CMakeFiles/testLinearSystem.dir/test/TestLinearSystem.cpp.o.d
+  FLAGS = -g
+  OBJECT_DIR = CMakeFiles/testLinearSystem.dir
+  OBJECT_FILE_DIR = CMakeFiles/testLinearSystem.dir/test
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target testLinearSystem
+
+
+#############################################
+# Link the executable testLinearSystem
+
+build testLinearSystem: CXX_EXECUTABLE_LINKER__testLinearSystem_Debug CMakeFiles/testLinearSystem.dir/LinearSystem.cpp.o CMakeFiles/testLinearSystem.dir/test/TestLinearSystem.cpp.o
+  FLAGS = -g
+  OBJECT_DIR = CMakeFiles/testLinearSystem.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_FILE = testLinearSystem
+  TARGET_PDB = testLinearSystem.dbg
+
 
 #############################################
 # Utility command for edit_cache
@@ -112,7 +149,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 #############################################
 # Folder: /home/zan/CLionProjects/matrix_operations/cmake-build-debug
 
-build all: phony matrix_operations
+build all: phony matrix_operations testLinearSystem
 
 # =============================================================================
 # Built-in targets
