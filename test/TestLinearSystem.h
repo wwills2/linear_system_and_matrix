@@ -9,6 +9,7 @@
 
 class TestLinearSystem {
 
+public:
     void classInitAndPrint();
 };
 

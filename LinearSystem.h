@@ -9,6 +9,8 @@
 #include <map>
 #include <iostream>
 
+class TestLinearSystem;
+
 namespace wwills {
 
     class LinearSystem;
@@ -18,7 +20,7 @@ namespace wwills {
     class LinearSystem {
 
     public:
-        friend class TestLinearSystem;
+        friend TestLinearSystem;
 
         LinearSystem();
         ~LinearSystem();

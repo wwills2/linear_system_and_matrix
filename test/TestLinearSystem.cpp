@@ -4,6 +4,17 @@
 
 #include "TestLinearSystem.h"
 
+int main(){
+
+    TestLinearSystem test;
+
+    test.classInitAndPrint();
+
+    return 0;
+}
+
+
+
 void TestLinearSystem::classInitAndPrint() {
 
     wwills::LinearSystem testSystem;
