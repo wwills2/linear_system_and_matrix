@@ -52,7 +52,7 @@ namespace wwills {
 
         friend LinearSystem;
 
-        friend class TestLinearSystem;
+        friend TestLinearSystem;
     };
 
 } // wwills2

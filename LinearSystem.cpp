@@ -8,7 +8,8 @@ namespace wwills {
     LinearSystem::LinearSystem() {
 
         numMatrices = 1;
-        matrices["A"] = Matrix();   //new templated matrix called A
+        Matrix matrix;
+        matrices["A"] = matrix;   //new templated matrix called A
     }
 
     LinearSystem::~LinearSystem() {
@@ -29,10 +30,13 @@ namespace wwills {
         matrix = new float *[numRows];
 
         //initialize array and allocate individual elements
+        float num = 1;
+
         for (int row = 0; row < numRows; row++){
+            matrix[row] = new float[numCols];
             for (int col = 0; col < numCols; col++){
-                matrix[col] = new float;
-                matrix[row][col] = (float) row + (float) col;
+                matrix[row][col] = num;
+                num++;
             }
         }
     }
@@ -59,10 +63,10 @@ namespace wwills {
 
         for (int row = 0; row < numRows; row++){
 
-            std::cout << "row " << row << ": [";
+            std::cout << "row " << row << ": [ ";
 
-            for (int col = 0; col < 0; col++){
-                std::cout << matrix[row][col];
+            for (int col = 0; col < numCols; col++){
+                std::cout << matrix[row][col] << " ";
             }
 
             std::cout << "]\n";
