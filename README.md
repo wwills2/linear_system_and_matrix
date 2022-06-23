@@ -18,5 +18,5 @@
   - main.cpp
 
     - Driver for the Demonstrative program built by the included Makefile. Facilitates reading in the representation of 
-    a matrix and calling the appropriate methods
+    a elements and calling the appropriate methods
   - 

@@ -10,8 +10,10 @@
 class TestLinearSystem {
 
 public:
-    void matrixInit();      //calls the matrix constructor to initialize a generic matrix
+    void matrixInit();      //calls the elements constructor to initialize a generic elements
+    void matrixAssignOP();
     void linearSysInit();   //calls the linear system constructor to initialize a generic system object
+
 
 };
 

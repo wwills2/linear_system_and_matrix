@@ -41,14 +41,18 @@ namespace wwills {
         Matrix();
         ~Matrix();
 
+        Matrix(const Matrix &rhs);
+
         void print();
+
+        const Matrix &operator=(const Matrix &rhs);
 
     private:
 
         int numRows;        //num rows
         int numCols;        //num cols
-        int numElements;    //number of elements in the matrix
-        float **matrix;     //2d, dynamically allocated matrix
+        int numElements;    //number of elements in the elements
+        float **elements;     //2d, dynamically allocated elements
 
         friend LinearSystem;
 

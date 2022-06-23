@@ -9,7 +9,7 @@ namespace wwills {
 
         numMatrices = 1;
         Matrix matrix;
-        matrices["A"] = matrix;   //new templated matrix called A
+        matrices["A"] = matrix;   //new templated elements called A
     }
 
     LinearSystem::~LinearSystem() {
@@ -27,15 +27,15 @@ namespace wwills {
         numElements = numRows * numCols;
 
         //allocate array of float array pointers
-        matrix = new float *[numRows];
+        elements = new float *[numRows];
 
         //initialize array and allocate individual elements
         float num = 1;
 
         for (int row = 0; row < numRows; row++){
-            matrix[row] = new float[numCols];
+            elements[row] = new float[numCols];
             for (int col = 0; col < numCols; col++){
-                matrix[row][col] = num;
+                elements[row][col] = num;
                 num++;
             }
         }
@@ -46,17 +46,40 @@ namespace wwills {
         //zero and deallocate data
         for (int row = 0; row < numRows; row++){
             for (int col = 0; col < numCols; col++){
-                matrix[row][col] = 0;
+                elements[row][col] = 0;
             }
         }
 
         for (int row = 0; row < numRows; row++){
-            delete[] matrix[row];
-            matrix[row] = nullptr;
+
+            delete[] elements[row];
+            elements[row] = nullptr;
         }
 
-        delete[] matrix;
-        matrix = nullptr;
+        delete[] elements;
+        elements = nullptr;
+    }
+
+    Matrix::Matrix(const Matrix &rhs) {
+
+        //self assignment guard
+        if (this != &rhs) {
+
+            //copy static members
+            numRows = rhs.numRows;
+            numCols = rhs.numCols;
+            numElements = rhs.numElements;
+
+            //dynamically initialize elements
+            elements = new float *[numRows];
+
+            for (int row = 0; row < numRows; row++) {
+                elements[row] = new float[numCols];
+                for (int col = 0; col < numCols; col++) {
+                    elements[row][col] = rhs.elements[row][col];
+                }
+            }
+        }
     }
 
     void Matrix::print() {
@@ -66,11 +89,35 @@ namespace wwills {
             std::cout << "row " << row << ": [ ";
 
             for (int col = 0; col < numCols; col++){
-                std::cout << matrix[row][col] << " ";
+                std::cout << elements[row][col] << " ";
             }
 
             std::cout << "]\n";
         }
     }
+
+    const Matrix &Matrix::operator=(const Matrix &rhs) {
+
+        //self assignment guard
+        if (this == &rhs){
+            return *this;
+        }else{
+
+            //copy static members
+            numRows = rhs.numRows;
+            numCols = rhs.numCols;
+            numElements = rhs.numElements;
+
+            //copy elements
+            for (int row = 0; row < numRows; row++){
+                for (int col = 0; col < numCols; col++){
+                    elements[row][col] = rhs.elements[row][col];
+                }
+            }
+
+            return *this;
+        }
+    }
+
 
 } // wwills2

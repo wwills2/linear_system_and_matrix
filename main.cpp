@@ -4,7 +4,7 @@
 ** Author:  Zan Wills
 ** Date:    6/14/2022
 **
-** This file contains the driver for the matrix operations program
+** This file contains the driver for the elements operations program
 **
 ***********************************************/
 
@@ -24,22 +24,22 @@ int main(int arg, char **argv) {
 
         std::string rawInput;           //input directly from command line
         int dimension;                  //temp var to hold value
-        int **coefficientMatrix2D;      //holds the 2D coefficient matrix
+        int **coefficientMatrix2D;      //holds the 2D coefficient elements
 
         //take in input from cli
-        std::cout << "enter # rows in coefficient matrix: \n";
+        std::cout << "enter # rows in coefficient elements: \n";
         std::cin >> rawInput;
         dimension = rawInput[0] - 48;
         matrixDimensions[0] = dimension;
 
-        std::cout << "enter # columns in coefficient matrix: \n";
+        std::cout << "enter # columns in coefficient elements: \n";
         std::cin >> rawInput;
         dimension = rawInput[0] - 48;
         matrixDimensions[1] = dimension;
 
         *coefficientMatrix2D = new int[6];
 
-        std::cout << "enter matrix row by row\n";
+        std::cout << "enter elements row by row\n";
         for (int i = 0; i < matrixDimensions[0]; i++){
 
 
