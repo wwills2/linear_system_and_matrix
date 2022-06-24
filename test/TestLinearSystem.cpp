@@ -23,10 +23,28 @@ int main(){
         test.matrixAssignOP();
     }
 
+    cout << "testing Matrix assignment operator" << endl;
+    {
+        TestLinearSystem test;
+        test.matrixCopyInit();
+    }
+
+    cout << "testing Matrix buildIdentityMxM()" << endl;
+    {
+        TestLinearSystem test;
+        test.buildIdentityMxMTest();
+    }
+
+    cout << "testing Matrix buildIdentityNxN()" << endl;
+    {
+        TestLinearSystem test;
+        test.buildIdentityNxNTest();
+    }
+
     cout << "testing LinearSystem constructor" << endl;
     {
         TestLinearSystem test;
-        //test.linearSysInit();
+        test.linearSysInit();
     }
 
     return 0;
@@ -42,6 +60,7 @@ void TestLinearSystem::matrixInit() {
 }
 
 void TestLinearSystem::matrixAssignOP() {
+
     wwills::Matrix testMatrix;
 
     testMatrix.elements[0][1] = 5.5;
@@ -54,6 +73,54 @@ void TestLinearSystem::matrixAssignOP() {
     assert(copyMatrix.elements != testMatrix.elements);
     assert(copyMatrix.elements[0][1] == 5.5);
     assert(copyMatrix.elements[1][0] == 6.5);
+
+    copyMatrix.print();
+}
+
+void TestLinearSystem::matrixCopyInit() {
+
+    wwills::Matrix testMatrix;
+
+    testMatrix.elements[0][1] = 5.5;
+    testMatrix.elements[1][0] = 6.5;
+
+    wwills::Matrix copyMatrix = testMatrix;
+
+    assert(&copyMatrix != &testMatrix);
+    assert(copyMatrix.elements != testMatrix.elements);
+    assert(copyMatrix.elements[0][1] == 5.5);
+    assert(copyMatrix.elements[1][0] == 6.5);
+
+    copyMatrix.print();
+}
+
+void TestLinearSystem::buildIdentityMxMTest() {
+
+    wwills::Matrix testMatrix;
+    wwills::Matrix I = testMatrix.buildIdentityMxM();
+
+    assert(I.numElements == (testMatrix.numRows * testMatrix.numRows));
+    assert(I.elements[0][0] == 1);
+    assert(I.elements[1][1] == 1);
+    assert(I.elements[0][1] == 0);
+    assert(I.elements[1][0] == 0);
+
+    I.print();
+}
+
+void TestLinearSystem::buildIdentityNxNTest() {
+
+    wwills::Matrix testMatrix;
+    wwills::Matrix I = testMatrix.buildIdentityNxN();
+
+    assert(I.numElements == (testMatrix.numCols * testMatrix.numCols));
+    assert(I.elements[0][0] == 1);
+    assert(I.elements[1][1] == 1);
+    assert(I.elements[2][2] == 1);
+    assert(I.elements[0][1] == 0);
+    assert(I.elements[1][0] == 0);
+
+    I.print();
 }
 
 void TestLinearSystem::linearSysInit() {
@@ -62,7 +129,8 @@ void TestLinearSystem::linearSysInit() {
     assert(testSystem.numMatrices == 1);
     assert(testSystem.matrices["A"].numElements == 6);
     assert(testSystem.matrices["A"].elements[0][0] == 1);
-
 }
+
+
 
 

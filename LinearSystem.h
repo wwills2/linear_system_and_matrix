@@ -8,6 +8,7 @@
 #include <vector>
 #include <map>
 #include <iostream>
+#include <string>
 
 class TestLinearSystem;
 
@@ -25,6 +26,10 @@ namespace wwills {
         LinearSystem();
         ~LinearSystem();
 
+        void addMatrix(const std::string &name);
+
+        void addMatrix(const std::string &name, const int &rows, const int &cols);
+
         void printAll();
 
     private:
@@ -41,6 +46,8 @@ namespace wwills {
         Matrix();
         ~Matrix();
 
+        Matrix(int rows, int cols);
+
         Matrix(const Matrix &rhs);
 
         void print();
@@ -48,6 +55,10 @@ namespace wwills {
         const Matrix &operator=(const Matrix &rhs);
 
     private:
+
+        Matrix buildIdentityMxM();
+
+        Matrix buildIdentityNxN();
 
         int numRows;        //num rows
         int numCols;        //num cols
