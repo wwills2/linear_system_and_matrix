@@ -9,6 +9,7 @@
 using std::cout;
 using std::endl;
 
+
 int main(){
 
     cout << "testing Matrix constructor" << endl;
@@ -122,6 +123,21 @@ void TestLinearSystem::buildIdentityNxNTest() {
 
     I.print();
 }
+
+void TestLinearSystem::addMatrixTest() {
+
+
+    wwills::LinearSystem testSystem;
+    testSystem.addMatrix("testDefault");
+
+    assert(testSystem.matrices["testDefault"].elements[0][0] == 1);
+
+    testSystem.addMatrix("testArguments", 4, 5);
+
+    assert(testSystem.matrices["testArguments"].elements[3][4] == 0);
+
+}
+
 
 void TestLinearSystem::linearSysInit() {
 

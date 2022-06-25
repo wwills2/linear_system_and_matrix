@@ -3,6 +3,7 @@
 //
 
 #include "LinearSystem.h"
+#include "Matrix.h"
 
 namespace wwills {
     LinearSystem::LinearSystem() {
@@ -13,10 +14,6 @@ namespace wwills {
     }
 
     LinearSystem::~LinearSystem() {
-
-    }
-
-    void LinearSystem::printAll() {
 
     }
 

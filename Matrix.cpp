@@ -2,7 +2,7 @@
 // Created by zan on 6/23/22.
 //
 
-#include "LinearSystem.h"
+#include "Matrix.h"
 
 namespace wwills{
     Matrix::Matrix() {
@@ -122,6 +122,8 @@ namespace wwills{
         }
     }
 
+    //private + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
     Matrix Matrix::buildIdentityMxM() {
 
         //build m x m matrix
@@ -131,6 +133,7 @@ namespace wwills{
         for (int row = 0; row < numRows; row++){
             for (int col = 0; col < numRows; col++){
 
+                // place 1 down the diagonal
                 if (row == col){
                     identity.elements[row][col] = 1;
                 }else{
@@ -151,6 +154,7 @@ namespace wwills{
         for (int row = 0; row < numCols; row++){
             for (int col = 0; col < numCols; col++){
 
+                // place 1 down the diagonal
                 if (row == col){
                     identity.elements[row][col] = 1;
                 }else{
@@ -160,6 +164,27 @@ namespace wwills{
         }
 
         return identity;
+    }
+
+    void Matrix::addRows(float *source, float *destination) {
+
+        for (int col = 0; col < numCols; col++){
+
+            //add the source row index to the destination row index
+            destination[col] += source[col];
+        }
+    }
+
+    void Matrix::replaceRows(float *source, float *destination) {
+
+    }
+
+    void Matrix::interchangeRows(float *swap1, float *swap2) {
+
+    }
+
+    void Matrix::scaleRow(float *row) {
+
     }
 
 } // wwills2
