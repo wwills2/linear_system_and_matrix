@@ -30,4 +30,8 @@ namespace wwills {
         numMatrices++;
         matrices[name] = new Matrix(rows, cols);
     }
+
+    Matrix *LinearSystem::operator[](const std::string &name) {
+        return matrices[name];
+    }
 }

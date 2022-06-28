@@ -166,7 +166,7 @@ namespace wwills{
         return identity;
     }
 
-    void Matrix::addRows(float *source, float *destination) {
+    void Matrix::addRows(const float *source, float *destination) {
 
         for (int col = 0; col < numCols; col++){
 
@@ -175,7 +175,7 @@ namespace wwills{
         }
     }
 
-    void Matrix::replaceRows(float *source, float *destination) {
+    void Matrix::replaceRows(const float *source, float *destination) {
 
     }
 

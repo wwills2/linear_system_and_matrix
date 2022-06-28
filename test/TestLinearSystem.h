@@ -17,9 +17,8 @@ public:
     void buildIdentityMxMTest();                //calls buildIdentityMxMTest
     void buildIdentityNxNTest();                //calls buildIdentityNxNTest
 
-    void addMatrixTest();
+    void addMatrixTest();                       //calls both add matrix functions
     void linearSysInit();                       //calls the linear system constructor, generic linear system object
-
 
 };
 

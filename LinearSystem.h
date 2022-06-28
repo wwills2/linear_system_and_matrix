@@ -15,7 +15,6 @@ class TestLinearSystem;
 namespace wwills {
 
     class LinearSystem;
-
     class Matrix;
 
     //holds the matrices and all other data about the linear system of equations and the problem to be solved
@@ -31,6 +30,8 @@ namespace wwills {
         void addMatrix(const std::string &name);
 
         void addMatrix(const std::string &name, const int &rows, const int &cols);
+
+        Matrix *operator[](const std::string &name);
 
     private:
 

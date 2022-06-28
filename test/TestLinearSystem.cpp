@@ -50,7 +50,8 @@ int main(){
 
     cout << "testing addMatrix() and addMatrix(rows, cols)" << endl;
     {
-
+        TestLinearSystem test;
+        test.addMatrixTest();
     }
 
     return 0;
@@ -140,9 +141,10 @@ void TestLinearSystem::addMatrixTest() {
     testSystem.addMatrix("testArguments", 4, 5);
 
     for (int i = 0; i < testSystem.matrices["testArguments"]->numRows; i++){
-
+        for (int j = 0; j < testSystem.matrices["testArguments"]->numCols; j++){
+            assert(testSystem.matrices["testArguments"]->elements[i][j] == 0);
+        }
     }
-
 }
 
 

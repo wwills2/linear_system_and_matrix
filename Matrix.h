@@ -29,9 +29,9 @@ namespace wwills{
 
         Matrix buildIdentityNxN();
 
-        void addRows(float *source, float *destination);
+        void addRows(const float *source, float *destination);
 
-        void replaceRows(float *source, float *destination);
+        void replaceRows(const float *source, float *destination);
 
         void interchangeRows(float *swap1, float *swap2);
 
