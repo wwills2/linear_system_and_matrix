@@ -48,6 +48,11 @@ int main(){
         test.linearSysInit();
     }
 
+    cout << "testing addMatrix() and addMatrix(rows, cols)" << endl;
+    {
+
+    }
+
     return 0;
 }
 
@@ -130,11 +135,13 @@ void TestLinearSystem::addMatrixTest() {
     wwills::LinearSystem testSystem;
     testSystem.addMatrix("testDefault");
 
-    assert(testSystem.matrices["testDefault"].elements[0][0] == 1);
+    assert(testSystem.matrices["testDefault"]->elements[0][0] == 1);
 
     testSystem.addMatrix("testArguments", 4, 5);
 
-    assert(testSystem.matrices["testArguments"].elements[3][4] == 0);
+    for (int i = 0; i < testSystem.matrices["testArguments"]->numRows; i++){
+
+    }
 
 }
 
@@ -143,8 +150,8 @@ void TestLinearSystem::linearSysInit() {
 
     wwills::LinearSystem testSystem;
     assert(testSystem.numMatrices == 1);
-    assert(testSystem.matrices["A"].numElements == 6);
-    assert(testSystem.matrices["A"].elements[0][0] == 1);
+    assert(testSystem.matrices["A"]->numElements == 6);
+    assert(testSystem.matrices["A"]->elements[0][0] == 1);
 }
 
 

@@ -36,7 +36,7 @@ namespace wwills {
 
         //data members
         int numMatrices;
-        std::map<std::string, Matrix> matrices;
+        std::map<std::string, Matrix *> matrices;
     };
 }
 
