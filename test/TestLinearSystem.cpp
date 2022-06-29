@@ -21,7 +21,7 @@ int main(){
     cout << "testing Matrix assignment operator" << endl;
     {
         TestLinearSystem test;
-        test.matrixAssignOP();
+        test.matrixAssignOp();
     }
 
     cout << "testing Matrix assignment operator" << endl;
@@ -66,7 +66,7 @@ void TestLinearSystem::matrixInit() {
     assert(testMatrix.numElements == (testMatrix.numRows * testMatrix.numCols));
 }
 
-void TestLinearSystem::matrixAssignOP() {
+void TestLinearSystem::matrixAssignOp() {
 
     wwills::Matrix testMatrix;
 
@@ -154,6 +154,14 @@ void TestLinearSystem::linearSysInit() {
     assert(testSystem.numMatrices == 1);
     assert(testSystem.matrices["A"]->numElements == 6);
     assert(testSystem.matrices["A"]->elements[0][0] == 1);
+}
+
+void TestLinearSystem::overloadedElementOp() {
+
+    wwills::LinearSystem testSystem;
+
+    testSystem.addMatrix("test", 3, 1);
+    assert(testSystem["test"].)
 }
 
 
