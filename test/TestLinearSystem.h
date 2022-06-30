@@ -16,10 +16,14 @@ public:
     void matrixCopyInit();                      //calls matrix overloaded copy constructor
     void buildIdentityMxMTest();                //calls buildIdentityMxMTest
     void buildIdentityNxNTest();                //calls buildIdentityNxNTest
+    void addRowsTest();                         //calls addRows(float *, float *)
+    void matrixOverloadedElementOp();           //calls the Matrix overloaded [] operator
 
     void linearSysInit();                       //calls the linear system constructor, generic linear system object
     void addMatrixTest();                       //calls both add matrix functions
-    void overloadedElementOp();
+    void sysOverloadedElementOp();              //calls the LinearSystem overloaded [] operator
+
+    void dotVsOverloadBench();                  //see test file
 
 
 };

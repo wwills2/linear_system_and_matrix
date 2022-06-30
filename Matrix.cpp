@@ -166,6 +166,10 @@ namespace wwills{
         return identity;
     }
 
+    float *Matrix::operator[](const int row) {
+        return elements[row];
+    }
+
     void Matrix::addRows(const float *source, float *destination) {
 
         for (int col = 0; col < numCols; col++){
@@ -175,7 +179,8 @@ namespace wwills{
         }
     }
 
-    void Matrix::replaceRows(const float *source, float *destination) {
+    void Matrix::replaceRows(const float *source, float *destination, const int sourceMultiple) {
+
 
     }
 

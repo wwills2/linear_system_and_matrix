@@ -3,7 +3,6 @@
 //
 
 #include <cassert>
-
 #include "TestLinearSystem.h"
 
 using std::cout;
@@ -54,9 +53,77 @@ int main(){
         test.addMatrixTest();
     }
 
+    cout << "testing addRows(float *, float *)" << endl;
+    {
+        TestLinearSystem test;
+        test.addRowsTest();
+    }
+
+    cout << "testing LinearSystem overloaded [] operator" << endl;
+    {
+        TestLinearSystem test;
+        test.sysOverloadedElementOp();
+    }
+
+    cout << "testing Matrix overloaded [] operator" << endl;
+    {
+        TestLinearSystem test;
+        test.matrixOverloadedElementOp();
+    }
+
+    cout << "benchmark dot vs overloaded[] matrix operator" << endl;
+    {
+        TestLinearSystem test;
+        test.dotVsOverloadBench();
+    }
+
     return 0;
 }
 
+
+void TestLinearSystem::dotVsOverloadBench() {
+
+    /* benchmarks accessing matrix elements via matrix.elements[m][n] verses accessing elements with an overloaded
+     * [] operator via matrix[m][n]
+     */
+
+    int numRows = 10000;
+    int numCols = 2000;
+
+    wwills::Matrix matrix(numRows, numCols);
+    float count = 1;
+
+    //start counting clock cycles
+    clock_t start = clock();
+    clock_t stop;
+
+    for (int i = 0; i < numRows; i++){
+        for (int j = 0; j < numCols; j++){
+            matrix.elements[i][j] = count;
+            count++;
+        }
+    }
+
+    stop = clock();
+
+    float time = ((float)(stop - start)) / CLOCKS_PER_SEC;
+    cout << "\tdot operator: " << time << " seconds" << endl;
+
+    //start counting clock cycles
+    start = clock();
+
+    for (int i = 0; i < numRows; i++){
+        for (int j = 0; j < numCols; j++){
+            matrix[i][j] = count;
+            count++;
+        }
+    }
+
+    stop = clock();
+
+    time = ((float)(stop - start)) / CLOCKS_PER_SEC;
+    cout << "\toverloaded [] operator: " << time << " seconds" << endl;
+}
 
 
 void TestLinearSystem::matrixInit() {
@@ -130,6 +197,28 @@ void TestLinearSystem::buildIdentityNxNTest() {
     I.print();
 }
 
+void TestLinearSystem::addRowsTest(){
+
+    wwills::Matrix testMatrix;
+
+    testMatrix.addRows(testMatrix.elements[0], testMatrix.elements[1]);
+    assert(testMatrix.elements[1][0] == 5);
+    assert(testMatrix.elements[1][1] == 7);
+    assert(testMatrix.elements[1][2] == 9);
+
+    testMatrix.print();
+}
+
+void TestLinearSystem::matrixOverloadedElementOp() {
+
+    wwills::Matrix testMatrix;
+
+    float *row = testMatrix[0];
+    assert(row[0] == 1 && row[1] == 2 && row[2] == 3);
+}
+
+//LinearSystem Tests + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+
 void TestLinearSystem::addMatrixTest() {
 
 
@@ -156,12 +245,12 @@ void TestLinearSystem::linearSysInit() {
     assert(testSystem.matrices["A"]->elements[0][0] == 1);
 }
 
-void TestLinearSystem::overloadedElementOp() {
+void TestLinearSystem::sysOverloadedElementOp() {
 
     wwills::LinearSystem testSystem;
 
     testSystem.addMatrix("test", 3, 1);
-    assert(testSystem["test"].)
+    assert(testSystem["test"]->elements[2][0] == 0);
 }
 
 
