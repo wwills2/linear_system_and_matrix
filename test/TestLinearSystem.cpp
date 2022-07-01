@@ -87,8 +87,8 @@ void TestLinearSystem::dotVsOverloadBench() {
      * [] operator via matrix[m][n]
      */
 
-    int numRows = 10000;
-    int numCols = 2000;
+    int numRows = 5000;
+    int numCols = 10000;
 
     wwills::Matrix matrix(numRows, numCols);
     float count = 1;
