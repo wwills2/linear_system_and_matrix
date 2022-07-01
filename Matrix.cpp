@@ -166,7 +166,7 @@ namespace wwills{
         return identity;
     }
 
-    float *Matrix::operator[](const int row) {
+    inline float *Matrix::operator[](const int row) {
         return elements[row];
     }
 

@@ -8,16 +8,17 @@
 using std::cout;
 using std::endl;
 
+inline float *wwills::Matrix::operator[](const int row) {
+    return elements[row];
+}
 
 int main(){
 
-    /*
     cout << "benchmark dot vs overloaded[] matrix operator" << endl;
     {
         TestLinearSystem test;
         test.dotVsOverloadBench();
     }
-    */
 
     cout << "testing Matrix constructor" << endl;
     {
@@ -93,7 +94,6 @@ int main(){
 
     return 0;
 }
-
 
 void TestLinearSystem::dotVsOverloadBench() {
 
@@ -229,6 +229,9 @@ void TestLinearSystem::matrixOverloadedElementOp() {
 
     float *row = testMatrix[0];
     assert(row[0] == 1 && row[1] == 2 && row[2] == 3);
+
+    wwills::LinearSystem testSystem;
+    assert(testSystem["A"][0][1][0] == 4);
 }
 
 void TestLinearSystem::replaceRowsTest() {
