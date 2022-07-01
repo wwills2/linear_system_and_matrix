@@ -179,17 +179,34 @@ namespace wwills{
         }
     }
 
-    void Matrix::replaceRows(const float *source, float *destination, const int sourceMultiple) {
+    void Matrix::replaceRows(const float *source, float *destination, const float sourceMultiple) {
 
-
+        //multiply entries in the source row and add them to the destination row
+        for (int col = 0; col < numCols; col++){
+            destination[col] += (source[col] * sourceMultiple);
+        }
     }
 
     void Matrix::interchangeRows(float *swap1, float *swap2) {
 
+        //copy swap row 1 to temp location
+        float *tempArray = new float[numCols];
+        memcpy(tempArray, swap1, sizeof (float) * numCols);
+
+        //copy swap row 2 to swap row 1
+        memcpy(swap1, swap2, sizeof (float) * numCols);
+
+        //copy temp to swap row 2
+        memcpy(swap2, tempArray, sizeof (float) * numCols);
+
+        delete[] tempArray;
     }
 
-    void Matrix::scaleRow(float *row) {
+    void Matrix::scaleRow(float *row, float factor) {
 
+        for (int col = 0; col < numCols; col++){
+            row[col] *= factor;
+        }
     }
 
 } // wwills2

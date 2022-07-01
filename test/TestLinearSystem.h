@@ -18,6 +18,8 @@ public:
     void buildIdentityNxNTest();                //calls buildIdentityNxNTest
     void addRowsTest();                         //calls addRows(float *, float *)
     void matrixOverloadedElementOp();           //calls the Matrix overloaded [] operator
+    void replaceRowsTest();                     //calls replaceRows(float *, float *, float)
+    void interchangeRowsTest();                 //calls interchangeRows (float *, float *)
 
     void linearSysInit();                       //calls the linear system constructor, generic linear system object
     void addMatrixTest();                       //calls both add matrix functions

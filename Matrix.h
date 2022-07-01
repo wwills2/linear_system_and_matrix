@@ -5,6 +5,7 @@
 #ifndef MATRIX_OPERATIONS_MATRIX_H
 #define MATRIX_OPERATIONS_MATRIX_H
 
+#include <cstring>
 #include "LinearSystem.h"
 
 namespace wwills{
@@ -33,11 +34,11 @@ namespace wwills{
 
         void addRows(const float *source, float *destination);
 
-        void replaceRows(const float *source, float *destination, const int sourceMultiple);
+        void replaceRows(const float *source, float *destination, const float sourceMultiple);
 
         void interchangeRows(float *swap1, float *swap2);
 
-        void scaleRow(float *row);
+        void scaleRow(float *row, float factor);
 
         int numRows;        //num rows
         int numCols;        //num cols

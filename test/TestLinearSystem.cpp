@@ -11,6 +11,14 @@ using std::endl;
 
 int main(){
 
+    /*
+    cout << "benchmark dot vs overloaded[] matrix operator" << endl;
+    {
+        TestLinearSystem test;
+        test.dotVsOverloadBench();
+    }
+    */
+
     cout << "testing Matrix constructor" << endl;
     {
         TestLinearSystem test;
@@ -71,10 +79,16 @@ int main(){
         test.matrixOverloadedElementOp();
     }
 
-    cout << "benchmark dot vs overloaded[] matrix operator" << endl;
+    cout << "testing replaceRows(float *, float *, float)" << endl;
     {
         TestLinearSystem test;
-        test.dotVsOverloadBench();
+        test.replaceRowsTest();
+    }
+
+    cout << "testing interchangeRows(float *, float *)" << endl;
+    {
+        TestLinearSystem test;
+        test.interchangeRowsTest();
     }
 
     return 0;
@@ -83,8 +97,8 @@ int main(){
 
 void TestLinearSystem::dotVsOverloadBench() {
 
-    /* benchmarks accessing matrix elements via matrix.elements[m][n] verses accessing elements with an overloaded
-     * [] operator via matrix[m][n]
+    /* benchmarks the performance of accessing matrix elements via matrix.elements[m][n] verses accessing elements
+     * with an overloaded [] operator via matrix[m][n]
      */
 
     int numRows = 5000;
@@ -217,6 +231,23 @@ void TestLinearSystem::matrixOverloadedElementOp() {
     assert(row[0] == 1 && row[1] == 2 && row[2] == 3);
 }
 
+void TestLinearSystem::replaceRowsTest() {
+
+    wwills::Matrix testMatrix;
+
+    testMatrix.replaceRows(testMatrix[0], testMatrix[1], -2);
+    assert(testMatrix[1][0] == 2 && testMatrix[1][1] == 1 && testMatrix[1][2] == 0);
+}
+
+void TestLinearSystem::interchangeRowsTest() {
+
+    wwills::Matrix testMatrix;
+
+    testMatrix.interchangeRows(testMatrix[0], testMatrix[1]);
+    assert(testMatrix[0][0] == 4 && testMatrix[0][1] == 5 && testMatrix[0][2]);
+    assert(testMatrix[1][0] == 1 && testMatrix[1][1] == 2 && testMatrix[1][2]);
+}
+
 //LinearSystem Tests + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
 void TestLinearSystem::addMatrixTest() {
@@ -252,6 +283,10 @@ void TestLinearSystem::sysOverloadedElementOp() {
     testSystem.addMatrix("test", 3, 1);
     assert(testSystem["test"]->elements[2][0] == 0);
 }
+
+
+
+
 
 
 
