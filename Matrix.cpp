@@ -117,6 +117,11 @@ namespace wwills{
 
                 delete[] elements;
                 elements = new float*[rhs.numRows];
+
+                for (int row = 0; row < numRows; row++){
+
+                    elements[row] = new float[rhs.numCols];
+                }
             }
 
             //copy static members
@@ -126,8 +131,6 @@ namespace wwills{
 
             //copy elements
             for (int row = 0; row < numRows; row++){
-
-                elements[row] = new float[rhs.numCols];
 
                 for (int col = 0; col < numCols; col++){
                     elements[row][col] = rhs.elements[row][col];

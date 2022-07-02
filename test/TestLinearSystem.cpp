@@ -233,7 +233,9 @@ void TestLinearSystem::matrixOverloadedElementOp() {
     assert(row[0] == 1 && row[1] == 2 && row[2] == 3);
 
     wwills::LinearSystem testSystem;
-    assert(testSystem["A"][1][1] == 4);
+
+    testSystem.matrices["A"].print();
+    assert(testSystem["A"][1][1] == 5);
 }
 
 void TestLinearSystem::replaceRowsTest() {
