@@ -31,13 +31,13 @@ namespace wwills {
 
         void addMatrix(const std::string &name, const int &rows, const int &cols);
 
-        Matrix *operator[](const std::string &name);
+        Matrix &operator[](const std::string &name);
 
     private:
 
         //data members
         int numMatrices;
-        std::map<std::string, Matrix *> matrices;
+        std::map<std::string, Matrix> matrices;
     };
 }
 

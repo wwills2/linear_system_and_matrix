@@ -3,7 +3,7 @@ project(matrix_operations)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_compile_options(-O3)
+add_compile_options(-Wall -pedantic)
 
 add_executable(matrix_operations main.cpp LinearSystem.h LinearSystem.cpp Matrix.cpp Matrix.h)
 

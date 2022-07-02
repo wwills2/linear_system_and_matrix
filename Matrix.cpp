@@ -106,6 +106,19 @@ namespace wwills{
             return *this;
         }else{
 
+            //reallocate array if dimensions are different
+            if (numCols != rhs.numCols || numRows != rhs.numRows){
+
+                for (int row = 0; row < numRows; row++){
+
+                    delete[] elements[row];
+                    elements[row] = nullptr;
+                }
+
+                delete[] elements;
+                elements = new float*[rhs.numRows];
+            }
+
             //copy static members
             numRows = rhs.numRows;
             numCols = rhs.numCols;
@@ -113,6 +126,9 @@ namespace wwills{
 
             //copy elements
             for (int row = 0; row < numRows; row++){
+
+                elements[row] = new float[rhs.numCols];
+
                 for (int col = 0; col < numCols; col++){
                     elements[row][col] = rhs.elements[row][col];
                 }

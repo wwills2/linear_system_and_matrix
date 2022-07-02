@@ -14,11 +14,13 @@ inline float *wwills::Matrix::operator[](const int row) {
 
 int main(){
 
+    /*
     cout << "benchmark dot vs overloaded[] matrix operator" << endl;
     {
         TestLinearSystem test;
         test.dotVsOverloadBench();
     }
+    */
 
     cout << "testing Matrix constructor" << endl;
     {
@@ -154,7 +156,7 @@ void TestLinearSystem::matrixAssignOp() {
     testMatrix.elements[0][1] = 5.5;
     testMatrix.elements[1][0] = 6.5;
 
-    wwills::Matrix copyMatrix;
+    wwills::Matrix copyMatrix(10, 4);
     copyMatrix = testMatrix;
 
     assert(&copyMatrix != &testMatrix);
@@ -231,7 +233,7 @@ void TestLinearSystem::matrixOverloadedElementOp() {
     assert(row[0] == 1 && row[1] == 2 && row[2] == 3);
 
     wwills::LinearSystem testSystem;
-    assert(testSystem["A"][0][1][0] == 4);
+    assert(testSystem["A"][1][1] == 4);
 }
 
 void TestLinearSystem::replaceRowsTest() {
@@ -259,13 +261,13 @@ void TestLinearSystem::addMatrixTest() {
     wwills::LinearSystem testSystem;
     testSystem.addMatrix("testDefault");
 
-    assert(testSystem.matrices["testDefault"]->elements[0][0] == 1);
+    assert(testSystem.matrices["testDefault"].elements[0][0] == 1);
 
     testSystem.addMatrix("testArguments", 4, 5);
 
-    for (int i = 0; i < testSystem.matrices["testArguments"]->numRows; i++){
-        for (int j = 0; j < testSystem.matrices["testArguments"]->numCols; j++){
-            assert(testSystem.matrices["testArguments"]->elements[i][j] == 0);
+    for (int i = 0; i < testSystem.matrices["testArguments"].numRows; i++){
+        for (int j = 0; j < testSystem.matrices["testArguments"].numCols; j++){
+            assert(testSystem.matrices["testArguments"].elements[i][j] == 0);
         }
     }
 }
@@ -275,8 +277,8 @@ void TestLinearSystem::linearSysInit() {
 
     wwills::LinearSystem testSystem;
     assert(testSystem.numMatrices == 1);
-    assert(testSystem.matrices["A"]->numElements == 6);
-    assert(testSystem.matrices["A"]->elements[0][0] == 1);
+    assert(testSystem.matrices["A"].numElements == 6);
+    assert(testSystem.matrices["A"].elements[0][0] == 1);
 }
 
 void TestLinearSystem::sysOverloadedElementOp() {
@@ -284,7 +286,7 @@ void TestLinearSystem::sysOverloadedElementOp() {
     wwills::LinearSystem testSystem;
 
     testSystem.addMatrix("test", 3, 1);
-    assert(testSystem["test"]->elements[2][0] == 0);
+    assert(testSystem["test"].elements[2][0] == 0);
 }
 
 

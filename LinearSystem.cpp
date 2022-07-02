@@ -9,29 +9,24 @@ namespace wwills {
     LinearSystem::LinearSystem() {
 
         numMatrices = 1;
-        matrices["A"] = new Matrix;   //new templated elements called A
+        matrices["A"] = Matrix();   //new templated elements called A
     }
 
-    LinearSystem::~LinearSystem() {
-
-        for (auto itr = matrices.begin(); itr != matrices.end(); itr++){
-            delete itr->second;
-        }
-    }
+    LinearSystem::~LinearSystem() = default;
 
     void LinearSystem::addMatrix(const std::string &name) {
 
         numMatrices++;
-        matrices[name] = new Matrix;   //new templated elements called A
+        matrices[name] = Matrix();   //new templated elements called A
     }
 
     void LinearSystem::addMatrix(const std::string &name, const int &rows, const int &cols) {
 
         numMatrices++;
-        matrices[name] = new Matrix(rows, cols);
+        matrices[name] = Matrix(rows, cols);
     }
 
-    Matrix *LinearSystem::operator[](const std::string &name) {
+    Matrix &LinearSystem::operator[](const std::string &name) {
         return matrices[name];
     }
 }
