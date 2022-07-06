@@ -109,16 +109,17 @@ namespace wwills{
             //reallocate array if dimensions are different
             if (numCols != rhs.numCols || numRows != rhs.numRows){
 
+                //delete current array
                 for (int row = 0; row < numRows; row++){
 
                     delete[] elements[row];
                     elements[row] = nullptr;
                 }
-
                 delete[] elements;
-                elements = new float*[rhs.numRows];
 
-                for (int row = 0; row < numRows; row++){
+                //realloc to match rhs dimensions
+                elements = new float*[rhs.numRows];
+                for (int row = 0; row < rhs.numRows; row++){
 
                     elements[row] = new float[rhs.numCols];
                 }
@@ -131,10 +132,7 @@ namespace wwills{
 
             //copy elements
             for (int row = 0; row < numRows; row++){
-
-                for (int col = 0; col < numCols; col++){
-                    elements[row][col] = rhs.elements[row][col];
-                }
+                memcpy(elements[row], rhs.elements[row], sizeof (float) * numCols);
             }
 
             return *this;
