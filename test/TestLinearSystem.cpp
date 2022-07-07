@@ -14,13 +14,11 @@ inline float *wwills::Matrix::operator[](const int row) {
 
 int main(){
 
-    /*
     cout << "benchmark dot vs overloaded[] matrix operator" << endl;
     {
         TestLinearSystem test;
         test.dotVsOverloadBench();
     }
-    */
 
     cout << "testing Matrix constructor" << endl;
     {

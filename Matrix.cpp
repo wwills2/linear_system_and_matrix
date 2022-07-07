@@ -99,6 +99,30 @@ namespace wwills{
         }
     }
 
+    void Matrix::reducedEchelon() {
+
+        std::pair<int, int> pivot = {0, 0};
+
+        for (int i = 0; i < numRows; i++){
+
+            if (elements[pivot.first][pivot.second] == 0) {
+
+                //! move non-zero into pivot position
+            }else if (elements[pivot.first][pivot.second] != 1){
+
+                 //scale pivot row to get 1 in the pivot position
+                float scaleFactor = 1 / elements[pivot.first][pivot.second];
+                scaleRow(elements[pivot.first], scaleFactor);
+            }
+
+            for (int row = pivot.second + 1; row < numRows - (pivot.second + 1); row++) {
+
+
+            }
+        }
+    }
+
+
     const Matrix &Matrix::operator=(const Matrix &rhs) {
 
         //self assignment guard

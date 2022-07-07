@@ -51,19 +51,19 @@ build cmake_object_order_depends_target_matrix_operations: phony || CMakeFiles/m
 
 build CMakeFiles/matrix_operations.dir/main.cpp.o: CXX_COMPILER__matrix_operations_Debug /home/zan/CLionProjects/matrix_operations/main.cpp || cmake_object_order_depends_target_matrix_operations
   DEP_FILE = CMakeFiles/matrix_operations.dir/main.cpp.o.d
-  FLAGS = -g -Wall -pedantic -std=gnu++14
+  FLAGS = -g -Wall -pedantic -g3 -std=gnu++14
   OBJECT_DIR = CMakeFiles/matrix_operations.dir
   OBJECT_FILE_DIR = CMakeFiles/matrix_operations.dir
 
 build CMakeFiles/matrix_operations.dir/LinearSystem.cpp.o: CXX_COMPILER__matrix_operations_Debug /home/zan/CLionProjects/matrix_operations/LinearSystem.cpp || cmake_object_order_depends_target_matrix_operations
   DEP_FILE = CMakeFiles/matrix_operations.dir/LinearSystem.cpp.o.d
-  FLAGS = -g -Wall -pedantic -std=gnu++14
+  FLAGS = -g -Wall -pedantic -g3 -std=gnu++14
   OBJECT_DIR = CMakeFiles/matrix_operations.dir
   OBJECT_FILE_DIR = CMakeFiles/matrix_operations.dir
 
 build CMakeFiles/matrix_operations.dir/Matrix.cpp.o: CXX_COMPILER__matrix_operations_Debug /home/zan/CLionProjects/matrix_operations/Matrix.cpp || cmake_object_order_depends_target_matrix_operations
   DEP_FILE = CMakeFiles/matrix_operations.dir/Matrix.cpp.o.d
-  FLAGS = -g -Wall -pedantic -std=gnu++14
+  FLAGS = -g -Wall -pedantic -g3 -std=gnu++14
   OBJECT_DIR = CMakeFiles/matrix_operations.dir
   OBJECT_FILE_DIR = CMakeFiles/matrix_operations.dir
 
@@ -94,19 +94,19 @@ build cmake_object_order_depends_target_testLinearSystem: phony || CMakeFiles/te
 
 build CMakeFiles/testLinearSystem.dir/LinearSystem.cpp.o: CXX_COMPILER__testLinearSystem_Debug /home/zan/CLionProjects/matrix_operations/LinearSystem.cpp || cmake_object_order_depends_target_testLinearSystem
   DEP_FILE = CMakeFiles/testLinearSystem.dir/LinearSystem.cpp.o.d
-  FLAGS = -g -Wall -pedantic -std=gnu++14
+  FLAGS = -g -Wall -pedantic -g3 -std=gnu++14
   OBJECT_DIR = CMakeFiles/testLinearSystem.dir
   OBJECT_FILE_DIR = CMakeFiles/testLinearSystem.dir
 
 build CMakeFiles/testLinearSystem.dir/test/TestLinearSystem.cpp.o: CXX_COMPILER__testLinearSystem_Debug /home/zan/CLionProjects/matrix_operations/test/TestLinearSystem.cpp || cmake_object_order_depends_target_testLinearSystem
   DEP_FILE = CMakeFiles/testLinearSystem.dir/test/TestLinearSystem.cpp.o.d
-  FLAGS = -g -Wall -pedantic -std=gnu++14
+  FLAGS = -g -Wall -pedantic -g3 -std=gnu++14
   OBJECT_DIR = CMakeFiles/testLinearSystem.dir
   OBJECT_FILE_DIR = CMakeFiles/testLinearSystem.dir/test
 
 build CMakeFiles/testLinearSystem.dir/Matrix.cpp.o: CXX_COMPILER__testLinearSystem_Debug /home/zan/CLionProjects/matrix_operations/Matrix.cpp || cmake_object_order_depends_target_testLinearSystem
   DEP_FILE = CMakeFiles/testLinearSystem.dir/Matrix.cpp.o.d
-  FLAGS = -g -Wall -pedantic -std=gnu++14
+  FLAGS = -g -Wall -pedantic -g3 -std=gnu++14
   OBJECT_DIR = CMakeFiles/testLinearSystem.dir
   OBJECT_FILE_DIR = CMakeFiles/testLinearSystem.dir
 

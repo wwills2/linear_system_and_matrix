@@ -22,6 +22,8 @@ namespace wwills{
 
         void print();
 
+        void reducedEchelon();
+
         const Matrix &operator=(const Matrix &rhs);
 
     private:

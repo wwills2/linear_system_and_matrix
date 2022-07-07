@@ -9,7 +9,7 @@ namespace wwills {
     LinearSystem::LinearSystem() {
 
         numMatrices = 1;
-        matrices["A"] = Matrix();   //new templated elements called A
+        matrices["A"];   //new templated elements called A
     }
 
     LinearSystem::~LinearSystem() = default;
@@ -17,13 +17,16 @@ namespace wwills {
     void LinearSystem::addMatrix(const std::string &name) {
 
         numMatrices++;
-        matrices[name] = Matrix();   //new templated elements called A
+        matrices[name];   //new templated elements called A
     }
 
     void LinearSystem::addMatrix(const std::string &name, const int &rows, const int &cols) {
 
         numMatrices++;
-        matrices[name] = Matrix(rows, cols);
+        Matrix matrix(rows, cols);
+
+        //perform a memory move into the map to reduce copy operation overhead
+        matrices.insert(std::pair<std::string, Matrix>(name, std::move(matrix)));
     }
 
     Matrix &LinearSystem::operator[](const std::string &name) {
