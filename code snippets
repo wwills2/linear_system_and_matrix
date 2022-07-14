@@ -1,0 +1,7 @@
+//scale the pivot row to get 1 in pivot position
+            if (elements[pivot.first][pivot.second] != 1){
+
+                 //scale pivot row to get 1 in the pivot position
+                float scaleFactor = 1 / elements[pivot.first][pivot.second];
+                scaleRow(elements[pivot.first], scaleFactor);
+            }

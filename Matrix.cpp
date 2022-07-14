@@ -101,23 +101,37 @@ namespace wwills{
 
     void Matrix::reducedEchelon() {
 
+        float rowScalar = 0;
         std::pair<int, int> pivot = {0, 0};
 
+        //loop through all pivot positions and perform forward operations
         for (int i = 0; i < numRows; i++){
 
+            //get non-zero into pivot position
             if (elements[pivot.first][pivot.second] == 0) {
 
-                //! move non-zero into pivot position
-            }else if (elements[pivot.first][pivot.second] != 1){
+                int row = pivot.first;
+                while (elements[row][pivot.second] == 0){
+                    row++;
+                }
 
-                 //scale pivot row to get 1 in the pivot position
-                float scaleFactor = 1 / elements[pivot.first][pivot.second];
-                scaleRow(elements[pivot.first], scaleFactor);
+                interchangeRows(elements[row], elements[pivot.first]);
             }
 
-            for (int row = pivot.second + 1; row < numRows - (pivot.second + 1); row++) {
+            //perform row operations to clear the pivot column
+            for (int row = 0; row < numRows; row++) {
 
+                if (row != pivot.first){
 
+                    rowScalar = elements[row][pivot.second] / elements[pivot.first][pivot.second];
+
+                    if ((elements[row][pivot.second] > 0 && elements[pivot.first][pivot.second] > 0) ||
+                            (elements[row][pivot.second] > 0 && elements[pivot.first][pivot.second] > 0)){
+                        rowScalar *= -1;
+                    }
+
+                    replaceRows(elements[pivot.first], elements[row], rowScalar);
+                }
             }
         }
     }
