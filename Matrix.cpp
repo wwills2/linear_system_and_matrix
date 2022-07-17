@@ -99,39 +99,65 @@ namespace wwills{
         }
     }
 
-    void Matrix::reducedEchelon() {
+    void Matrix::echelonForm() {
 
         float rowScalar = 0;
         std::pair<int, int> pivot = {0, 0};
 
+        tryNextColumn:      //this label is used by the goto statement ~20 lines down
+        //get non-zero into pivot position
+        int tryRow = pivot.first + 1;
+
+        //get non-zero into pivot position
+        while ((elements[tryRow][pivot.second] == 0) && (tryRow < numRows)){
+            tryRow++;
+        }
+
+        //swap current tryRow if non-zero found
+        if (elements[pivot.first][pivot.second] != 0) {
+
+            interchangeRows(elements[tryRow], elements[pivot.first]);
+        }else{
+
+            //move the pivot column over 1 and try to find a non-zero entry
+            pivot.second += 1;
+            goto tryNextColumn;     //resolves the edge case that column 0 has no non-zero entries
+        }
+
+
         //loop through all pivot positions and perform forward operations
         for (int i = 0; i < numRows; i++){
 
-            //get non-zero into pivot position
-            if (elements[pivot.first][pivot.second] == 0) {
+            //perform tryRow operations to clear the pivot column
+            for (int row = pivot.first + 1; row < numRows; row++) {
 
-                int row = pivot.first;
-                while (elements[row][pivot.second] == 0){
-                    row++;
-                }
-
-                interchangeRows(elements[row], elements[pivot.first]);
-            }
-
-            //perform row operations to clear the pivot column
-            for (int row = 0; row < numRows; row++) {
-
-                if (row != pivot.first){
+                if (elements[row][pivot.second] != 0) {
 
                     rowScalar = elements[row][pivot.second] / elements[pivot.first][pivot.second];
 
                     if ((elements[row][pivot.second] > 0 && elements[pivot.first][pivot.second] > 0) ||
-                            (elements[row][pivot.second] > 0 && elements[pivot.first][pivot.second] > 0)){
+                        (elements[row][pivot.second] > 0 && elements[pivot.first][pivot.second] > 0)) {
                         rowScalar *= -1;
                     }
 
                     replaceRows(elements[pivot.first], elements[row], rowScalar);
                 }
+            }
+
+            pivot.first++;
+            pivot.second++;
+            int startCol = pivot.second;
+
+            //find the next pivot position if adjacent pivot is zero
+            while (elements[pivot.first][pivot.second] == 0){
+
+                if (pivot.second == numCols - 1){
+
+                    pivot.second = startCol;
+
+                    for (int col = pivot)
+                }
+                    pivot.second++;
             }
         }
     }

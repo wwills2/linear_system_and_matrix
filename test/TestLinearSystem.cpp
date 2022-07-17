@@ -92,6 +92,12 @@ int main(){
         test.interchangeRowsTest();
     }
 
+    cout << "testing echelonFormTest()" << endl;
+    {
+        TestLinearSystem test;
+        test.echelonFormTest();
+    }
+
     return 0;
 }
 
@@ -252,6 +258,14 @@ void TestLinearSystem::interchangeRowsTest() {
     assert(testMatrix[0][0] == 4 && testMatrix[0][1] == 5 && testMatrix[0][2]);
     assert(testMatrix[1][0] == 1 && testMatrix[1][1] == 2 && testMatrix[1][2]);
 }
+
+void TestLinearSystem::echelonFormTest() {
+
+    wwills::Matrix testMatrix(3, 3);
+
+    testMatrix.echelonForm();
+}
+
 
 //LinearSystem Tests + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 

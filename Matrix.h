@@ -22,7 +22,8 @@ namespace wwills{
 
         void print();
 
-        void reducedEchelon();
+        //! important: column zero must be non-zero to work properly
+        void echelonForm();
 
         const Matrix &operator=(const Matrix &rhs);
 
