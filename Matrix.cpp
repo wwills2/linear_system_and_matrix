@@ -107,7 +107,7 @@ namespace wwills{
         tryNextColumn:      //this label is used by the goto statement ~20 lines down
 
         //get non-zero into pivot position
-        int tryRow = pivot.first + 1;
+        int tryRow = pivot.first;
 
         //get non-zero into pivot position
         while ((elements[tryRow][pivot.second] == 0) && (tryRow < numRows)){
