@@ -46,7 +46,7 @@ namespace wwills{
         int numRows;        //num rows
         int numCols;        //num cols
         int numElements;    //number of elements in the elements
-        float **elements;   //2d, dynamically allocated elements
+        float **elements;   //2d, dynamically allocated, elements array
 
         friend LinearSystem;
 

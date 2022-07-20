@@ -105,6 +105,7 @@ namespace wwills{
         std::pair<int, int> pivot = {0, 0};
 
         tryNextColumn:      //this label is used by the goto statement ~20 lines down
+
         //get non-zero into pivot position
         int tryRow = pivot.first + 1;
 
@@ -125,18 +126,23 @@ namespace wwills{
         }
 
 
+        int searchCol = 0;
+        int searchRow = 0;      //used when searching for pivot
+        bool rowSwapNeeded = false;
+
         //loop through all pivot positions and perform forward operations
         for (int i = 0; i < numRows; i++){
 
-            //perform tryRow operations to clear the pivot column
+            //perform row operations to clear the pivot column
             for (int row = pivot.first + 1; row < numRows; row++) {
 
                 if (elements[row][pivot.second] != 0) {
 
                     rowScalar = elements[row][pivot.second] / elements[pivot.first][pivot.second];
 
+                    //make scalar negative if the sign is the same
                     if ((elements[row][pivot.second] > 0 && elements[pivot.first][pivot.second] > 0) ||
-                        (elements[row][pivot.second] > 0 && elements[pivot.first][pivot.second] > 0)) {
+                        (elements[row][pivot.second] < 0 && elements[pivot.first][pivot.second] < 0)) {
                         rowScalar *= -1;
                     }
 
@@ -146,19 +152,31 @@ namespace wwills{
 
             pivot.first++;
             pivot.second++;
-            int startCol = pivot.second;
 
-            //find the next pivot position if adjacent pivot is zero
-            while (elements[pivot.first][pivot.second] == 0){
+            searchRow = pivot.first;
+            searchCol = pivot.second;
+            rowSwapNeeded = false;
 
-                if (pivot.second == numCols - 1){
+            //find the next pivot position if adjacent pivot is zero, then swap
+            while ((elements[searchRow][searchCol] == 0) && (searchRow < numRows)){
 
-                    pivot.second = startCol;
+                //move back to current pivot column if at the end of the row and there is another row
+                if ((searchCol == numCols - 1) && (searchRow + 1 < numRows)){
 
-                    for (int col = pivot)
+                    searchCol = pivot.second;
+                    searchRow++;
+                    rowSwapNeeded = true;
                 }
-                    pivot.second++;
+
+                searchCol++;
             }
+
+            if (rowSwapNeeded){
+                //move the new pivot row up via swap
+                interchangeRows(elements[pivot.first], elements[searchRow]);
+            }
+
+            pivot.second = searchCol;
         }
     }
 
