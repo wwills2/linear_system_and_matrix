@@ -110,16 +110,27 @@ namespace wwills{
         int tryRow = pivot.first;
 
         //get non-zero into pivot position
-        while ((elements[tryRow][pivot.second] == 0) && (tryRow < numRows)){
+        while (elements[tryRow][pivot.second] == 0){
+
             tryRow++;
+
+            //swap current tryRow if non-zero found
+            if (elements[tryRow][pivot.second] != 0) {
+
+                interchangeRows(elements[tryRow], elements[pivot.first]);
+            }else if (tryRow == numRows - 1){
+
+                //move the pivot column over 1 and try to find a non-zero entry
+                pivot.second += 1;
+            }
         }
 
         //swap current tryRow if non-zero found
-        if (elements[pivot.first][pivot.second] != 0) {
+        if (elements[tryRow][pivot.second] != 0) {
 
-            interchangeRows(elements[tryRow], elements[pivot.first]);
-        }else{
-
+            //!interchangeRows(elements[tryRow], elements[pivot.first]);
+        //!}else{
+        if (tryRow == numRows)
             //move the pivot column over 1 and try to find a non-zero entry
             pivot.second += 1;
             goto tryNextColumn;     //resolves the edge case that column 0 has no non-zero entries
