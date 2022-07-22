@@ -22,6 +22,8 @@ namespace wwills{
 
         void print();
 
+        void debugPrint();
+
         //! important: column zero must be non-zero to work properly
         void echelonForm();
 

@@ -95,7 +95,23 @@ namespace wwills{
                 std::cout << elements[row][col] << " ";
             }
 
-            std::cout << "]\n";
+            std::cout << "]" << std::endl;
+        }
+
+        std::cout << std::endl;
+    }
+
+    void Matrix::debugPrint() {
+
+        for (int row = 0; row < numRows; row++){
+
+            printf("row %i: [ ", row);
+
+            for (int col = 0; col < numCols; col++){
+                printf("%f ", elements[row][col]);
+            }
+
+            printf("]\n");
         }
     }
 
@@ -103,8 +119,6 @@ namespace wwills{
 
         float rowScalar = 0;
         std::pair<int, int> pivot = {0, 0};
-
-        tryNextColumn:      //this label is used by the goto statement ~20 lines down
 
         //get non-zero into pivot position
         int tryRow = pivot.first;
@@ -118,22 +132,13 @@ namespace wwills{
             if (elements[tryRow][pivot.second] != 0) {
 
                 interchangeRows(elements[tryRow], elements[pivot.first]);
+                tryRow = pivot.first;
+
             }else if (tryRow == numRows - 1){
 
                 //move the pivot column over 1 and try to find a non-zero entry
                 pivot.second += 1;
             }
-        }
-
-        //swap current tryRow if non-zero found
-        if (elements[tryRow][pivot.second] != 0) {
-
-            //!interchangeRows(elements[tryRow], elements[pivot.first]);
-        //!}else{
-        if (tryRow == numRows)
-            //move the pivot column over 1 and try to find a non-zero entry
-            pivot.second += 1;
-            goto tryNextColumn;     //resolves the edge case that column 0 has no non-zero entries
         }
 
 
@@ -152,8 +157,8 @@ namespace wwills{
                     rowScalar = elements[row][pivot.second] / elements[pivot.first][pivot.second];
 
                     //make scalar negative if the sign is the same
-                    if ((elements[row][pivot.second] > 0 && elements[pivot.first][pivot.second] > 0) ||
-                        (elements[row][pivot.second] < 0 && elements[pivot.first][pivot.second] < 0)) {
+                    if ((elements[row][pivot.second] < 0 && elements[pivot.first][pivot.second] > 0) ||
+                        (elements[row][pivot.second] > 0 && elements[pivot.first][pivot.second] < 0)) {
                         rowScalar *= -1;
                     }
 
@@ -168,21 +173,22 @@ namespace wwills{
             searchCol = pivot.second;
             rowSwapNeeded = false;
 
-            //find the next pivot position if adjacent pivot is zero, then swap
+            //find the next pivot position, if all entries in row are zero, then swap
             while ((elements[searchRow][searchCol] == 0) && (searchRow < numRows)){
 
                 //move back to current pivot column if at the end of the row and there is another row
                 if ((searchCol == numCols - 1) && (searchRow + 1 < numRows)){
 
                     searchCol = pivot.second;
-                    searchRow++;
                     rowSwapNeeded = true;
+                    searchRow++;
                 }
 
                 searchCol++;
             }
 
             if (rowSwapNeeded){
+
                 //move the new pivot row up via swap
                 interchangeRows(elements[pivot.first], elements[searchRow]);
             }

@@ -11,6 +11,23 @@
 class TestLinearSystem {
 
 public:
+
+    /*
+    static void debugMatrixPrint(wwills::Matrix &matrix){
+
+        for (int row = 0; row < matrix.numRows; row++){
+
+            std::cout << "row " << row << ": [ ";
+
+            for (int col = 0; col < matrix.numCols; col++){
+                std::cout << elements[row][col] << " ";
+            }
+
+            std::cout << "]\n";
+        }
+    }
+    */
+
     void matrixInit();                          //calls the elements constructor to initialize a generic elements
     void matrixAssignOp();                      //calls matrix overloaded assigment operator
     void matrixCopyInit();                      //calls matrix overloaded copy constructor

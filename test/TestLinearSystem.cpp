@@ -261,18 +261,20 @@ void TestLinearSystem::interchangeRowsTest() {
 
 void TestLinearSystem::echelonFormTest() {
 
-    float initialMatrix[18] = {0, 3, -6, 6, 4 ,-5,
+    float initialMatrix[24] = {0, 3, -6, 6, 4 ,-5,
                                3, -7, 8, -5, 8, 9,
+                               0 , 0, 0, 0, 0, 0,
                                3, -9, 12, -9, 6, 15};
 
-    float initialEchelonMatrix[18] = {3, -9, 12, -9, 6, -15,
-                                    0, 2, -4, 4, 2, -6,
-                                    0, 0, 0, 0, 1, 4};
+    float initialEchelonMatrix[24] = {3, -9, 12, -9, 6, -15,
+                                      0, 2, -4, 4, 2, -6,
+                                    0, 0, 0, 0, 1, 4,
+                                    0 , 0, 0, 0, 0, 0,};
 
-    wwills::Matrix testMatrix(3, 6);
+    wwills::Matrix testMatrix(4, 6);
 
     int i = 0;
-    for (int row = 0; row < 3; row++){
+    for (int row = 0; row < 4; row++){
         for(int col = 0; col < 6; col++){
             testMatrix[row][col] = initialMatrix[i];
             i++;
@@ -282,7 +284,7 @@ void TestLinearSystem::echelonFormTest() {
     testMatrix.echelonForm();
 
     i = 0;
-    for (int row = 0; row < 3; row++){
+    for (int row = 0; row < 4; row++){
         for(int col = 0; col < 6; col++){
             assert(testMatrix[row][col] == initialEchelonMatrix[i]);
             i++;
