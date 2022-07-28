@@ -13,14 +13,3 @@
 algebra. The code is a mix of C++ OOP paradigms and C features such as raw pointers and arrays. Though this mix isn't 
 practical in most production environments, it is used here to show competency with both languages.
 
-### Design
-
-- Namespace: wwills 
-
-- Project Root
-
-  - main.cpp
-
-    - Driver for the Demonstrative program built by the included Makefile. Facilitates reading in the representation of 
-    a elements and calling the appropriate methods
-  - 
