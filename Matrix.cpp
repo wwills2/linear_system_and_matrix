@@ -11,14 +11,10 @@ namespace wwills{
         numCols = 3;
         numElements = numRows * numCols;
 
-        //allocate array of float array pointers
-        elements = new float *[numRows];
-
-        //initialize array and allocate individual elements
+        //initialize elements
         float num = 1;
 
         for (int row = 0; row < numRows; row++){
-            elements[row] = new float[numCols];
             for (int col = 0; col < numCols; col++){
                 elements[row][col] = num;
                 num++;
@@ -28,21 +24,12 @@ namespace wwills{
 
     Matrix::~Matrix() {
 
-        //zero and deallocate data
+        //zero data
         for (int row = 0; row < numRows; row++){
             for (int col = 0; col < numCols; col++){
                 elements[row][col] = 0;
             }
         }
-
-        for (int row = 0; row < numRows; row++){
-
-            delete[] elements[row];
-            elements[row] = nullptr;
-        }
-
-        delete[] elements;
-        elements = nullptr;
     }
 
     Matrix::Matrix(int rows, int cols) {
@@ -51,12 +38,8 @@ namespace wwills{
         numCols = cols;
         numElements = numRows * numCols;
 
-        //allocate array of float array pointers
-        elements = new float *[numRows];
-
         //initialize array and allocate individual elements
         for (int row = 0; row < numRows; row++){
-            elements[row] = new float[numCols];
             for (int col = 0; col < numCols; col++){
                 elements[row][col] = 0;
             }
@@ -73,11 +56,7 @@ namespace wwills{
             numCols = rhs.numCols;
             numElements = rhs.numElements;
 
-            //dynamically initialize elements
-            elements = new float *[numRows];
-
             for (int row = 0; row < numRows; row++) {
-                elements[row] = new float[numCols];
                 for (int col = 0; col < numCols; col++) {
                     elements[row][col] = rhs.elements[row][col];
                 }
@@ -101,26 +80,10 @@ namespace wwills{
         std::cout << std::endl;
     }
 
-    void Matrix::debugPrint() {
-
-        for (int row = 0; row < numRows; row++){
-
-            printf("row %i: [ ", row);
-
-            for (int col = 0; col < numCols; col++){
-                printf("%f ", elements[row][col]);
-            }
-
-            printf("]\n");
-        }
-    }
-
     void Matrix::echelonForm() {
 
         float rowScalar = 0;
         std::pair<int, int> pivot = {0, 0};
-
-        //get non-zero into pivot position
         int tryRow = pivot.first;
 
         //get non-zero into pivot position
@@ -140,7 +103,6 @@ namespace wwills{
                 pivot.second += 1;
             }
         }
-
 
         int searchCol = 0;
         int searchRow = 0;      //used when searching for pivot
@@ -205,34 +167,12 @@ namespace wwills{
             return *this;
         }else{
 
-            //reallocate array if dimensions are different
-            if (numCols != rhs.numCols || numRows != rhs.numRows){
-
-                //delete current array
-                for (int row = 0; row < numRows; row++){
-
-                    delete[] elements[row];
-                    elements[row] = nullptr;
-                }
-                delete[] elements;
-
-                //realloc to match rhs dimensions
-                elements = new float*[rhs.numRows];
-                for (int row = 0; row < rhs.numRows; row++){
-
-                    elements[row] = new float[rhs.numCols];
-                }
-            }
-
             //copy static members
             numRows = rhs.numRows;
             numCols = rhs.numCols;
             numElements = rhs.numElements;
 
-            //copy elements
-            for (int row = 0; row < numRows; row++){
-                memcpy(elements[row], rhs.elements[row], sizeof (float) * numCols);
-            }
+            elements = rhs.elements;
 
             return *this;
         }
@@ -282,11 +222,11 @@ namespace wwills{
         return identity;
     }
 
-    inline float *Matrix::operator[](const int row) {
+    inline std::vector<float> Matrix::operator[](const int row) {
         return elements[row];
     }
 
-    void Matrix::addRows(const float *source, float *destination) {
+    void Matrix::addRows(const std::vector<float> &source, std::vector<float> &destination) {
 
         for (int col = 0; col < numCols; col++){
 
@@ -295,7 +235,7 @@ namespace wwills{
         }
     }
 
-    void Matrix::replaceRows(const float *source, float *destination, const float sourceMultiple) {
+    void Matrix::replaceRows(const std::vector<float> &source, std::vector<float> &destination, const float sourceMultiple) {
 
         //multiply entries in the source row and add them to the destination row
         for (int col = 0; col < numCols; col++){
@@ -303,22 +243,17 @@ namespace wwills{
         }
     }
 
-    void Matrix::interchangeRows(float *swap1, float *swap2) {
+    void Matrix::interchangeRows(std::vector<float> &swap1, std::vector<float> &swap2) {
 
         //copy swap row 1 to temp location
-        float *tempArray = new float[numCols];
-        memcpy(tempArray, swap1, sizeof (float) * numCols);
+        std::vector<float> tempArray;
 
-        //copy swap row 2 to swap row 1
-        memcpy(swap1, swap2, sizeof (float) * numCols);
-
-        //copy temp to swap row 2
-        memcpy(swap2, tempArray, sizeof (float) * numCols);
-
-        delete[] tempArray;
+        tempArray = swap1;
+        swap1 = swap2;
+        swap2 = tempArray;
     }
 
-    void Matrix::scaleRow(float *row, float factor) {
+    void Matrix::scaleRow(std::vector<float> &row, float factor) {
 
         for (int col = 0; col < numCols; col++){
             row[col] *= factor;

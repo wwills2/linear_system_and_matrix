@@ -8,7 +8,7 @@
 using std::cout;
 using std::endl;
 
-inline float *wwills::Matrix::operator[](const int row) {
+inline std::vector<float> wwills::Matrix::operator[](const int row) {
     return elements[row];
 }
 
@@ -233,7 +233,7 @@ void TestLinearSystem::matrixOverloadedElementOp() {
 
     wwills::Matrix testMatrix;
 
-    float *row = testMatrix[0];
+    std::vector<float> row = testMatrix[0];
     assert(row[0] == 1 && row[1] == 2 && row[2] == 3);
 
     wwills::LinearSystem testSystem;

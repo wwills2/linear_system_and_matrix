@@ -35,20 +35,20 @@ namespace wwills{
 
         Matrix buildIdentityNxN();
 
-        float *operator[](const int row);
+        std::vector<float> operator[](const int row);
 
-        void addRows(const float *source, float *destination);
+        void addRows(const std::vector<float> &source, std::vector<float> &destination);
 
-        void replaceRows(const float *source, float *destination, const float sourceMultiple);
+        void replaceRows(const std::vector<float> &source, std::vector<float> &destination, const float sourceMultiple);
 
-        void interchangeRows(float *swap1, float *swap2);
+        void interchangeRows(std::vector<float> &swap1, std::vector<float> &swap2);
 
-        void scaleRow(float *row, float factor);
+        void scaleRow(std::vector<float> &row, float factor);
 
         int numRows;        //num rows
         int numCols;        //num cols
         int numElements;    //number of elements in the elements
-        float **elements;   //2d, dynamically allocated, elements array
+        std::vector< std::vector<float> > elements;   //2d, dynamically allocated, elements array
 
         friend LinearSystem;
 
