@@ -86,12 +86,6 @@ int main(){
         test.replaceRowsTest();
     }
 
-    cout << "testing interchangeRows(float *, float *)" << endl;
-    {
-        TestLinearSystem test;
-        test.interchangeRowsTest();
-    }
-
     cout << "testing echelonFormTest()" << endl;
     {
         TestLinearSystem test;
@@ -221,7 +215,7 @@ void TestLinearSystem::addRowsTest(){
 
     wwills::Matrix testMatrix;
 
-    testMatrix.addRows(testMatrix.elements[0], testMatrix.elements[1]);
+    testMatrix.addRows(0, 1);
     assert(testMatrix.elements[1][0] == 5);
     assert(testMatrix.elements[1][1] == 7);
     assert(testMatrix.elements[1][2] == 9);
@@ -246,17 +240,8 @@ void TestLinearSystem::replaceRowsTest() {
 
     wwills::Matrix testMatrix;
 
-    testMatrix.replaceRows(testMatrix[0], testMatrix[1], -2);
+    testMatrix.replaceRows(0, 1, -2);
     assert(testMatrix[1][0] == 2 && testMatrix[1][1] == 1 && testMatrix[1][2] == 0);
-}
-
-void TestLinearSystem::interchangeRowsTest() {
-
-    wwills::Matrix testMatrix;
-
-    testMatrix.interchangeRows(testMatrix[0], testMatrix[1]);
-    assert(testMatrix[0][0] == 4 && testMatrix[0][1] == 5 && testMatrix[0][2]);
-    assert(testMatrix[1][0] == 1 && testMatrix[1][1] == 2 && testMatrix[1][2]);
 }
 
 void TestLinearSystem::echelonFormTest() {

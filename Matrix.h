@@ -18,16 +18,11 @@ namespace wwills{
 
         Matrix(int rows, int cols);
 
-        Matrix(const Matrix &rhs);
-
         void print();
-
-        void debugPrint();
 
         //! important: column zero must be non-zero to work properly
         void echelonForm();
 
-        const Matrix &operator=(const Matrix &rhs);
 
     private:
 
@@ -37,13 +32,11 @@ namespace wwills{
 
         std::vector<float> operator[](const int row);
 
-        void addRows(const std::vector<float> &source, std::vector<float> &destination);
+        void addRows(const int &source, const int &destination);
 
-        void replaceRows(const std::vector<float> &source, std::vector<float> &destination, const float sourceMultiple);
+        void replaceRows(const int &source, const int &destination, const float sourceMultiple);
 
-        void interchangeRows(std::vector<float> &swap1, std::vector<float> &swap2);
-
-        void scaleRow(std::vector<float> &row, float factor);
+        void scaleRow(const int &row, float factor);
 
         int numRows;        //num rows
         int numCols;        //num cols

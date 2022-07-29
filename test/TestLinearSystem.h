@@ -29,14 +29,11 @@ public:
     */
 
     void matrixInit();                          //calls the elements constructor to initialize a generic elements
-    void matrixAssignOp();                      //calls matrix overloaded assigment operator
-    void matrixCopyInit();                      //calls matrix overloaded copy constructor
     void buildIdentityMxMTest();                //calls buildIdentityMxMTest
     void buildIdentityNxNTest();                //calls buildIdentityNxNTest
     void addRowsTest();                         //calls addRows(float *, float *)
     void matrixOverloadedElementOp();           //calls the Matrix overloaded [] operator
     void replaceRowsTest();                     //calls replaceRows(float *, float *, float)
-    void interchangeRowsTest();                 //calls interchangeRows (float *, float *)
     void echelonFormTest();                      //calls echelonFormTest()
 
     void linearSysInit();                       //calls the linear system constructor, generic linear system object

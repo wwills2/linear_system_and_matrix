@@ -15,8 +15,11 @@ namespace wwills{
         float num = 1;
 
         for (int row = 0; row < numRows; row++){
+
+            elements.emplace_back(std::vector<float>(numCols));
+
             for (int col = 0; col < numCols; col++){
-                elements[row][col] = num;
+                elements[row].push_back(num);
                 num++;
             }
         }
@@ -40,26 +43,11 @@ namespace wwills{
 
         //initialize array and allocate individual elements
         for (int row = 0; row < numRows; row++){
+
+            elements.emplace_back(std::vector<float>(numCols));
+
             for (int col = 0; col < numCols; col++){
-                elements[row][col] = 0;
-            }
-        }
-    }
-
-    Matrix::Matrix(const Matrix &rhs) {
-
-        //self assignment guard
-        if (this != &rhs) {
-
-            //copy static members
-            numRows = rhs.numRows;
-            numCols = rhs.numCols;
-            numElements = rhs.numElements;
-
-            for (int row = 0; row < numRows; row++) {
-                for (int col = 0; col < numCols; col++) {
-                    elements[row][col] = rhs.elements[row][col];
-                }
+                elements[row].push_back(0);
             }
         }
     }
@@ -94,7 +82,7 @@ namespace wwills{
             //swap current tryRow if non-zero found
             if (elements[tryRow][pivot.second] != 0) {
 
-                interchangeRows(elements[tryRow], elements[pivot.first]);
+                elements[tryRow].swap(elements[pivot.first]);
                 tryRow = pivot.first;
 
             }else if (tryRow == numRows - 1){
@@ -124,7 +112,7 @@ namespace wwills{
                         rowScalar *= -1;
                     }
 
-                    replaceRows(elements[pivot.first], elements[row], rowScalar);
+                    replaceRows(pivot.first, row, rowScalar);
                 }
             }
 
@@ -152,29 +140,10 @@ namespace wwills{
             if (rowSwapNeeded){
 
                 //move the new pivot row up via swap
-                interchangeRows(elements[pivot.first], elements[searchRow]);
+                elements[pivot.first].swap(elements[searchRow]);
             }
 
             pivot.second = searchCol;
-        }
-    }
-
-
-    const Matrix &Matrix::operator=(const Matrix &rhs) {
-
-        //self assignment guard
-        if (this == &rhs){
-            return *this;
-        }else{
-
-            //copy static members
-            numRows = rhs.numRows;
-            numCols = rhs.numCols;
-            numElements = rhs.numElements;
-
-            elements = rhs.elements;
-
-            return *this;
         }
     }
 
@@ -226,37 +195,27 @@ namespace wwills{
         return elements[row];
     }
 
-    void Matrix::addRows(const std::vector<float> &source, std::vector<float> &destination) {
+    void Matrix::addRows(const int &source, const int &destination) {
 
         for (int col = 0; col < numCols; col++){
 
             //add the source row index to the destination row index
-            destination[col] += source[col];
+            elements[destination][col] += elements[source][col];
         }
     }
 
-    void Matrix::replaceRows(const std::vector<float> &source, std::vector<float> &destination, const float sourceMultiple) {
+    void Matrix::replaceRows(const int &source, const int &destination, const float sourceMultiple) {
 
         //multiply entries in the source row and add them to the destination row
         for (int col = 0; col < numCols; col++){
-            destination[col] += (source[col] * sourceMultiple);
+            elements[destination][col] += (elements[source][col] * sourceMultiple);
         }
     }
 
-    void Matrix::interchangeRows(std::vector<float> &swap1, std::vector<float> &swap2) {
-
-        //copy swap row 1 to temp location
-        std::vector<float> tempArray;
-
-        tempArray = swap1;
-        swap1 = swap2;
-        swap2 = tempArray;
-    }
-
-    void Matrix::scaleRow(std::vector<float> &row, float factor) {
+    void Matrix::scaleRow(const int &row, float factor) {
 
         for (int col = 0; col < numCols; col++){
-            row[col] *= factor;
+            elements[row][col] *= factor;
         }
     }
 
