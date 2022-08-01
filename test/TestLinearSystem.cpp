@@ -8,17 +8,19 @@
 using std::cout;
 using std::endl;
 
-inline std::vector<float> wwills::Matrix::operator[](const int row) {
+inline std::vector<float> &wwills::Matrix::operator[](const int &row) {
     return elements[row];
 }
 
 int main(){
 
+    /*
     cout << "benchmark dot vs overloaded[] matrix operator" << endl;
     {
         TestLinearSystem test;
         test.dotVsOverloadBench();
     }
+     */
 
     cout << "testing Matrix constructor" << endl;
     {
@@ -30,12 +32,6 @@ int main(){
     {
         TestLinearSystem test;
         test.matrixAssignOp();
-    }
-
-    cout << "testing Matrix assignment operator" << endl;
-    {
-        TestLinearSystem test;
-        test.matrixCopyInit();
     }
 
     cout << "testing Matrix buildIdentityMxM()" << endl;
@@ -149,33 +145,17 @@ void TestLinearSystem::matrixInit() {
 
 void TestLinearSystem::matrixAssignOp() {
 
-    wwills::Matrix testMatrix;
-
-    testMatrix.elements[0][1] = 5.5;
-    testMatrix.elements[1][0] = 6.5;
-
     wwills::Matrix copyMatrix(10, 4);
-    copyMatrix = testMatrix;
 
-    assert(&copyMatrix != &testMatrix);
-    assert(copyMatrix.elements != testMatrix.elements);
-    assert(copyMatrix.elements[0][1] == 5.5);
-    assert(copyMatrix.elements[1][0] == 6.5);
+    {
+        wwills::Matrix testMatrix;
 
-    copyMatrix.print();
-}
+        testMatrix.elements[0][1] = 5.5;
+        testMatrix.elements[1][0] = 6.5;
 
-void TestLinearSystem::matrixCopyInit() {
+        copyMatrix = testMatrix;
+    }
 
-    wwills::Matrix testMatrix;
-
-    testMatrix.elements[0][1] = 5.5;
-    testMatrix.elements[1][0] = 6.5;
-
-    wwills::Matrix copyMatrix = testMatrix;
-
-    assert(&copyMatrix != &testMatrix);
-    assert(copyMatrix.elements != testMatrix.elements);
     assert(copyMatrix.elements[0][1] == 5.5);
     assert(copyMatrix.elements[1][0] == 6.5);
 

@@ -30,7 +30,7 @@ namespace wwills{
 
         Matrix buildIdentityNxN();
 
-        std::vector<float> operator[](const int row);
+        std::vector<float> &operator[](const int &row);
 
         void addRows(const int &source, const int &destination);
 

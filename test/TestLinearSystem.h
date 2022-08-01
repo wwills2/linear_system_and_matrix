@@ -14,6 +14,7 @@ public:
 
 
     void matrixInit();                          //calls the elements constructor to initialize a generic elements
+    void matrixAssignOp();                      //tests assigning one matrix to another
     void buildIdentityMxMTest();                //calls buildIdentityMxMTest
     void buildIdentityNxNTest();                //calls buildIdentityNxNTest
     void addRowsTest();                         //calls addRows(float *, float *)
