@@ -73,10 +73,10 @@ namespace wwills{
         float rowScalar = 0;
         std::pair<int, int> pivot = {0, 0};
         bool matrixIsNonZero = false;
-        int tryRow = pivot.first;
+        int tryRow = numRows - 1;
 
         //get non-zero into pivot position
-        while (elements[pivot.first][pivot.second] == 0 && pivot.second != numCols){
+        while (pivot.second != numCols && elements[pivot.first][pivot.second] == 0){
 
             //swap current row with first row if non-zero found
             if (elements[tryRow][pivot.second] != 0) {
@@ -88,11 +88,11 @@ namespace wwills{
 
                 //move the pivot column over 1 and try to find a non-zero entry
                 pivot.second++;
-                tryRow = 0;
+                tryRow = numRows - 1;
 
             }else if ((tryRow + 1) < numRows){
 
-                tryRow++;
+                tryRow--;
             }
         }
 
@@ -113,8 +113,8 @@ namespace wwills{
                         rowScalar = elements[row][pivot.second] / elements[pivot.first][pivot.second];
 
                         //make scalar negative if the sign is the same
-                        if ((elements[row][pivot.second] < 0 && elements[pivot.first][pivot.second] > 0) ||
-                            (elements[row][pivot.second] > 0 && elements[pivot.first][pivot.second] < 0)) {
+                        if ((elements[row][pivot.second] < 0 && elements[pivot.first][pivot.second] < 0) ||
+                            (elements[row][pivot.second] > 0 && elements[pivot.first][pivot.second] > 0)) {
                             rowScalar *= -1;
                         }
 
@@ -125,31 +125,37 @@ namespace wwills{
                 pivot.first++;
                 pivot.second++;
 
-                searchRow = pivot.first;
-                searchCol = pivot.second;
-                rowSwapNeeded = false;
+                //find next pivot if not in the last column
+                if (pivot.second < numCols - 1){
 
-                //find the next pivot position, if all entries in row are zero, then swap
-                while ((elements[searchRow][searchCol] == 0) && (searchRow < numRows)){
+                    searchRow = pivot.first;
+                    searchCol = pivot.second;
+                    rowSwapNeeded = false;
 
-                    //move back to current pivot column if at the end of the row and there is another row
-                    if ((searchCol == numCols - 1) && (searchRow + 1 < numRows)){
+                    //find the next pivot position, if all entries in row are zero, then swap
+                    while (searchRow < numRows && elements[searchRow][searchCol] == 0){
 
-                        searchCol = pivot.second;
-                        rowSwapNeeded = true;
-                        searchRow++;
+                        //move back to current pivot column if at the end of the row and there is another row
+                        if ((searchCol == numCols - 1) && (searchRow + 1 < numRows)){
+
+                            searchCol = pivot.second;
+                            rowSwapNeeded = true;
+                            searchRow++;
+                        }else if (searchCol + 1 < numCols){
+
+                            searchCol++;
+                        }
                     }
 
-                    searchCol++;
+                    //swap rows to move non-zero into pivot
+                    if (rowSwapNeeded){
+
+                        //move the new pivot row up via swap
+                        elements[pivot.first].swap(elements[searchRow]);
+                    }
+
+                    pivot.second = searchCol;
                 }
-
-                if (rowSwapNeeded){
-
-                    //move the new pivot row up via swap
-                    elements[pivot.first].swap(elements[searchRow]);
-                }
-
-                pivot.second = searchCol;
             }
         }
     }
