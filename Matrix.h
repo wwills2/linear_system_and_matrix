@@ -22,8 +22,6 @@ namespace wwills{
 
         void print();
 
-        void debugPrint();
-
         //! important: column zero must be non-zero to work properly
         void echelonForm();
 
@@ -35,7 +33,7 @@ namespace wwills{
 
         Matrix buildIdentityNxN();
 
-        float *operator[](const int row);
+        float *operator[](const int &row);
 
         void addRows(const int &sourceRow, const int &destinationRow);
 
@@ -43,7 +41,7 @@ namespace wwills{
 
         void interchangeRows(const int &swapRow1, const int &swapRow2);
 
-        void scaleRow(float *row, float factor);
+        void scaleRow(float *row, const float &factor);
 
         int numRows;        //num rows
         int numCols;        //num cols

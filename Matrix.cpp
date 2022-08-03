@@ -101,20 +101,6 @@ namespace wwills{
         std::cout << std::endl;
     }
 
-    void Matrix::debugPrint() {
-
-        for (int row = 0; row < numRows; row++){
-
-            printf("row %i: [ ", row);
-
-            for (int col = 0; col < numCols; col++){
-                printf("%f ", elements[row][col]);
-            }
-
-            printf("]\n");
-        }
-    }
-
     void Matrix::echelonForm() {
 
         float rowScalar = 0;
@@ -292,7 +278,7 @@ namespace wwills{
         return identity;
     }
 
-    inline float *Matrix::operator[](const int row) {
+    inline float *Matrix::operator[](const int &row) {
         return elements[row];
     }
 
@@ -328,7 +314,7 @@ namespace wwills{
         delete[] tempArray;
     }
 
-    void Matrix::scaleRow(float *row, float factor) {
+    void Matrix::scaleRow(float *row, const float &factor) {
 
         for (int col = 0; col < numCols; col++){
             row[col] *= factor;
