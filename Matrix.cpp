@@ -217,7 +217,7 @@ namespace wwills{
         }
     }
 
-    void Matrix::replaceRows(const int &source, const int &destination, const float sourceMultiple) {
+    void Matrix::replaceRows(const int &source, const int &destination, const float &sourceMultiple) {
 
         //multiply entries in the source row and add them to the destination row
         for (int col = 0; col < numCols; col++){
@@ -225,7 +225,7 @@ namespace wwills{
         }
     }
 
-    void Matrix::scaleRow(const int &row, float factor) {
+    void Matrix::scaleRow(const int &row, float &factor) {
 
         for (int col = 0; col < numCols; col++){
             elements[row][col] *= factor;

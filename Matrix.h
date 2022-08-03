@@ -34,9 +34,9 @@ namespace wwills{
 
         void addRows(const int &source, const int &destination);
 
-        void replaceRows(const int &source, const int &destination, const float sourceMultiple);
+        void replaceRows(const int &source, const int &destination, const float &sourceMultiple);
 
-        void scaleRow(const int &row, float factor);
+        void scaleRow(const int &row, float &factor);
 
         int numRows;        //num rows
         int numCols;        //num cols
