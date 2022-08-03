@@ -8,7 +8,7 @@
 using std::cout;
 using std::endl;
 
-inline float *wwills::Matrix::operator[](const int row) {
+inline float *wwills::Matrix::operator[](const int &row) {
     return elements[row];
 }
 
