@@ -37,11 +37,11 @@ namespace wwills{
 
         float *operator[](const int row);
 
-        void addRows(const float *source, float *destination);
+        void addRows(const int &sourceRow, const int &destinationRow);
 
-        void replaceRows(const float *source, float *destination, const float sourceMultiple);
+        void replaceRows(const int &sourceRow, const int &destinationRow, const float &sourceMultiple);
 
-        void interchangeRows(float *swap1, float *swap2);
+        void interchangeRows(const int &swapRow1, const int &swapRow2);
 
         void scaleRow(float *row, float factor);
 

@@ -1,14 +1,17 @@
 # ninja log v5
-262	312	1658454316195442798	testLinearSystem	a68ac7ccda9ba627
+398	454	1658976440801121742	testLinearSystem	a68ac7ccda9ba627
+0	15	1659569892126866828	build.ninja	38c1c46e63653f60
 1	336	1656548570675628771	CMakeFiles/matrix_operations.dir/Matrix.cpp.o	96a94d3e565cf849
-0	262	1658454316147444092	CMakeFiles/testLinearSystem.dir/Matrix.cpp.o	ad6e16eb4e986d44
+0	314	1658976440661124639	CMakeFiles/testLinearSystem.dir/Matrix.cpp.o	ad6e16eb4e986d44
 1	465	1656548570803626339	CMakeFiles/matrix_operations.dir/LinearSystem.cpp.o	e647896f63a25fc5
 170	211	1655251535048920297	matrix_operations	88be515d3ea4e90e
 0	170	1655251535008919828	CMakeFiles/matrix_operations.dir/main.cpp.o	a5cc7e802a6e960f
-1	358	1658452617936072642	CMakeFiles/testLinearSystem.dir/LinearSystem.cpp.o	95c637de50b29456
-0	352	1658453135880833635	CMakeFiles/testLinearSystem.dir/test/TestLinearSystem.cpp.o	a4419435c899d52a
-0	15	1658976440341131259	build.ninja	38c1c46e63653f60
-0	314	1658976440661124639	CMakeFiles/testLinearSystem.dir/Matrix.cpp.o	ad6e16eb4e986d44
-1	377	1658976440721123397	CMakeFiles/testLinearSystem.dir/test/TestLinearSystem.cpp.o	a4419435c899d52a
 0	398	1658976440745122901	CMakeFiles/testLinearSystem.dir/LinearSystem.cpp.o	95c637de50b29456
-398	454	1658976440801121742	testLinearSystem	a68ac7ccda9ba627
+1	377	1658976440721123397	CMakeFiles/testLinearSystem.dir/test/TestLinearSystem.cpp.o	a4419435c899d52a
+0	19	1659569892126866828	build.ninja	38c1c46e63653f60
+0	388	1659569892518862435	CMakeFiles/testLinearSystem.dir/Matrix.cpp.o	ad6e16eb4e986d44
+1	433	1659569892562861942	CMakeFiles/testLinearSystem.dir/test/TestLinearSystem.cpp.o	a4419435c899d52a
+0	463	1659569892590861628	CMakeFiles/testLinearSystem.dir/LinearSystem.cpp.o	95c637de50b29456
+463	519	1659569892646861000	testLinearSystem	a68ac7ccda9ba627
+0	355	1659569977041918835	CMakeFiles/testLinearSystem.dir/test/TestLinearSystem.cpp.o	a4419435c899d52a
+355	410	1659569977097918212	testLinearSystem	a68ac7ccda9ba627

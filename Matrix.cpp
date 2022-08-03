@@ -119,81 +119,91 @@ namespace wwills{
 
         float rowScalar = 0;
         std::pair<int, int> pivot = {0, 0};
+        bool matrixIsNonZero = false;
+        int tryRow = numRows - 1;
 
         //get non-zero into pivot position
-        int tryRow = pivot.first;
+        while (pivot.second != numCols && elements[pivot.first][pivot.second] == 0){
 
-        //get non-zero into pivot position
-        while (elements[tryRow][pivot.second] == 0){
-
-            tryRow++;
-
-            //swap current tryRow if non-zero found
+            //swap current row with first row if non-zero found
             if (elements[tryRow][pivot.second] != 0) {
 
-                interchangeRows(elements[tryRow], elements[pivot.first]);
-                tryRow = pivot.first;
+                interchangeRows(tryRow, pivot.first);
+                matrixIsNonZero = true;
 
-            }else if (tryRow == numRows - 1){
+            }else if (tryRow == numRows - 1) {
 
                 //move the pivot column over 1 and try to find a non-zero entry
-                pivot.second += 1;
+                pivot.second++;
+                tryRow = numRows - 1;
+
+            }else if ((tryRow + 1) < numRows){
+
+                tryRow--;
             }
         }
 
+        if (matrixIsNonZero){
 
-        int searchCol = 0;
-        int searchRow = 0;      //used when searching for pivot
-        bool rowSwapNeeded = false;
+            int searchCol = 0;
+            int searchRow = 0;      //used when searching for pivot
+            bool rowSwapNeeded = false;
 
-        //loop through all pivot positions and perform forward operations
-        for (int i = 0; i < numRows; i++){
+            //loop through all pivot positions and perform forward operations
+            for (int i = 0; i < numRows; i++){
 
-            //perform row operations to clear the pivot column
-            for (int row = pivot.first + 1; row < numRows; row++) {
+                //perform row operations to clear the pivot column
+                for (int row = pivot.first + 1; row < numRows; row++) {
 
-                if (elements[row][pivot.second] != 0) {
+                    if (elements[row][pivot.second] != 0) {
 
-                    rowScalar = elements[row][pivot.second] / elements[pivot.first][pivot.second];
+                        rowScalar = elements[row][pivot.second] / elements[pivot.first][pivot.second];
 
-                    //make scalar negative if the sign is the same
-                    if ((elements[row][pivot.second] < 0 && elements[pivot.first][pivot.second] > 0) ||
-                        (elements[row][pivot.second] > 0 && elements[pivot.first][pivot.second] < 0)) {
-                        rowScalar *= -1;
+                        //make scalar negative if the sign is the same
+                        if ((elements[row][pivot.second] < 0 && elements[pivot.first][pivot.second] < 0) ||
+                            (elements[row][pivot.second] > 0 && elements[pivot.first][pivot.second] > 0)) {
+                            rowScalar *= -1;
+                        }
+
+                        replaceRows(pivot.first, row, rowScalar);
+                    }
+                }
+
+                pivot.first++;
+                pivot.second++;
+
+                //find next pivot if not in the last column
+                if (pivot.second < numCols - 1){
+
+                    searchRow = pivot.first;
+                    searchCol = pivot.second;
+                    rowSwapNeeded = false;
+
+                    //find the next pivot position, if all entries in row are zero, then swap
+                    while (searchRow < numRows && elements[searchRow][searchCol] == 0){
+
+                        //move back to current pivot column if at the end of the row and there is another row
+                        if ((searchCol == numCols - 1) && (searchRow + 1 < numRows)){
+
+                            searchCol = pivot.second;
+                            rowSwapNeeded = true;
+                            searchRow++;
+                        }else if (searchCol + 1 < numCols){
+
+                            searchCol++;
+                        }
                     }
 
-                    replaceRows(elements[pivot.first], elements[row], rowScalar);
+                    //swap rows to move non-zero into pivot
+                    if (rowSwapNeeded){
+
+                        //move the new pivot row up via swap
+                        interchangeRows(pivot.first, searchRow);
+                    }
+
+                    pivot.second = searchCol;
                 }
             }
-
-            pivot.first++;
-            pivot.second++;
-
-            searchRow = pivot.first;
-            searchCol = pivot.second;
-            rowSwapNeeded = false;
-
-            //find the next pivot position, if all entries in row are zero, then swap
-            while ((elements[searchRow][searchCol] == 0) && (searchRow < numRows)){
-
-                //move back to current pivot column if at the end of the row and there is another row
-                if ((searchCol == numCols - 1) && (searchRow + 1 < numRows)){
-
-                    searchCol = pivot.second;
-                    rowSwapNeeded = true;
-                    searchRow++;
-                }
-
-                searchCol++;
-            }
-
-            if (rowSwapNeeded){
-
-                //move the new pivot row up via swap
-                interchangeRows(elements[pivot.first], elements[searchRow]);
-            }
-
-            pivot.second = searchCol;
         }
     }
 
@@ -286,34 +296,34 @@ namespace wwills{
         return elements[row];
     }
 
-    void Matrix::addRows(const float *source, float *destination) {
+    void Matrix::addRows(const int &sourceRow, const int &destinationRow) {
 
         for (int col = 0; col < numCols; col++){
 
             //add the source row index to the destination row index
-            destination[col] += source[col];
+            elements[destinationRow][col] += elements[sourceRow][col];
         }
     }
 
-    void Matrix::replaceRows(const float *source, float *destination, const float sourceMultiple) {
+    void Matrix::replaceRows(const int &sourceRow, const int &destinationRow, const float &sourceMultiple) {
 
         //multiply entries in the source row and add them to the destination row
         for (int col = 0; col < numCols; col++){
-            destination[col] += (source[col] * sourceMultiple);
+            elements[destinationRow][col] += (elements[sourceRow][col] * sourceMultiple);
         }
     }
 
-    void Matrix::interchangeRows(float *swap1, float *swap2) {
+    void Matrix::interchangeRows(const int &swapRow1, const int &swapRow2) {
 
         //copy swap row 1 to temp location
         float *tempArray = new float[numCols];
-        memcpy(tempArray, swap1, sizeof (float) * numCols);
+        memcpy(tempArray, elements[swapRow1], sizeof (float) * numCols);
 
         //copy swap row 2 to swap row 1
-        memcpy(swap1, swap2, sizeof (float) * numCols);
+        memcpy(elements[swapRow1], elements[swapRow2], sizeof (float) * numCols);
 
         //copy temp to swap row 2
-        memcpy(swap2, tempArray, sizeof (float) * numCols);
+        memcpy(elements[swapRow2], tempArray, sizeof (float) * numCols);
 
         delete[] tempArray;
     }
