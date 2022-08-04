@@ -241,27 +241,32 @@ namespace wwills{
         //build m x m matrix
         Matrix identity(numRows, numRows);
 
+        int t1_start = 0;
 
-        for (int row = 0; row < numRows; row++){
+        std::thread t1 {&Matrix::buildIdentityMxMThread, t1_start};
+
+        return identity;
+    }
+
+    void Matrix::buildIdentityMxMThread(int startRow) {
+
+        for (int row = startRow; row < numRows; row += 4){
             for (int col = 0; col < numRows; col++){
 
                 // place 1 down the diagonal
                 if (row == col){
-                    identity.elements[row][col] = 1;
+                    elements[row][col] = 1;
                 }else{
-                    identity.elements[row][col] = 0;
+                    elements[row][col] = 0;
                 }
             }
         }
-
-        return identity;
     }
 
     Matrix Matrix::buildIdentityNxN() {
 
         //build n x n matrix
         Matrix identity(numCols, numCols);
-
 
         for (int row = 0; row < numCols; row++){
             for (int col = 0; col < numCols; col++){

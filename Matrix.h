@@ -31,7 +31,11 @@ namespace wwills{
 
         Matrix buildIdentityMxM();
 
+        void buildIdentityMxMThread(int startRow);
+
         Matrix buildIdentityNxN();
+
+        void buildIdentityNxNThread();
 
         float *operator[](const int &row);
 

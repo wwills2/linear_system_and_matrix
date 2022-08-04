@@ -9,6 +9,7 @@
 #include <map>
 #include <iostream>
 #include <string>
+#include <thread>
 
 class TestLinearSystem;
 
@@ -36,6 +37,7 @@ namespace wwills {
     private:
 
         //data members
+        const unsigned int machine_threads = std::thread::hardware_concurrency();
         int numMatrices;
         std::map<std::string, Matrix> matrices;
     };

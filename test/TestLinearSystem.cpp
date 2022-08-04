@@ -191,7 +191,7 @@ void TestLinearSystem::matrixCopyInit() {
 
 void TestLinearSystem::buildIdentityMxMTest() {
 
-    wwills::Matrix testMatrix;
+    wwills::Matrix testMatrix(30, 30);
     wwills::Matrix I = testMatrix.buildIdentityMxM();
 
     assert(I.numElements == (testMatrix.numRows * testMatrix.numRows));
@@ -201,11 +201,27 @@ void TestLinearSystem::buildIdentityMxMTest() {
     assert(I.elements[1][0] == 0);
 
     I.print();
+    /*
+    wwills::Matrix testMatrixBig(8000, 10000);
+    wwills::Matrix I2 = testMatrixBig.buildIdentityNxN();
+
+    for (int row = 0; row < testMatrixBig.numRows; row++){
+        for (int col = 0; col < testMatrix.numRows; col++){
+
+            // place 1 down the diagonal
+            if (row == col){
+                assert(I2.elements[row][col] == 1);
+            }else{
+                assert(I2.elements[row][col] == 0);
+            }
+        }
+    }
+     */
 }
 
 void TestLinearSystem::buildIdentityNxNTest() {
 
-    wwills::Matrix testMatrix;
+    wwills::Matrix testMatrix(30, 20);
     wwills::Matrix I = testMatrix.buildIdentityNxN();
 
     assert(I.numElements == (testMatrix.numCols * testMatrix.numCols));
@@ -216,6 +232,23 @@ void TestLinearSystem::buildIdentityNxNTest() {
     assert(I.elements[1][0] == 0);
 
     I.print();
+
+    /*
+    wwills::Matrix testMatrixBig(8000, 10000);
+    wwills::Matrix I2 = testMatrixBig.buildIdentityNxN();
+
+    for (int row = 0; row < testMatrixBig.numCols; row++){
+        for (int col = 0; col < testMatrix.numCols; col++){
+
+            // place 1 down the diagonal
+            if (row == col){
+                assert(I2.elements[row][col] == 1);
+            }else{
+                assert(I2.elements[row][col] == 0);
+            }
+        }
+    }
+     */
 }
 
 void TestLinearSystem::addRowsTest(){
