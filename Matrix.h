@@ -31,7 +31,7 @@ namespace wwills{
 
         Matrix buildIdentityMxM();
 
-        void buildIdentityMxMThread(int startRow);
+        void buildIdentityMxMThread(const int &startRow, const int &numThreads);
 
         Matrix buildIdentityNxN();
 

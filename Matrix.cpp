@@ -240,17 +240,23 @@ namespace wwills{
 
         //build m x m matrix
         Matrix identity(numRows, numRows);
+        std::vector<std::thread> threads;
+        const unsigned int numThreads = std::thread::hardware_concurrency();
 
-        int t1_start = 0;
+        for (unsigned int i = 0; i < numThreads; i++){
+            threads.emplace_back(&Matrix::buildIdentityMxMThread, identity, i, numThreads);
+        }
 
-        std::thread t1 {&Matrix::buildIdentityMxMThread, t1_start};
+        for (unsigned int i = 0; i < numThreads; i++){
+            threads[i].join();
+        }
 
         return identity;
     }
 
-    void Matrix::buildIdentityMxMThread(int startRow) {
+    void Matrix::buildIdentityMxMThread(const int &startRow, const int &numThreads) {
 
-        for (int row = startRow; row < numRows; row += 4){
+        for (int row = startRow; row < numRows; row += numThreads){
             for (int col = 0; col < numRows; col++){
 
                 // place 1 down the diagonal

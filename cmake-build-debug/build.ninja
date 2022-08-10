@@ -77,6 +77,7 @@ build CMakeFiles/matrix_operations.dir/Matrix.cpp.o: CXX_COMPILER__matrix_operat
 
 build matrix_operations: CXX_EXECUTABLE_LINKER__matrix_operations_Debug CMakeFiles/matrix_operations.dir/main.cpp.o CMakeFiles/matrix_operations.dir/LinearSystem.cpp.o CMakeFiles/matrix_operations.dir/Matrix.cpp.o
   FLAGS = -g
+  LINK_FLAGS = -pthread
   OBJECT_DIR = CMakeFiles/matrix_operations.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -120,6 +121,7 @@ build CMakeFiles/testLinearSystem.dir/Matrix.cpp.o: CXX_COMPILER__testLinearSyst
 
 build testLinearSystem: CXX_EXECUTABLE_LINKER__testLinearSystem_Debug CMakeFiles/testLinearSystem.dir/LinearSystem.cpp.o CMakeFiles/testLinearSystem.dir/test/TestLinearSystem.cpp.o CMakeFiles/testLinearSystem.dir/Matrix.cpp.o
   FLAGS = -g
+  LINK_FLAGS = -pthread
   OBJECT_DIR = CMakeFiles/testLinearSystem.dir
   POST_BUILD = :
   PRE_LINK = :
@@ -131,7 +133,7 @@ build testLinearSystem: CXX_EXECUTABLE_LINKER__testLinearSystem_Debug CMakeFiles
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cd /home/zan/CLionProjects/matrix_operations/cmake-build-debug && /snap/clion/198/bin/cmake/linux/bin/ccmake -S/home/zan/CLionProjects/matrix_operations -B/home/zan/CLionProjects/matrix_operations/cmake-build-debug
+  COMMAND = cd /home/zan/CLionProjects/matrix_operations/cmake-build-debug && /snap/clion/203/bin/cmake/linux/bin/ccmake -S/home/zan/CLionProjects/matrix_operations -B/home/zan/CLionProjects/matrix_operations/cmake-build-debug
   DESC = Running CMake cache editor...
   pool = console
   restat = 1
