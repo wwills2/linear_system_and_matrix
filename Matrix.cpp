@@ -24,6 +24,8 @@ namespace wwills{
                 num++;
             }
         }
+
+        buildIdentityMxM();
     }
 
     Matrix::~Matrix() {
@@ -61,6 +63,8 @@ namespace wwills{
                 elements[row][col] = 0;
             }
         }
+
+        buildIdentityMxM();
     }
 
     Matrix::Matrix(const Matrix &rhs) {
@@ -82,6 +86,8 @@ namespace wwills{
                     elements[row][col] = rhs.elements[row][col];
                 }
             }
+
+            buildIdentityMxM();
         }
     }
 
@@ -238,32 +244,33 @@ namespace wwills{
 
     Matrix Matrix::buildIdentityMxM() {
 
+        //allocate array of float array pointers
+        MxM_identity = new float *[numRows];
+
         //build m x m matrix
-        Matrix identity(numRows, numRows);
         std::vector<std::thread> threads;
         const unsigned int numThreads = std::thread::hardware_concurrency();
 
         for (unsigned int i = 0; i < numThreads; i++){
-            threads.emplace_back(&Matrix::buildIdentityMxMThread, identity, i, numThreads);
+            threads.emplace_back(&Matrix::buildIdentityMxMThread, this, i, numThreads);
         }
 
         for (unsigned int i = 0; i < numThreads; i++){
             threads[i].join();
         }
-
-        return identity;
     }
 
-    void Matrix::buildIdentityMxMThread(const int &startRow, const int &numThreads) {
+    void Matrix::buildIdentityMxMThread(int startRow, int numThreads) {
 
         for (int row = startRow; row < numRows; row += numThreads){
+            MxM_identity[row] = new float[numRows];
             for (int col = 0; col < numRows; col++){
 
                 // place 1 down the diagonal
                 if (row == col){
-                    elements[row][col] = 1;
+                    MxM_identity[row][col] = 1;
                 }else{
-                    elements[row][col] = 0;
+                    MxM_identity[row][col] = 0;
                 }
             }
         }

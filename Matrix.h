@@ -31,7 +31,7 @@ namespace wwills{
 
         Matrix buildIdentityMxM();
 
-        void buildIdentityMxMThread(const int &startRow, const int &numThreads);
+        void buildIdentityMxMThread(int startRow, int numThreads);
 
         Matrix buildIdentityNxN();
 
@@ -51,6 +51,8 @@ namespace wwills{
         int numCols;        //num cols
         int numElements;    //number of elements in the elements
         float **elements;   //2d, dynamically allocated, elements array
+        float **MxM_identity;   //identity matrix #rows x #rows
+        float **NxN_identity;   //identity matrix #cols x #cols
 
         friend LinearSystem;
 

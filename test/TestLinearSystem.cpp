@@ -191,16 +191,13 @@ void TestLinearSystem::matrixCopyInit() {
 
 void TestLinearSystem::buildIdentityMxMTest() {
 
-    wwills::Matrix testMatrix(30, 30);
-    wwills::Matrix I = testMatrix.buildIdentityMxM();
+    wwills::Matrix testMatrix(30, 20);
 
-    assert(I.numElements == (testMatrix.numRows * testMatrix.numRows));
-    assert(I.elements[0][0] == 1);
-    assert(I.elements[1][1] == 1);
-    assert(I.elements[0][1] == 0);
-    assert(I.elements[1][0] == 0);
+    assert(testMatrix.MxM_identity[0][0] == 1);
+    assert(testMatrix.MxM_identity[1][1] == 1);
+    assert(testMatrix.MxM_identity[0][1] == 0);
+    assert(testMatrix.MxM_identity[1][0] == 0);
 
-    I.print();
     /*
     wwills::Matrix testMatrixBig(8000, 10000);
     wwills::Matrix I2 = testMatrixBig.buildIdentityNxN();
