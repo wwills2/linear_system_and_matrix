@@ -29,13 +29,13 @@ namespace wwills{
 
     private:
 
-        Matrix buildIdentityMxM();
+        void buildIdentityMxM();
 
-        void buildIdentityMxMThread(int startRow, int numThreads);
+        void buildIdentityMxMThread(const int &startRow, const int &numThreads);
 
-        Matrix buildIdentityNxN();
+        void buildIdentityNxN();
 
-        void buildIdentityNxNThread();
+        void buildIdentityNxNThread(const int &startRow, const int &numThreads);
 
         float *operator[](const int &row);
 
@@ -51,8 +51,8 @@ namespace wwills{
         int numCols;        //num cols
         int numElements;    //number of elements in the elements
         float **elements;   //2d, dynamically allocated, elements array
-        float **MxM_identity;   //identity matrix #rows x #rows
-        float **NxN_identity;   //identity matrix #cols x #cols
+        float **mxmIdentity;   //identity matrix #rows x #rows
+        float **nxnIdentity;   //identity matrix #cols x #cols
 
         friend LinearSystem;
 

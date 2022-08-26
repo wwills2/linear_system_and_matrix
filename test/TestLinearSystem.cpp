@@ -156,96 +156,109 @@ void TestLinearSystem::matrixInit() {
 
 void TestLinearSystem::matrixAssignOp() {
 
-    wwills::Matrix testMatrix;
+    wwills::Matrix *testMatrix = new wwills::Matrix;
 
-    testMatrix.elements[0][1] = 5.5;
-    testMatrix.elements[1][0] = 6.5;
+    testMatrix->elements[0][1] = 5.5;
+    testMatrix->elements[1][0] = 6.5;
 
-    wwills::Matrix copyMatrix(10, 4);
-    copyMatrix = testMatrix;
+    wwills::Matrix *copyMatrix = new wwills::Matrix(10, 4);
+    *copyMatrix = *testMatrix;
 
     assert(&copyMatrix != &testMatrix);
-    assert(copyMatrix.elements != testMatrix.elements);
-    assert(copyMatrix.elements[0][1] == 5.5);
-    assert(copyMatrix.elements[1][0] == 6.5);
+    assert(copyMatrix->elements != testMatrix->elements);
 
-    copyMatrix.print();
+    delete testMatrix;
+
+    assert(copyMatrix->elements[0][1] == 5.5);
+    assert(copyMatrix->elements[1][0] == 6.5);
+
+    copyMatrix->print();
+
+    delete copyMatrix;
 }
 
 void TestLinearSystem::matrixCopyInit() {
 
-    wwills::Matrix testMatrix;
+    wwills::Matrix *testMatrix = new wwills::Matrix;
 
-    testMatrix.elements[0][1] = 5.5;
-    testMatrix.elements[1][0] = 6.5;
+    testMatrix->elements[0][1] = 5.5;
+    testMatrix->elements[1][0] = 6.5;
 
-    wwills::Matrix copyMatrix = testMatrix;
+    wwills::Matrix *copyMatrix = new wwills::Matrix(*testMatrix);
 
     assert(&copyMatrix != &testMatrix);
-    assert(copyMatrix.elements != testMatrix.elements);
-    assert(copyMatrix.elements[0][1] == 5.5);
-    assert(copyMatrix.elements[1][0] == 6.5);
+    assert(copyMatrix->elements != testMatrix->elements);
 
-    copyMatrix.print();
+    delete testMatrix;
+
+    assert(copyMatrix->elements[0][1] == 5.5);
+    assert(copyMatrix->elements[1][0] == 6.5);
+
+    copyMatrix->print();
+
+    delete copyMatrix;
 }
 
 void TestLinearSystem::buildIdentityMxMTest() {
 
     wwills::Matrix testMatrix(30, 20);
 
-    assert(testMatrix.MxM_identity[0][0] == 1);
-    assert(testMatrix.MxM_identity[1][1] == 1);
-    assert(testMatrix.MxM_identity[0][1] == 0);
-    assert(testMatrix.MxM_identity[1][0] == 0);
-
-    /*
-    wwills::Matrix testMatrixBig(8000, 10000);
-    wwills::Matrix I2 = testMatrixBig.buildIdentityNxN();
-
-    for (int row = 0; row < testMatrixBig.numRows; row++){
+    for (int row = 0; row < testMatrix.numRows; row++){
         for (int col = 0; col < testMatrix.numRows; col++){
 
-            // place 1 down the diagonal
+            // assert 1 down the diagonal
             if (row == col){
-                assert(I2.elements[row][col] == 1);
+                assert(testMatrix.mxmIdentity[row][col] == 1);
             }else{
-                assert(I2.elements[row][col] == 0);
+                assert(testMatrix.mxmIdentity[row][col] == 0);
             }
         }
     }
-     */
+
+    wwills::Matrix testMatrixBig(50000, 40000);
+
+    for (int row = 0; row < testMatrixBig.numRows; row++) {
+        for (int col = 0; col < testMatrix.numRows; col++) {
+
+            // assert 1 down the diagonal
+            if (row == col) {
+                assert(testMatrixBig.mxmIdentity[row][col] == 1);
+            } else {
+                assert(testMatrixBig.mxmIdentity[row][col] == 0);
+            }
+        }
+    }
 }
 
 void TestLinearSystem::buildIdentityNxNTest() {
 
     wwills::Matrix testMatrix(30, 20);
-    wwills::Matrix I = testMatrix.buildIdentityNxN();
 
-    assert(I.numElements == (testMatrix.numCols * testMatrix.numCols));
-    assert(I.elements[0][0] == 1);
-    assert(I.elements[1][1] == 1);
-    assert(I.elements[2][2] == 1);
-    assert(I.elements[0][1] == 0);
-    assert(I.elements[1][0] == 0);
-
-    I.print();
-
-    /*
-    wwills::Matrix testMatrixBig(8000, 10000);
-    wwills::Matrix I2 = testMatrixBig.buildIdentityNxN();
-
-    for (int row = 0; row < testMatrixBig.numCols; row++){
+    for (int row = 0; row < testMatrix.numCols; row++){
         for (int col = 0; col < testMatrix.numCols; col++){
 
-            // place 1 down the diagonal
+            // assert 1 down the diagonal
             if (row == col){
-                assert(I2.elements[row][col] == 1);
+                assert(testMatrix.nxnIdentity[row][col] == 1);
             }else{
-                assert(I2.elements[row][col] == 0);
+                assert(testMatrix.nxnIdentity[row][col] == 0);
             }
         }
     }
-     */
+
+    wwills::Matrix testMatrixBig(50000, 40000);
+
+    for (int row = 0; row < testMatrixBig.numCols; row++) {
+        for (int col = 0; col < testMatrixBig.numCols; col++) {
+
+            // assert 1 down the diagonal
+            if (row == col) {
+                assert(testMatrix.nxnIdentity[row][col] == 1);
+            } else {
+                assert(testMatrix.nxnIdentity[row][col] == 0);
+            }
+        }
+    }
 }
 
 void TestLinearSystem::addRowsTest(){

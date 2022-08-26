@@ -25,12 +25,15 @@ namespace wwills{
             }
         }
 
+        //build this matrix's identity matrices
         buildIdentityMxM();
+        buildIdentityNxN();
+
     }
 
     Matrix::~Matrix() {
 
-        //zero and deallocate data
+        //zero and deallocate matrix data
         for (int row = 0; row < numRows; row++){
             for (int col = 0; col < numCols; col++){
                 elements[row][col] = 0;
@@ -45,6 +48,27 @@ namespace wwills{
 
         delete[] elements;
         elements = nullptr;
+
+        //deallocate MxM identity matrix
+        for (int row = 0; row < numRows; row++){
+
+            delete[] mxmIdentity[row];
+            mxmIdentity[row] = nullptr;
+        }
+
+        delete[] mxmIdentity;
+        mxmIdentity = nullptr;
+
+        //deallocate NxN identity matrix
+        for (int row = 0; row < numCols; row++){
+
+            delete[] nxnIdentity[row];
+            nxnIdentity[row] = nullptr;
+        }
+
+        delete[] nxnIdentity;
+        nxnIdentity = nullptr;
+
     }
 
     Matrix::Matrix(int rows, int cols) {
@@ -65,6 +89,7 @@ namespace wwills{
         }
 
         buildIdentityMxM();
+        buildIdentityNxN();
     }
 
     Matrix::Matrix(const Matrix &rhs) {
@@ -87,7 +112,21 @@ namespace wwills{
                 }
             }
 
-            buildIdentityMxM();
+            //allocate and copy MxM identity matrix
+            mxmIdentity = new float *[numRows];
+
+            for (int row = 0; row < numRows; row++){
+                mxmIdentity[row] = new float[numRows];
+                memcpy(mxmIdentity[row], rhs.mxmIdentity[row], sizeof (float) * numRows);
+            }
+
+            //allocate and copy MxM identity matrix
+            nxnIdentity = new float *[numCols];
+
+            for (int row = 0; row < numCols; row++){
+                nxnIdentity[row] = new float[numRows];
+                memcpy(nxnIdentity[row], rhs.nxnIdentity[row], sizeof (float) * numCols);
+            }
         }
     }
 
@@ -202,6 +241,8 @@ namespace wwills{
 
     const Matrix &Matrix::operator=(const Matrix &rhs) {
 
+        bool rebuildIdentity = false;
+
         //self assignment guard
         if (this == &rhs){
             return *this;
@@ -209,6 +250,8 @@ namespace wwills{
 
             //reallocate array if dimensions are different
             if (numCols != rhs.numCols || numRows != rhs.numRows){
+
+                rebuildIdentity = true;
 
                 //delete current array
                 for (int row = 0; row < numRows; row++){
@@ -218,12 +261,29 @@ namespace wwills{
                 }
                 delete[] elements;
 
-                //realloc to match rhs dimensions
+                //realloc matrix to match rhs dimensions
                 elements = new float*[rhs.numRows];
                 for (int row = 0; row < rhs.numRows; row++){
 
                     elements[row] = new float[rhs.numCols];
                 }
+
+                //delete MxM identity matrix
+                for (int row = 0; row < numRows; row++){
+
+                    delete[] mxmIdentity[row];
+                    mxmIdentity[row] = nullptr;
+                }
+
+                delete[] mxmIdentity;
+
+                //delete NxN identity matrix
+                for (int row = 0; row < numCols; row++){
+
+                    delete[] nxnIdentity[row];
+                    nxnIdentity[row] = nullptr;
+                }
+                delete[] nxnIdentity;
             }
 
             //copy static members
@@ -236,16 +296,35 @@ namespace wwills{
                 memcpy(elements[row], rhs.elements[row], sizeof (float) * numCols);
             }
 
+            if (rebuildIdentity){
+
+                //reallocate and copy MxM identity matrix
+                mxmIdentity = new float *[numRows];
+
+                for (int row = 0; row < numRows; row++){
+                    mxmIdentity[row] = new float[numRows];
+                    memcpy(mxmIdentity[row], rhs.mxmIdentity[row], sizeof (float) * numRows);
+                }
+
+                //reallocate and copy NxN identity matrix
+                nxnIdentity = new float *[numCols];
+
+                for (int row = 0; row < numCols; row++){
+                    nxnIdentity[row] = new float[numCols];
+                    memcpy(nxnIdentity[row], rhs.nxnIdentity[row], sizeof (float) * numCols);
+                }
+            }
+
             return *this;
         }
     }
 
     //private + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
-    Matrix Matrix::buildIdentityMxM() {
+    void Matrix::buildIdentityMxM() {
 
         //allocate array of float array pointers
-        MxM_identity = new float *[numRows];
+        mxmIdentity = new float *[numRows];
 
         //build m x m matrix
         std::vector<std::thread> threads;
@@ -260,40 +339,58 @@ namespace wwills{
         }
     }
 
-    void Matrix::buildIdentityMxMThread(int startRow, int numThreads) {
+    void Matrix::buildIdentityMxMThread(const int &startRow, const int &numThreads) {
 
         for (int row = startRow; row < numRows; row += numThreads){
-            MxM_identity[row] = new float[numRows];
+            mxmIdentity[row] = new float[numRows];
             for (int col = 0; col < numRows; col++){
 
                 // place 1 down the diagonal
                 if (row == col){
-                    MxM_identity[row][col] = 1;
+                    mxmIdentity[row][col] = 1;
                 }else{
-                    MxM_identity[row][col] = 0;
+                    mxmIdentity[row][col] = 0;
                 }
             }
         }
     }
 
-    Matrix Matrix::buildIdentityNxN() {
+    void Matrix::buildIdentityNxN() {
+
+        //allocate array of float array pointers
+        nxnIdentity = new float *[numCols];
 
         //build n x n matrix
-        Matrix identity(numCols, numCols);
+        std::vector<std::thread> threads;
+        const unsigned int numThreads = std::thread::hardware_concurrency();
 
-        for (int row = 0; row < numCols; row++){
+        for (unsigned int i = 0; i < numThreads; i++){
+            threads.emplace_back(&Matrix::buildIdentityNxNThread, this, i, numThreads);
+        }
+
+        for (unsigned int i = 0; i < numThreads; i++){
+            threads[i].join();
+        }
+    }
+
+    void Matrix::buildIdentityNxNThread(const int &startRow, const int &numThreads) {
+
+        for (int row = startRow; row < numCols; row += numThreads){
+            nxnIdentity[row] = new float[numCols];
             for (int col = 0; col < numCols; col++){
 
                 // place 1 down the diagonal
                 if (row == col){
-                    identity.elements[row][col] = 1;
+                    nxnIdentity[row][col] = 1;
                 }else{
-                    identity.elements[row][col] = 0;
+                    nxnIdentity[row][col] = 0;
+                }
+
+                if (row == 0 && col == 28){
+                    std::cout << "value at [0][28] is " << nxnIdentity[0][28] << std::endl;
                 }
             }
         }
-
-        return identity;
     }
 
     inline float *Matrix::operator[](const int &row) {
