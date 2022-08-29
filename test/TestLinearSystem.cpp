@@ -21,6 +21,18 @@ int main(){
     }
      */
 
+    cout << "testing Matrix buildIdentityMxM()" << endl;
+    {
+        TestLinearSystem test;
+        test.buildIdentityMxMTest();
+    }
+
+    cout << "testing Matrix buildIdentityNxN()" << endl;
+    {
+        TestLinearSystem test;
+        test.buildIdentityNxNTest();
+    }
+
     cout << "testing Matrix constructor" << endl;
     {
         TestLinearSystem test;
@@ -37,18 +49,6 @@ int main(){
     {
         TestLinearSystem test;
         test.matrixCopyInit();
-    }
-
-    cout << "testing Matrix buildIdentityMxM()" << endl;
-    {
-        TestLinearSystem test;
-        test.buildIdentityMxMTest();
-    }
-
-    cout << "testing Matrix buildIdentityNxN()" << endl;
-    {
-        TestLinearSystem test;
-        test.buildIdentityNxNTest();
     }
 
     cout << "testing LinearSystem constructor" << endl;

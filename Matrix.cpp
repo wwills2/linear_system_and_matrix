@@ -328,7 +328,7 @@ namespace wwills{
 
         //build m x m matrix
         std::vector<std::thread> threads;
-        const unsigned int numThreads = std::thread::hardware_concurrency();
+        const unsigned int numThreads = std::thread::hardware_concurrency() - 1;
 
         for (unsigned int i = 0; i < numThreads; i++){
             threads.emplace_back(&Matrix::buildIdentityMxMThread, this, i, numThreads);
@@ -340,6 +340,8 @@ namespace wwills{
     }
 
     void Matrix::buildIdentityMxMThread(const int &startRow, const int &numThreads) {
+
+        std::cout << "MxM thread created" << std::endl;
 
         for (int row = startRow; row < numRows; row += numThreads){
             mxmIdentity[row] = new float[numRows];
@@ -384,10 +386,6 @@ namespace wwills{
                     nxnIdentity[row][col] = 1;
                 }else{
                     nxnIdentity[row][col] = 0;
-                }
-
-                if (row == 0 && col == 28){
-                    std::cout << "value at [0][28] is " << nxnIdentity[0][28] << std::endl;
                 }
             }
         }
