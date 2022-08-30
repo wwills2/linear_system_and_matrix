@@ -253,9 +253,9 @@ void TestLinearSystem::buildIdentityNxNTest() {
 
             // assert 1 down the diagonal
             if (row == col) {
-                assert(testMatrix.nxnIdentity[row][col] == 1);
-            } else {
-                assert(testMatrix.nxnIdentity[row][col] == 0);
+                assert(testMatrixBig.nxnIdentity[row][col] == 1);
+            }else{
+                assert(testMatrixBig.nxnIdentity[row][col] == 0);
             }
         }
     }

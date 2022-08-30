@@ -120,11 +120,11 @@ namespace wwills{
                 memcpy(mxmIdentity[row], rhs.mxmIdentity[row], sizeof (float) * numRows);
             }
 
-            //allocate and copy MxM identity matrix
+            //allocate and copy NxN identity matrix
             nxnIdentity = new float *[numCols];
 
             for (int row = 0; row < numCols; row++){
-                nxnIdentity[row] = new float[numRows];
+                nxnIdentity[row] = new float[numCols];
                 memcpy(nxnIdentity[row], rhs.nxnIdentity[row], sizeof (float) * numCols);
             }
         }
@@ -340,8 +340,6 @@ namespace wwills{
     }
 
     void Matrix::buildIdentityMxMThread(const int &startRow, const int &numThreads) {
-
-        std::cout << "MxM thread created" << std::endl;
 
         for (int row = startRow; row < numRows; row += numThreads){
             mxmIdentity[row] = new float[numRows];
