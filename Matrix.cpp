@@ -4,7 +4,7 @@
 
 #include "Matrix.h"
 
-namespace wwills{
+namespace wwills2{
     Matrix::Matrix() {
 
         numRows = 2;
@@ -342,16 +342,8 @@ namespace wwills{
     void Matrix::buildIdentityMxMThread(const int &startRow, const int &numThreads) {
 
         for (int row = startRow; row < numRows; row += numThreads){
-            mxmIdentity[row] = new float[numRows];
-            for (int col = 0; col < numRows; col++){
-
-                // place 1 down the diagonal
-                if (row == col){
-                    mxmIdentity[row][col] = 1;
-                }else{
-                    mxmIdentity[row][col] = 0;
-                }
-            }
+            mxmIdentity[row] = new float[numRows]{};
+            mxmIdentity[row][row] = 1;
         }
     }
 
@@ -376,16 +368,9 @@ namespace wwills{
     void Matrix::buildIdentityNxNThread(const int &startRow, const int &numThreads) {
 
         for (int row = startRow; row < numCols; row += numThreads){
-            nxnIdentity[row] = new float[numCols];
-            for (int col = 0; col < numCols; col++){
 
-                // place 1 down the diagonal
-                if (row == col){
-                    nxnIdentity[row][col] = 1;
-                }else{
-                    nxnIdentity[row][col] = 0;
-                }
-            }
+            nxnIdentity[row] = new float[numCols]{};
+            nxnIdentity[row][row] = 1;
         }
     }
 

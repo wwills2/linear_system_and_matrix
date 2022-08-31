@@ -8,7 +8,7 @@
 #include <cstring>
 #include "LinearSystem.h"
 
-namespace wwills{
+namespace wwills2{
 
     class Matrix {
     public:

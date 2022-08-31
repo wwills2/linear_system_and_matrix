@@ -5,7 +5,7 @@
 #include "LinearSystem.h"
 #include "Matrix.h"
 
-namespace wwills {
+namespace wwills2 {
     LinearSystem::LinearSystem() {
 
         numMatrices = 1;

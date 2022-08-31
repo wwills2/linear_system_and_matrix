@@ -29,6 +29,9 @@ public:
 
     void dotVsOverloadBench();                  //see test file
 
+    //builds a random matrix
+    wwills2::Matrix &generateRandomMatrix(const int minRowCol, const int maxRowCol);
+
 
 };
 

@@ -13,7 +13,7 @@
 
 class TestLinearSystem;
 
-namespace wwills {
+namespace wwills2 {
 
     class LinearSystem;
     class Matrix;
