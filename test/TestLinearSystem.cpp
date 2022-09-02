@@ -382,8 +382,11 @@ void TestLinearSystem::interchangeRowsTest() {
 }
 
 void TestLinearSystem::echelonFormTest() {
+
+    cout << "\tTextbook hardcoded samples" << endl;
     {
-        cout << "\tTextbook hardcoded sample" << endl;
+        int rows = 4;
+        int cols = 6;
 
         float initialMatrix[24] = {0, 3, -6, 6, 4 ,-5,
                                    3, -7, 8, -5, 8, 9,
@@ -398,8 +401,8 @@ void TestLinearSystem::echelonFormTest() {
         wwills2::Matrix testMatrix(4, 6);
 
         int i = 0;
-        for (int row = 0; row < 4; row++){
-            for(int col = 0; col < 6; col++){
+        for (int row = 0; row < rows; row++){
+            for(int col = 0; col < cols; col++){
                 testMatrix[row][col] = initialMatrix[i];
                 i++;
             }
@@ -408,13 +411,85 @@ void TestLinearSystem::echelonFormTest() {
         testMatrix.echelonForm();
 
         i = 0;
-        for (int row = 0; row < 4; row++){
-            for(int col = 0; col < 6; col++){
+        for (int row = 0; row < rows; row++){
+            for(int col = 0; col < cols; col++){
                 assert(testMatrix[row][col] == initialEchelonMatrix[i]);
                 i++;
             }
         }
     }
+    {
+        int rows = 3;
+        int cols = 4;
+
+        float initialMatrix[12] = {1 ,5, 2, -6,
+                                   0 ,4, -7, 2 ,
+                                   0, 0 , 5, 0};
+
+        float initialEchelonMatrix[12] = {1 ,5, 2, -6,
+                                          0 ,4, -7, 2 ,
+                                          0, 0 , 5, 0};
+
+        wwills2::Matrix testMatrix(3, 4);
+
+        int i = 0;
+        for (int row = 0; row < rows; row++){
+            for(int col = 0; col < cols; col++){
+                testMatrix[row][col] = initialMatrix[i];
+                i++;
+            }
+        }
+
+        testMatrix.echelonForm();
+
+        i = 0;
+        for (int row = 0; row < rows; row++){
+            for(int col = 0; col < cols; col++){
+                assert(testMatrix[row][col] == initialEchelonMatrix[i]);
+                i++;
+            }
+        }
+    }
+    {
+        int rows = 4;
+        int cols = 5;
+
+        float initialMatrix[20] = {0, -3, -6, 4, 9,
+                                   -1, -2 , -1, 3, 1,
+                                   -2, -3, 0, 3, -1,
+                                   1, 4, 5, -9, -7};
+
+        float initialEchelonMatrix[20] = {0 , -3, -6, 4, 9,
+                                          -1, -2, -1, 3, 1,
+                                          -2, -3 , 0, 3, -1,
+                                          1, 4, 5, -9 , -7};
+
+        wwills2::Matrix testMatrix(4, 6);
+
+        int i = 0;
+        for (int row = 0; row < rows; row++){
+            for(int col = 0; col < cols; col++){
+                testMatrix[row][col] = initialMatrix[i];
+                i++;
+            }
+        }
+
+        testMatrix.print();
+        testMatrix.echelonForm();
+        testMatrix.print();
+
+        i = 0;
+        for (int row = 0; row < rows; row++){
+            for(int col = 0; col < cols; col++){
+                assert(testMatrix[row][col] == initialEchelonMatrix[i]);
+                i++;
+            }
+        }
+    }
+
+
+
+    /*
     {
         cout << "\trandom generated test samples" << endl;
 
@@ -431,6 +506,7 @@ void TestLinearSystem::echelonFormTest() {
             }
         }
     }
+     */
 }
 
 

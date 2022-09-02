@@ -21,7 +21,7 @@ public:
     void matrixOverloadedElementOp();           //calls the Matrix overloaded [] operator
     void replaceRowsTest();                     //calls replaceRows(float *, float *, float)
     void interchangeRowsTest();                 //calls interchangeRows (float *, float *)
-    void echelonFormTest();                      //calls echelonFormTest()
+    void echelonFormTest();                     //calls echelonFormTest()
 
     void linearSysInit();                       //calls the linear system constructor, generic linear system object
     void addMatrixTest();                       //calls both add matrix functions
