@@ -5,3 +5,25 @@
                 float scaleFactor = 1 / elements[pivot.first][pivot.second];
                 scaleRow(elements[pivot.first], scaleFactor);
             }
+
+
+prototyped column-first pivot search code vvvv
+
+//find the next pivot position, look down columns for swaps, moving across rows
+                    while ((searchCol < numCols) && (elements[searchRow][searchCol] == 0)){
+
+                        //move back to current pivot row if at the bottom of column, and there is another row
+                        if ((searchRow == numRows - 1) && (searchCol + 1 < numCols)){
+
+                            searchRow = pivot.first;
+                            rowSwapNeeded = true;
+                            searchCol++;
+                        }else if (searchRow + 1 < numRows){
+
+                            searchRow++;
+                        }else{
+
+                            //at the end of a column and there are no more rows to search, end
+                            searchCol = numCols;
+                        }
+                    }

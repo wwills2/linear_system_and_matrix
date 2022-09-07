@@ -150,17 +150,15 @@ namespace wwills2{
 
         float rowScalar = 0;
         std::pair<int, int> pivot = {0, 0};
-        bool matrixIsNonZero = false;
         int tryRow = numRows - 1;
 
         //get non-zero into pivot position
-        while (pivot.second != numCols && elements[pivot.first][pivot.second] == 0){
+        while ((pivot.second != numCols) && (elements[pivot.first][pivot.second] == 0)){
 
             //swap current row with first row if non-zero found
             if (elements[tryRow][pivot.second] != 0) {
 
                 interchangeRows(tryRow, pivot.first);
-                matrixIsNonZero = true;
 
             }else if (tryRow == numRows - 1) {
 
@@ -174,7 +172,7 @@ namespace wwills2{
             }
         }
 
-        if (matrixIsNonZero){
+        if (elements[pivot.first][pivot.second] != 0){
 
             int searchCol = 0;
             int searchRow = 0;      //used when searching for pivot
@@ -191,8 +189,8 @@ namespace wwills2{
                         rowScalar = elements[row][pivot.second] / elements[pivot.first][pivot.second];
 
                         //make scalar negative if the sign is the same
-                        if ((elements[row][pivot.second] < 0 && elements[pivot.first][pivot.second] < 0) ||
-                            (elements[row][pivot.second] > 0 && elements[pivot.first][pivot.second] > 0)) {
+                        if ((elements[row][pivot.second] < 0 && rowScalar < 0) ||
+                            (elements[row][pivot.second] > 0 && rowScalar > 0)) {
                             rowScalar *= -1;
                         }
 
@@ -211,7 +209,7 @@ namespace wwills2{
                     rowSwapNeeded = false;
 
                     //find the next pivot position, if all entries in row are zero, then swap
-                    while (searchRow < numRows && elements[searchRow][searchCol] == 0){
+                    while ((searchRow < numRows) && (elements[searchRow][searchCol] == 0)){
 
                         //move back to current pivot column if at the end of the row and there is another row
                         if ((searchCol == numCols - 1) && (searchRow + 1 < numRows)){
@@ -222,6 +220,10 @@ namespace wwills2{
                         }else if (searchCol + 1 < numCols){
 
                             searchCol++;
+                        }else{
+
+                            //at the end of a column and there are no more rows to search, end
+                            searchRow = numRows;
                         }
                     }
 
