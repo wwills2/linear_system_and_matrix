@@ -166,6 +166,8 @@ namespace wwills2{
                 }
             }
 
+            m_pivotPositions.push_back(pivot);
+
             //set echelon var
             m_isEchelon = true;
 
@@ -207,6 +209,8 @@ namespace wwills2{
                             return;
                         }
                     }
+
+                    m_pivotPositions.push_back(pivot);
                 }
             }
         }
@@ -416,7 +420,7 @@ namespace wwills2{
         for (int currCol = pivot.second; currCol < m_numCols; currCol++) {
 
             //search the current column for nonzero, swap if found
-            for (int currRow = pivot.first + 1; currRow < m_numRows; currRow++) {
+            for (int currRow = pivot.first; currRow < m_numRows; currRow++) {
 
                 if (m_elements[currRow][currCol] != 0){
 

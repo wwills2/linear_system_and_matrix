@@ -194,7 +194,7 @@ void TestLinearSystem::dotVsOverloadBench() {
     cout << "\toverloaded [] operator: " << time << " seconds" << endl;
 }
 
-wwills2::Matrix &TestLinearSystem::generateRandomMatrix(const int minRowCol, const int maxRowCol){
+wwills2::Matrix TestLinearSystem::generateRandomMatrix(const int minRowCol, const int maxRowCol){
 
     Random randRowColAmnt(minRowCol, maxRowCol);
     Random randElement(0, 1000);
@@ -215,6 +215,29 @@ wwills2::Matrix &TestLinearSystem::generateRandomMatrix(const int minRowCol, con
             }
         }
     }
+
+    return newMatrix;
+}
+
+wwills2::Matrix TestLinearSystem::generateRandomReducedMatrix(const int minRowCol, const int maxRowCol) {
+
+    Random randRowColAmnt(minRowCol, maxRowCol);
+    Random randElement(0, 1000);
+    Random makeZeroRow(1, 20);
+
+    int matrixRows = randRowColAmnt.getRandNum();
+    int matrixCols = randRowColAmnt.getRandNum();
+
+    Random distanceToPivotCol(1, matrixCols / 2);
+    Random distanceToPivotRow(1, matrixRows / 4);
+    std::pair<int, int> currentPivot = {0 ,0};
+
+    while (currentPivot.first < matrixRows && currentPivot.second < matrixCols){
+
+    }
+
+    wwills2::Matrix newMatrix(matrixRows, matrixCols);
+    return newMatrix;
 }
 
 void TestLinearSystem::matrixInit() {
@@ -663,8 +686,8 @@ void TestLinearSystem::echelonFormTest() {
 
     cout << "moving 1 echelon test" << endl;
     {
-        int numRows = 6;
-        int numCols = 5;
+        int numRows = 16;
+        int numCols = 10;
 
         for(int row = 0; row < numRows; row++){
             for(int col = 0; col < numCols; col++){
@@ -672,11 +695,11 @@ void TestLinearSystem::echelonFormTest() {
                 wwills2::Matrix testMatrix(numRows, numCols);
                 testMatrix[row][col] = 1;
 
-                cout << "before reduction" << endl;
-                testMatrix.print();
+                //cout << "before reduction" << endl;
+                //testMatrix.print();
                 testMatrix.makeEchelonForm();
-                cout << "after reduction" << endl;
-                testMatrix.print();
+                //cout << "after reduction" << endl;
+                //testMatrix.print();
 
 
                 //assert that the 1 has been moved into the first row in the correct col
@@ -748,3 +771,4 @@ void TestLinearSystem::sysOverloadedElementOp() {
     testSystem.addMatrix("test", 3, 1);
     assert(testSystem["test"].m_elements[2][0] == 0);
 }
+
