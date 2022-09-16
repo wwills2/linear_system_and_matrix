@@ -12,7 +12,7 @@ class TestLinearSystem {
 
 public:
 
-    void matrixInit();                          //calls the elements constructor to initialize a generic elements
+    void matrixInit();                          //calls the m_elements constructor to initialize a generic m_elements
     void matrixAssignOp();                      //calls matrix overloaded assigment operator
     void matrixCopyInit();                      //calls matrix overloaded copy constructor
     void buildIdentityMxMTest();                //calls buildIdentityMxMTest

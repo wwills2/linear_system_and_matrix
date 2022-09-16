@@ -38,8 +38,8 @@ namespace wwills2 {
 
         //data members
         const unsigned int machine_threads = std::thread::hardware_concurrency();
-        int numMatrices;
-        std::map<std::string, Matrix> matrices;
+        int m_numMatrices;
+        std::map<std::string, Matrix> m_matrices;
     };
 }
 

@@ -16,14 +16,14 @@ namespace wwills2{
         Matrix();
         ~Matrix();
 
-        Matrix(int rows, int cols);
+        Matrix(int rows, int cols, bool isEchelon=false, bool isReducedEchelon=false);
 
         Matrix(const Matrix &rhs);
 
         void print();
 
         //! important: column zero must be non-zero to work properly
-        void echelonForm();
+        void makeEchelonForm();
 
         const Matrix &operator=(const Matrix &rhs);
 
@@ -47,12 +47,16 @@ namespace wwills2{
 
         void scaleRow(float *row, const float &factor);
 
-        int numRows;        //num rows
-        int numCols;        //num cols
-        int numElements;    //number of elements in the elements
-        float **elements;   //2d, dynamically allocated, elements array
-        float **mxmIdentity;   //identity matrix #rows x #rows
-        float **nxnIdentity;   //identity matrix #cols x #cols
+        bool findAndSwapForPivot(std::pair<int, int> &pivot);
+
+        int m_numRows;        //num rows
+        int m_numCols;        //num cols
+        int m_numElements;    //number of m_elements in the m_elements
+        bool m_isEchelon;
+        bool m_isReducedEchelon;
+        float **m_elements;   //2d, dynamically allocated, m_elements array
+        float **m_mxmIdentity;   //identity matrix #rows x #rows
+        float **m_nxnIdentity;   //identity matrix #cols x #cols
 
         friend LinearSystem;
 
