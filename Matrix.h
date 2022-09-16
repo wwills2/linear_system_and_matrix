@@ -22,7 +22,6 @@ namespace wwills2{
 
         void print();
 
-        //! important: column zero must be non-zero to work properly
         void makeEchelonForm();
 
         const Matrix &operator=(const Matrix &rhs);
@@ -46,6 +45,8 @@ namespace wwills2{
         void interchangeRows(const int &swapRow1, const int &swapRow2);
 
         void scaleRow(float *row, const float &factor);
+
+        bool makeFirstPivotNonZero(std::pair<int, int> &pivot);
 
         bool findAndSwapForPivot(std::pair<int, int> &pivot);
 

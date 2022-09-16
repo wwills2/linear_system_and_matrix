@@ -385,13 +385,6 @@ void TestLinearSystem::echelonFormTest() {
 
     cout << "\tTextbook hardcoded samples" << endl;
     {
-        wwills2::Matrix testMatrix(4, 6);
-        testMatrix.print();
-        testMatrix.makeEchelonForm();
-        testMatrix.print();
-        cout << endl;
-    }
-    {
         //page 31
 
         int rows = 4;
@@ -587,7 +580,7 @@ void TestLinearSystem::echelonFormTest() {
         int rows = 5;
         int cols = 6;
 
-        float initialMatrix[30] = {1, 6, 2, -5, -2 ,-4,
+        float initialMatrix[30] = {1, 6, 2, -5, -2, -4,
                                    0, 0, 0, 0, 0, 0,
                                    0, 0, 0, 0, 1, 7,
                                    0, 0, 0, 0, 0, 0,
@@ -602,8 +595,8 @@ void TestLinearSystem::echelonFormTest() {
         wwills2::Matrix testMatrix(5, 6);
 
         int i = 0;
-        for (int row = 0; row < rows; row++){
-            for(int col = 0; col < cols; col++){
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
                 testMatrix[row][col] = initialMatrix[i];
                 i++;
             }
@@ -615,10 +608,86 @@ void TestLinearSystem::echelonFormTest() {
         cout << endl;
 
         i = 0;
-        for (int row = 0; row < rows; row++){
-            for(int col = 0; col < cols; col++){
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
                 assert(testMatrix[row][col] == initialEchelonMatrix[i]);
                 i++;
+            }
+        }
+    }
+
+    cout << "corner and edge cases" << endl;
+    {
+        wwills2::Matrix testMatrix(4, 6);
+        testMatrix.print();
+        testMatrix.makeEchelonForm();
+        testMatrix.print();
+        cout << endl;
+    }
+    {
+        wwills2::Matrix testMatrix;
+        testMatrix.print();
+        testMatrix.makeEchelonForm();
+        testMatrix.print();
+        cout << endl;
+    }
+    {
+        wwills2::Matrix testMatrix(1, 1);
+        testMatrix[0][0] = 10;
+
+        testMatrix.print();
+        testMatrix.makeEchelonForm();
+        testMatrix.print();
+        cout << endl;
+    }
+    {
+        wwills2::Matrix testMatrix(2, 1);
+        testMatrix[0][0] = 10;
+        testMatrix[1][0] = 5;
+
+        testMatrix.print();
+        testMatrix.makeEchelonForm();
+        testMatrix.print();
+        cout << endl;
+    }
+    {
+        wwills2::Matrix testMatrix(1, 2);
+        testMatrix[0][0] = 10;
+        testMatrix[0][1] = 5;
+
+        testMatrix.print();
+        testMatrix.makeEchelonForm();
+        testMatrix.print();
+        cout << endl;
+    }
+
+    cout << "moving 1 echelon test" << endl;
+    {
+        int numRows = 6;
+        int numCols = 5;
+
+        for(int row = 0; row < numRows; row++){
+            for(int col = 0; col < numCols; col++){
+
+                wwills2::Matrix testMatrix(numRows, numCols);
+                testMatrix[row][col] = 1;
+
+                cout << "before reduction" << endl;
+                testMatrix.print();
+                testMatrix.makeEchelonForm();
+                cout << "after reduction" << endl;
+                testMatrix.print();
+
+
+                //assert that the 1 has been moved into the first row in the correct col
+                assert(testMatrix.m_elements[0][col] == 1);
+
+                //verify all other rows are zero
+                for(int i = 1; i < numRows; i++){
+                    for(int j = 0; j < numCols; j++){
+                        assert(testMatrix.m_elements[i][j] == 0);
+                    }
+                }
             }
         }
     }

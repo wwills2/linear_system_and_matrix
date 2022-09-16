@@ -153,70 +153,59 @@ namespace wwills2{
 
     void Matrix::makeEchelonForm() {
 
-        float rowScalar = 0;
-        std::pair<int, int> pivot = {0, 0};
-        int tryRow = m_numRows - 1;
+        if (!m_isEchelon && !m_isReducedEchelon){
 
-        //get non-zero into pivot position
-        while ((pivot.second != m_numCols) && (m_elements[pivot.first][pivot.second] == 0)){
+            float rowScalar = 0;
+            std::pair<int, int> pivot = {0, 0};
 
-            //swap current row with first row if non-zero found
-            if (m_elements[tryRow][pivot.second] != 0) {
+            //get non-zero into pivot position
+            if (m_elements[pivot.first][pivot.second] == 0){
 
-                interchangeRows(tryRow, pivot.first);
-
-            }else if (tryRow == m_numRows - 1) {
-
-                //move the pivot column over 1 and try to find a non-zero entry
-                pivot.second++;
-                tryRow = m_numRows - 1;
-
-            }else if ((tryRow + 1) < m_numRows){
-
-                tryRow--;
+                if(!makeFirstPivotNonZero(pivot)){
+                    return;
+                }
             }
-        }
 
-        if(pivot.second >= m_numCols){
-            return;
-        }
+            //set echelon var
+            m_isEchelon = true;
 
-        if (m_elements[pivot.first][pivot.second] != 0){
+            if (m_elements[pivot.first][pivot.second] != 0){
 
-            //loop through all pivot positions and perform forward operations
-            for (int i = 0; i < m_numRows; i++) {
+                //loop through all pivot positions and perform forward operations
+                for (int i = 0; i < m_numRows; i++) {
 
-                //perform row operations to clear the pivot column
-                for (int row = pivot.first + 1; row < m_numRows; row++) {
+                    //perform row operations to clear the pivot column
+                    for (int row = pivot.first + 1; row < m_numRows; row++) {
 
-                    if (m_elements[row][pivot.second] != 0) {
+                        if (m_elements[row][pivot.second] != 0) {
 
-                        rowScalar = m_elements[row][pivot.second] / m_elements[pivot.first][pivot.second];
+                            rowScalar = m_elements[row][pivot.second] / m_elements[pivot.first][pivot.second];
 
-                        //make scalar negative if the sign is the same
-                        if ((m_elements[row][pivot.second] < 0 && rowScalar < 0) ||
-                            (m_elements[row][pivot.second] > 0 && rowScalar > 0)) {
-                            rowScalar *= -1;
+                            //make scalar negative if the sign is the same
+                            if ((m_elements[row][pivot.second] < 0 && rowScalar < 0) ||
+                                (m_elements[row][pivot.second] > 0 && rowScalar > 0)) {
+                                rowScalar *= -1;
+                            }
+
+                            replaceRows(pivot.first, row, rowScalar);
                         }
-
-                        replaceRows(pivot.first, row, rowScalar);
                     }
-                }
 
-                if (pivot.first + 1 < m_numRows){
-                    pivot.first++;
-                }
+                    if (pivot.first + 1 < m_numRows){
+                        pivot.first++;
+                    }
 
-                if (pivot.second + 1 < m_numCols){
-                    pivot.second++;
-                }
+                    if (pivot.second + 1 < m_numCols){
+                        pivot.second++;
+                    }
 
 
-                if (m_elements[pivot.first][pivot.second] == 0){
+                    if (m_elements[pivot.first][pivot.second] == 0){
 
-                    if (!findAndSwapForPivot(pivot)){
-                        //no new pivot found, stop
-                        return;
+                        if (!findAndSwapForPivot(pivot)){
+                            //no new pivot found, stop
+                            return;
+                        }
                     }
                 }
             }
@@ -400,6 +389,26 @@ namespace wwills2{
         for (int col = 0; col < m_numCols; col++){
             row[col] *= factor;
         }
+    }
+
+    bool Matrix::makeFirstPivotNonZero(std::pair<int, int> &pivot) {
+
+        for (int currCol = pivot.second; currCol < m_numCols; currCol++) {
+
+            //search the current column for nonzero, swap if found
+            for (int currRow = m_numRows - 1; currRow >= 0; currRow--){
+
+                if (m_elements[currRow][currCol] != 0){
+
+                    //swap the current row with nonzero, up to the row of hte current pivot
+                    interchangeRows(currRow, pivot.first);
+                    pivot.second = currCol;
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     bool Matrix::findAndSwapForPivot(std::pair<int, int> &pivot) {
