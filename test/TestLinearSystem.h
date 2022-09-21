@@ -30,10 +30,10 @@ public:
     void dotVsOverloadBench();                  //see test file
 
     //builds a random matrix
-    wwills2::Matrix generateRandomMatrix(const int minRowCol, const int maxRowCol);
+    wwills2::Matrix generateRandomMatrix(const int matrixRows, const int matrixCols);
 
     //builds random reduced matrix
-    wwills2::Matrix generateRandomReducedMatrix(const int minRowCol, const int maxRowCol);
+    wwills2::Matrix generateRandomReducedMatrix(const int matrixRows, const int matrixCols);
 
 
 };

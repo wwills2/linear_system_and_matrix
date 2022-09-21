@@ -4,6 +4,7 @@
 
 #include <cassert>
 #include <random>
+#include <algorithm>
 #include "TestLinearSystem.h"
 
 using std::cout;
@@ -67,7 +68,6 @@ int main(){
         TestLinearSystem test;
         test.dotVsOverloadBench();
     }
-     */
 
     cout << "testing Matrix buildIdentityMxM()" << endl;
     {
@@ -80,6 +80,7 @@ int main(){
         TestLinearSystem test;
         test.buildIdentityNxNTest();
     }
+    */
 
     cout << "testing Matrix constructor" << endl;
     {
@@ -194,15 +195,10 @@ void TestLinearSystem::dotVsOverloadBench() {
     cout << "\toverloaded [] operator: " << time << " seconds" << endl;
 }
 
-wwills2::Matrix TestLinearSystem::generateRandomMatrix(const int minRowCol, const int maxRowCol){
+wwills2::Matrix TestLinearSystem::generateRandomMatrix(const int matrixRows, const int matrixCols){
 
-    Random randRowColAmnt(minRowCol, maxRowCol);
-    Random randElement(0, 1000);
-    Random makeZeroRow(1, 20);
-
-    int matrixRows = randRowColAmnt.getRandNum();
-    int matrixCols = randRowColAmnt.getRandNum();
-
+    Random makeZeroRow(0, 1);
+    Random randElement(1, 500);
     wwills2::Matrix newMatrix(matrixRows, matrixCols);
 
     for (int row = 0; row < matrixRows; row++){
@@ -219,24 +215,64 @@ wwills2::Matrix TestLinearSystem::generateRandomMatrix(const int minRowCol, cons
     return newMatrix;
 }
 
-wwills2::Matrix TestLinearSystem::generateRandomReducedMatrix(const int minRowCol, const int maxRowCol) {
+wwills2::Matrix TestLinearSystem::generateRandomReducedMatrix(const int matrixRows, const int matrixCols) {
 
-    Random randRowColAmnt(minRowCol, maxRowCol);
-    Random randElement(0, 1000);
-    Random makeZeroRow(1, 20);
-
-    int matrixRows = randRowColAmnt.getRandNum();
-    int matrixCols = randRowColAmnt.getRandNum();
-
-    Random distanceToPivotCol(1, matrixCols / 2);
-    Random distanceToPivotRow(1, matrixRows / 4);
+    Random distanceToPivotCol(1, matrixCols / 5);
+    Random distanceToPivotRow(1, matrixRows / 8);
+    Random randElement(2 ,100);
+    Random putPivotZeroZero(0, 1);
+    Random makeNonZero(0, 1);
     std::pair<int, int> currentPivot = {0 ,0};
 
-    while (currentPivot.first < matrixRows && currentPivot.second < matrixCols){
+    std::vector<std::pair<int, int> > pivotPositions;
+    std::vector<int> pivotColumns;
 
+    if (putPivotZeroZero.getRandNum()){
+        pivotPositions.push_back(currentPivot);
+        pivotColumns.push_back(currentPivot.second);
+    }
+
+    bool addPivots = true;
+    int distanceToPivRowInt = 0;
+    int distanceToPivColInt = 0;
+    // generate random pivot positions, take note of pivot columns
+    while (addPivots){
+
+        distanceToPivRowInt = distanceToPivotRow.getRandNum();
+        if (currentPivot.first + distanceToPivRowInt < matrixRows){
+            currentPivot.first += distanceToPivRowInt;
+        }else{
+            addPivots = false;
+        }
+
+        distanceToPivColInt = distanceToPivotCol.getRandNum();
+        if ((currentPivot.second + distanceToPivColInt < matrixCols) && addPivots){
+            currentPivot.second += distanceToPivColInt;
+            pivotPositions.push_back(currentPivot);
+            pivotColumns.push_back(currentPivot.second);
+        }else{
+            addPivots = false;
+        }
     }
 
     wwills2::Matrix newMatrix(matrixRows, matrixCols);
+
+    //auto pivotItr = pivotPositions.begin();
+
+    //populate matrix with pivot positions and random values
+    for(auto pivot: pivotPositions){
+
+        newMatrix[pivot.first][pivot.second] = 1;
+
+        for(int j = pivot.second; j < newMatrix.m_numCols; j++){
+
+            if (std::find(pivotColumns.begin(), pivotColumns.end(), j) == pivotColumns.end() &&
+                        makeNonZero.getRandNum()){
+                newMatrix[pivot.first][j] = (float) randElement.getRandNum();
+            }
+        }
+    }
+
     return newMatrix;
 }
 
@@ -684,6 +720,7 @@ void TestLinearSystem::echelonFormTest() {
         cout << endl;
     }
 
+    /*
     cout << "moving 1 echelon test" << endl;
     {
         int numRows = 16;
@@ -714,25 +751,30 @@ void TestLinearSystem::echelonFormTest() {
             }
         }
     }
+     */
 
-    /*
     {
         cout << "\trandom generated test samples" << endl;
 
-        int numTests = 100;
-        int maxRowCol = 100;
+        int numTests = 20;
+        int maxRowCol = 30;
         int minRowCol = 10;
+        int matrixRows = 0;
+        int matrixCols = 0;
+        Random randRowColAmnt(minRowCol, maxRowCol);
 
         for (int testNum = 0; testNum < numTests; testNum++){
 
             //individual test scope
             {
-                //auto testMatrix = generateRandomMatrix(minRowCol, maxRowCol);
-                //!needs to be finished
+                matrixRows = randRowColAmnt.getRandNum();
+                matrixCols = randRowColAmnt.getRandNum();
+
+                auto testMatrix = generateRandomReducedMatrix(matrixRows, matrixCols);
+                testMatrix.print();
             }
         }
     }
-     */
 }
 
 

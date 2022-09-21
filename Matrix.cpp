@@ -139,10 +139,22 @@ namespace wwills2{
         std::cout << "Elements of Matrix at " << this << ":" << std::endl;
         for (int row = 0; row < m_numRows; row++){
 
-            std::cout << "row " << row << ": [ ";
+            std::cout << "row " << row;
+
+            if (row < 10){
+                std::cout << ": [  ";
+            }else{
+                std::cout << ": [ ";
+            }
 
             for (int col = 0; col < m_numCols; col++){
-                std::cout << m_elements[row][col] << " ";
+                std::cout << m_elements[row][col];
+
+                if (m_elements[row][col] < 10){
+                    std::cout << "  ";
+                }else{
+                    std::cout << " ";
+                }
             }
 
             std::cout << "]" << std::endl;
