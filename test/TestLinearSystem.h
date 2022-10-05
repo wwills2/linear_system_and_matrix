@@ -5,8 +5,12 @@
 #ifndef MATRIX_OPERATIONS_TESTLINEARSYSTEM_H
 #define MATRIX_OPERATIONS_TESTLINEARSYSTEM_H
 
+#include <random>
+#include <algorithm>
 #include "../LinearSystem.h"
 #include "../Matrix.h"
+
+class Random;
 
 class TestLinearSystem {
 
@@ -21,7 +25,8 @@ public:
     void matrixOverloadedElementOp();           //calls the Matrix overloaded [] operator
     void replaceRowsTest();                     //calls replaceRows(float *, float *, float)
     void interchangeRowsTest();                 //calls interchangeRows (float *, float *)
-    void echelonFormTest();                     //calls echelonFormTest()
+    void echelonFormTest();                     //calls makeEchelonForm()
+    void reducedEchelonFormTest();              //calls makeReducedEchelonForm()
 
     void linearSysInit();                       //calls the linear system constructor, generic linear system object
     void addMatrixTest();                       //calls both add matrix functions
@@ -33,9 +38,11 @@ public:
     wwills2::Matrix generateRandomMatrix(const int matrixRows, const int matrixCols);
 
     //builds random reduced matrix
-    wwills2::Matrix generateRandomReducedMatrix(const int matrixRows, const int matrixCols);
+    wwills2::Matrix generateRandomReducedMatrix(const int matrixRows, const int matrixCols, Random &randElement);
 
-
+    //randomizes reduced matrix with random row operations
+    void matrixRandomize(wwills2::Matrix &toRandomize, Random &randRowOP, Random &randRowNum,
+                         Random &randScalar, const int numIterations);
 };
 
 
