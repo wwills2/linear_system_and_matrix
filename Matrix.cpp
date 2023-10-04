@@ -270,7 +270,7 @@ namespace wwills2{
     }
 
 
-    const Matrix &Matrix::operator=(const Matrix &rhs) {
+    Matrix &Matrix::operator=(const Matrix &rhs) {
 
         bool rebuildIdentity = false;
 

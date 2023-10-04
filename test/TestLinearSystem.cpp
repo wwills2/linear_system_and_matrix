@@ -12,7 +12,7 @@ using std::endl;
 
 static std::ofstream logFile;
 
-inline float *wwills2::Matrix::operator[](const int &row) {
+inline double *wwills2::Matrix::operator[](const int &row) {
     return m_elements[row];
 }
 
@@ -886,24 +886,22 @@ void TestLinearSystem::reducedEchelonFormTest() {
 
             auto controlReducedMatrix = generateRandomReducedMatrix(matrixRows, matrixCols, randElement);
             auto testMatrix = controlReducedMatrix;
-            cout << "reduced form of matrix at " << &testMatrix << endl;
-            testMatrix.print();
+            logFile << "reduced form of matrix at " << &testMatrix << endl;
+            testMatrix.print(logFile);
 
             matrixRandomize(testMatrix, randRowOP, randRowNum, randScalar, numIterations);
-            cout << "matrix at " << &testMatrix << " after randomization" << endl;
-            testMatrix.print();
+            logFile << "matrix at " << &testMatrix << " after randomization" << endl;
+            testMatrix.print(logFile);
 
             testMatrix.makeEchelonForm();
-            cout << "matrix at " << &testMatrix << " after reduction" << endl;
-            testMatrix.print();
+            logFile << "matrix at " << &testMatrix << " after reduction" << endl;
+            testMatrix.print(logFile);
 
-            /*
             for (int i = 0; i < testMatrix.m_numRows; i++){
                 for (int j = 0; j < testMatrix.m_numCols; j++){
-                    assert(testMatrix[i][j] == controlReducedMatrix[i][j]);
+                    assert((testMatrix[i][j] - controlReducedMatrix[i][j]) < 0.001);
                 }
             }
-             */
         }
     }
 }

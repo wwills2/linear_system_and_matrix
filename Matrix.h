@@ -24,6 +24,8 @@ namespace wwills2{
 
         void makeEchelonForm();
 
+        void makeReducedEchelonForm();
+
         Matrix &operator=(const Matrix &rhs);
 
     private:

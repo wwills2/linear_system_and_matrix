@@ -5,8 +5,12 @@
 #ifndef MATRIX_OPERATIONS_TESTLINEARSYSTEM_H
 #define MATRIX_OPERATIONS_TESTLINEARSYSTEM_H
 
+#include <random>
+#include <algorithm>
 #include "../LinearSystem.h"
 #include "../Matrix.h"
+
+class Random;
 
 class TestLinearSystem {
 
@@ -34,11 +38,11 @@ public:
     static auto generateRandomMatrix(const int minRowCol, const int maxRowCol);
 
     //builds random reduced matrix
-    wwills2::Matrix generateRandomReducedMatrix(const int matrixRows, const int matrixCols, Random &randElement);
+    static wwills2::Matrix generateRandomReducedMatrix(const int matrixRows, const int matrixCols, Random &randElement);
 
     //randomizes reduced matrix with random row operations
-    void matrixRandomize(wwills2::Matrix &toRandomize, Random &randRowOP, Random &randRowNum,
-                         Random &randScalar, const int numIterations);
+    static void matrixRandomize(wwills2::Matrix &toRandomize, Random &randRowOP, Random &randRowNum,
+                                Random &randScalar, const int numIterations);
 };
 
 
