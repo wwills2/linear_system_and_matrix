@@ -36,28 +36,29 @@ namespace wwills2{
 
         void buildIdentityNxNThread(const int &startRow, const int &numThreads);
 
-        float *operator[](const int &row);
+        double *operator[](const int &row);
 
         void addRows(const int &sourceRow, const int &destinationRow);
 
-        void replaceRows(const int &sourceRow, const int &destinationRow, const float &sourceMultiple);
+        void replaceRows(const int &sourceRow, const int &destinationRow, const double &sourceMultiple);
 
         void interchangeRows(const int &swapRow1, const int &swapRow2);
 
-        void scaleRow(float *row, const float &factor);
+        void scaleRow(const int &row, const double &factor);
 
         bool makeFirstPivotNonZero(std::pair<int, int> &pivot);
 
         bool findAndSwapForPivot(std::pair<int, int> &pivot);
 
-        int m_numRows;        //num rows
-        int m_numCols;        //num cols
-        int m_numElements;    //number of elements in the matrix
-        bool m_isEchelon;
-        bool m_isReducedEchelon;
-        float **m_elements;   //2d, dynamically allocated, matrix elements array
-        float **m_mxmIdentity;   //identity matrix #rows x #rows
-        float **m_nxnIdentity;   //identity matrix #cols x #cols
+        int m_numRows;                                      //num rows
+        int m_numCols;                                      //num cols
+        int m_numElements;                                  //number of m_elements in the m_elements
+        bool m_isEchelon;                                   //tracks if the matrix is in echelon form
+        bool m_isReducedEchelon;                            //tracks if the matrix has been reduced
+        std::vector<std::pair<int, int>> m_pivotPositions;  //the pivot positions of the matrix
+        double **m_elements;                                 //2d, dynamically allocated, m_elements array
+        double **m_mxmIdentity;                              //identity matrix #rows x #rows
+        double **m_nxnIdentity;                              //identity matrix #cols x #cols
 
         friend LinearSystem;
 

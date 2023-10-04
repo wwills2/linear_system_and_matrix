@@ -22,6 +22,7 @@ public:
     static void replaceRowsTest();                     //calls replaceRows(float *, float *, float)
     static void interchangeRowsTest();                 //calls interchangeRows (float *, float *)
     static void echelonFormTest();                     //calls echelonFormTest()
+    static void reducedEchelonFormTest();              //calls makeReducedEchelonForm()
 
     static void linearSysInit();                       //calls the linear system constructor, generic linear system object
     static void addMatrixTest();                       //calls both add matrix functions
@@ -32,7 +33,12 @@ public:
     //builds a random matrix
     static auto generateRandomMatrix(const int minRowCol, const int maxRowCol);
 
+    //builds random reduced matrix
+    wwills2::Matrix generateRandomReducedMatrix(const int matrixRows, const int matrixCols, Random &randElement);
 
+    //randomizes reduced matrix with random row operations
+    void matrixRandomize(wwills2::Matrix &toRandomize, Random &randRowOP, Random &randRowNum,
+                         Random &randScalar, const int numIterations);
 };
 
 

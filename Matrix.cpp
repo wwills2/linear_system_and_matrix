@@ -12,15 +12,17 @@ namespace wwills2{
         m_numElements = m_numRows * m_numCols;
         m_isEchelon = false;
         m_isReducedEchelon = false;
+        m_mxmIdentity = nullptr;
+        m_nxnIdentity = nullptr;
 
-        //allocate array of float array pointers
-        m_elements = new float *[m_numRows];
+        //allocate array of double array pointers
+        m_elements = new double *[m_numRows];
 
         //initialize array and allocate individual m_elements
-        float num = 1;
+        double num = 1;
 
         for (int row = 0; row < m_numRows; row++){
-            m_elements[row] = new float[m_numCols];
+            m_elements[row] = new double[m_numCols];
             for (int col = 0; col < m_numCols; col++){
                 m_elements[row][col] = num;
                 num++;
@@ -80,13 +82,15 @@ namespace wwills2{
         m_numElements = m_numRows * m_numCols;
         m_isEchelon = isEchelon;
         m_isReducedEchelon = isReducedEchelon;
+        m_mxmIdentity = nullptr;
+        m_nxnIdentity = nullptr;
 
-        //allocate array of float array pointers
-        m_elements = new float *[m_numRows];
+        //allocate array of double array pointers
+        m_elements = new double *[m_numRows];
 
         //initialize array and allocate individual m_elements
         for (int row = 0; row < m_numRows; row++){
-            m_elements[row] = new float[m_numCols];
+            m_elements[row] = new double[m_numCols];
             for (int col = 0; col < m_numCols; col++){
                 m_elements[row][col] = 0;
             }
@@ -105,31 +109,34 @@ namespace wwills2{
             m_numRows = rhs.m_numRows;
             m_numCols = rhs.m_numCols;
             m_numElements = rhs.m_numElements;
+            m_isEchelon = rhs.m_isEchelon;
+            m_isReducedEchelon = rhs.m_isReducedEchelon;
+            m_pivotPositions = rhs.m_pivotPositions;
 
             //dynamically initialize m_elements
-            m_elements = new float *[m_numRows];
+            m_elements = new double *[m_numRows];
 
             for (int row = 0; row < m_numRows; row++) {
-                m_elements[row] = new float[m_numCols];
+                m_elements[row] = new double[m_numCols];
                 for (int col = 0; col < m_numCols; col++) {
                     m_elements[row][col] = rhs.m_elements[row][col];
                 }
             }
 
             //allocate and copy MxM identity matrix
-            m_mxmIdentity = new float *[m_numRows];
+            m_mxmIdentity = new double *[m_numRows];
 
             for (int row = 0; row < m_numRows; row++){
-                m_mxmIdentity[row] = new float[m_numRows];
-                memcpy(m_mxmIdentity[row], rhs.m_mxmIdentity[row], sizeof (float) * m_numRows);
+                m_mxmIdentity[row] = new double[m_numRows];
+                memcpy(m_mxmIdentity[row], rhs.m_mxmIdentity[row], sizeof (double) * m_numRows);
             }
 
             //allocate and copy NxN identity matrix
-            m_nxnIdentity = new float *[m_numCols];
+            m_nxnIdentity = new double *[m_numCols];
 
             for (int row = 0; row < m_numCols; row++){
-                m_nxnIdentity[row] = new float[m_numCols];
-                memcpy(m_nxnIdentity[row], rhs.m_nxnIdentity[row], sizeof (float) * m_numCols);
+                m_nxnIdentity[row] = new double[m_numCols];
+                memcpy(m_nxnIdentity[row], rhs.m_nxnIdentity[row], sizeof (double) * m_numCols);
             }
         }
     }
@@ -155,7 +162,7 @@ namespace wwills2{
 
         if (!m_isEchelon && !m_isReducedEchelon){
 
-            float rowScalar = 0;
+            double rowScalar = 0;
             std::pair<int, int> pivot = {0, 0};
 
             //get non-zero into pivot position
@@ -165,6 +172,8 @@ namespace wwills2{
                     return;
                 }
             }
+
+            m_pivotPositions.push_back(pivot);
 
             //set echelon var
             m_isEchelon = true;
@@ -182,12 +191,16 @@ namespace wwills2{
                             rowScalar = m_elements[row][pivot.second] / m_elements[pivot.first][pivot.second];
 
                             //make scalar negative if the sign is the same
-                            if ((m_elements[row][pivot.second] < 0 && rowScalar < 0) ||
-                                (m_elements[row][pivot.second] > 0 && rowScalar > 0)) {
+                            if ((m_elements[row][pivot.second] < 0 &&
+                                    (rowScalar * m_elements[pivot.first][pivot.second]) < 0) ||
+                                (m_elements[row][pivot.second] > 0 &&
+                                    (rowScalar * m_elements[pivot.first][pivot.second])> 0)) {
                                 rowScalar *= -1;
                             }
 
                             replaceRows(pivot.first, row, rowScalar);
+
+                            m_elements[row][pivot.second] = 0;
                         }
                     }
 
@@ -207,6 +220,50 @@ namespace wwills2{
                             return;
                         }
                     }
+
+                    m_pivotPositions.push_back(pivot);
+                }
+            }
+        }
+    }
+
+    void Matrix::makeReducedEchelonForm() {
+
+        //get the matrix in echelon form;
+        if (!m_isEchelon){
+
+            makeEchelonForm();
+        }
+
+        double factor = 0;
+        double rowScalar = 0;
+
+        //loop through pivot positions starting with the last one added / rightmost
+        for (auto currPivot : m_pivotPositions){
+
+            if (m_elements[currPivot.first][currPivot.second] != 1){
+
+                factor = 1 / m_elements[currPivot.first][currPivot.second];
+                scaleRow(currPivot.first, factor);
+            }
+
+            //search up the pivot column and clear
+            for (int row = currPivot.first; row >= 0; row--){
+
+                if (m_elements[row][currPivot.second] != 0) {
+
+                    rowScalar = m_elements[row][currPivot.second];
+
+                    //make scalar negative if the sign is the same
+                    //make scalar negative if the sign is the same
+                    if ((m_elements[row][currPivot.second] < 0 &&
+                         (rowScalar * m_elements[currPivot.first][currPivot.second]) < 0) ||
+                        (m_elements[row][currPivot.second] > 0 &&
+                         (rowScalar * m_elements[currPivot.first][currPivot.second])> 0)) {
+                        rowScalar *= -1;
+                    }
+
+                    replaceRows(currPivot.first, row, rowScalar);
                 }
             }
         }
@@ -236,10 +293,10 @@ namespace wwills2{
                 delete[] m_elements;
 
                 //realloc matrix to match rhs dimensions
-                m_elements = new float*[rhs.m_numRows];
+                m_elements = new double*[rhs.m_numRows];
                 for (int row = 0; row < rhs.m_numRows; row++){
 
-                    m_elements[row] = new float[rhs.m_numCols];
+                    m_elements[row] = new double[rhs.m_numCols];
                 }
 
                 //delete MxM identity matrix
@@ -264,28 +321,31 @@ namespace wwills2{
             m_numRows = rhs.m_numRows;
             m_numCols = rhs.m_numCols;
             m_numElements = rhs.m_numElements;
+            m_isEchelon = rhs.m_isEchelon;
+            m_isReducedEchelon = rhs.m_isReducedEchelon;
+            m_pivotPositions = rhs.m_pivotPositions;
 
             //copy m_elements
             for (int row = 0; row < m_numRows; row++){
-                memcpy(m_elements[row], rhs.m_elements[row], sizeof (float) * m_numCols);
+                memcpy(m_elements[row], rhs.m_elements[row], sizeof (double) * m_numCols);
             }
 
             if (rebuildIdentity){
 
                 //reallocate and copy MxM identity matrix
-                m_mxmIdentity = new float *[m_numRows];
+                m_mxmIdentity = new double *[m_numRows];
 
                 for (int row = 0; row < m_numRows; row++){
-                    m_mxmIdentity[row] = new float[m_numRows];
-                    memcpy(m_mxmIdentity[row], rhs.m_mxmIdentity[row], sizeof (float) * m_numRows);
+                    m_mxmIdentity[row] = new double[m_numRows];
+                    memcpy(m_mxmIdentity[row], rhs.m_mxmIdentity[row], sizeof (double) * m_numRows);
                 }
 
                 //reallocate and copy NxN identity matrix
-                m_nxnIdentity = new float *[m_numCols];
+                m_nxnIdentity = new double *[m_numCols];
 
                 for (int row = 0; row < m_numCols; row++){
-                    m_nxnIdentity[row] = new float[m_numCols];
-                    memcpy(m_nxnIdentity[row], rhs.m_nxnIdentity[row], sizeof (float) * m_numCols);
+                    m_nxnIdentity[row] = new double[m_numCols];
+                    memcpy(m_nxnIdentity[row], rhs.m_nxnIdentity[row], sizeof (double) * m_numCols);
                 }
             }
 
@@ -297,8 +357,8 @@ namespace wwills2{
 
     void Matrix::buildIdentityMxM() {
 
-        //allocate array of float array pointers
-        m_mxmIdentity = new float *[m_numRows];
+        //allocate array of double array pointers
+        m_mxmIdentity = new double *[m_numRows];
 
         //build m x m matrix
         std::vector<std::thread> threads;
@@ -316,15 +376,15 @@ namespace wwills2{
     void Matrix::buildIdentityMxMThread(const int &startRow, const int &numThreads) {
 
         for (int row = startRow; row < m_numRows; row += numThreads){
-            m_mxmIdentity[row] = new float[m_numRows]{};
+            m_mxmIdentity[row] = new double[m_numRows]{};
             m_mxmIdentity[row][row] = 1;
         }
     }
 
     void Matrix::buildIdentityNxN() {
 
-        //allocate array of float array pointers
-        m_nxnIdentity = new float *[m_numCols];
+        //allocate array of double array pointers
+        m_nxnIdentity = new double *[m_numCols];
 
         //build n x n matrix
         std::vector<std::thread> threads;
@@ -343,12 +403,12 @@ namespace wwills2{
 
         for (int row = startRow; row < m_numCols; row += numThreads){
 
-            m_nxnIdentity[row] = new float[m_numCols]{};
+            m_nxnIdentity[row] = new double[m_numCols]{};
             m_nxnIdentity[row][row] = 1;
         }
     }
 
-    inline float *Matrix::operator[](const int &row) {
+    inline double *Matrix::operator[](const int &row) {
         return m_elements[row];
     }
 
@@ -358,36 +418,51 @@ namespace wwills2{
 
             //add the source row index to the destination row index
             m_elements[destinationRow][col] += m_elements[sourceRow][col];
+
+            if (m_elements[destinationRow][col] == (double) -0){
+                m_elements[destinationRow][col] = 0;
+            }
         }
     }
 
-    void Matrix::replaceRows(const int &sourceRow, const int &destinationRow, const float &sourceMultiple) {
+    void Matrix::replaceRows(const int &sourceRow, const int &destinationRow, const double &sourceMultiple) {
 
         //multiply entries in the source row and add them to the destination row
         for (int col = 0; col < m_numCols; col++){
+
+            ///REMOVE
+            double destElement = m_elements[destinationRow][col];
+            double srcElement = m_elements[sourceRow][col];
+            double scaledSrcElement = m_elements[sourceRow][col] * sourceMultiple;
+            double result = destElement + scaledSrcElement;
+
             m_elements[destinationRow][col] += (m_elements[sourceRow][col] * sourceMultiple);
+
+            if (m_elements[destinationRow][col] == (double) -0){
+                m_elements[destinationRow][col] = 0;
+            }
         }
     }
 
     void Matrix::interchangeRows(const int &swapRow1, const int &swapRow2) {
 
         //copy swap row 1 to temp location
-        float *tempArray = new float[m_numCols];
-        memcpy(tempArray, m_elements[swapRow1], sizeof (float) * m_numCols);
+        double *tempArray = new double[m_numCols];
+        memcpy(tempArray, m_elements[swapRow1], sizeof (double) * m_numCols);
 
         //copy swap row 2 to swap row 1
-        memcpy(m_elements[swapRow1], m_elements[swapRow2], sizeof (float) * m_numCols);
+        memcpy(m_elements[swapRow1], m_elements[swapRow2], sizeof (double) * m_numCols);
 
         //copy temp to swap row 2
-        memcpy(m_elements[swapRow2], tempArray, sizeof (float) * m_numCols);
+        memcpy(m_elements[swapRow2], tempArray, sizeof (double) * m_numCols);
 
         delete[] tempArray;
     }
 
-    void Matrix::scaleRow(float *row, const float &factor) {
+    void Matrix::scaleRow(const int &row, const double &factor) {
 
         for (int col = 0; col < m_numCols; col++){
-            row[col] *= factor;
+            m_elements[row][col] *= factor;
         }
     }
 
@@ -416,12 +491,16 @@ namespace wwills2{
         for (int currCol = pivot.second; currCol < m_numCols; currCol++) {
 
             //search the current column for nonzero, swap if found
-            for (int currRow = pivot.first + 1; currRow < m_numRows; currRow++) {
+            for (int currRow = pivot.first; currRow < m_numRows; currRow++) {
 
-                if (m_elements[currRow][currCol] != 0){
+                if ((m_elements[currRow][currCol] != 0) && (currRow > pivot.first)){
 
                     //swap the current row with nonzero, up to the row of hte current pivot
                     interchangeRows(currRow, pivot.first);
+                    pivot.second = currCol;
+                    return true;
+                }else if (m_elements[currRow][currCol] != 0){
+
                     pivot.second = currCol;
                     return true;
                 }

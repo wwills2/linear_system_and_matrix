@@ -77,7 +77,7 @@ int main(){
         TestLinearSystem test;
         TestLinearSystem::dotVsOverloadBench();
     }
-     */
+
     cout << "testing Matrix buildIdentityMxM()" << endl;
     logFile << "testing Matrix buildIdentityMxM()" << endl;
     {
@@ -89,6 +89,7 @@ int main(){
     {
         TestLinearSystem::buildIdentityNxNTest();
     }
+    */
 
     cout << "testing Matrix constructor" << endl;
     logFile << "testing Matrix constructor" << endl;
@@ -156,6 +157,12 @@ int main(){
         TestLinearSystem::echelonFormTest();
     }
 
+    cout << "testing makeReducedEchelonForm()" << endl;
+    {
+        TestLinearSystem test;
+        test.reducedEchelonFormTest();
+    }
+
     return 0;
 }
 
@@ -184,8 +191,8 @@ void TestLinearSystem::dotVsOverloadBench() {
 
     stop = clock();
 
-    float time = ((float)(stop - start)) / CLOCKS_PER_SEC;
-    logFile << "\tdot operator: " << time << " seconds" << endl;
+    double time = ((double)(stop - start)) / CLOCKS_PER_SEC;
+    cout << "\tdot operator: " << time << " seconds" << endl;
 
     //start counting clock cycles
     start = clock();
@@ -199,8 +206,8 @@ void TestLinearSystem::dotVsOverloadBench() {
 
     stop = clock();
 
-    time = ((float)(stop - start)) / CLOCKS_PER_SEC;
-    logFile << "\toverloaded [] operator: " << time << " seconds" << endl;
+    time = ((double)(stop - start)) / CLOCKS_PER_SEC;
+    cout << "\toverloaded [] operator: " << time << " seconds" << endl;
 }
 
 auto TestLinearSystem::generateRandomMatrix(const int minRowCol, const int maxRowCol){
@@ -226,6 +233,139 @@ auto TestLinearSystem::generateRandomMatrix(const int minRowCol, const int maxRo
     }
 
     return newMatrix;
+
+    return newMatrix;
+}
+
+wwills2::Matrix
+TestLinearSystem::generateRandomReducedMatrix(const int matrixRows, const int matrixCols, Random &randElement) {
+    //!FIX
+
+    int colDist = matrixCols / 5;
+    int rowDist = matrixRows / 8;
+
+    if (colDist < 2){
+        colDist = 2;
+    }
+    if (rowDist < 2){
+        rowDist = 2;
+    }
+
+    Random distanceToPivotCol(1, colDist);
+    Random distanceToPivotRow(1, rowDist);
+    Random putPivotZeroZero(0, 1);
+    Random makeNonZero(0, 1);
+    std::pair<int, int> currentPivot = {0 ,0};
+
+    std::vector<std::pair<int, int> > pivotPositions;
+    std::vector<int> pivotColumns;
+
+    if (putPivotZeroZero.getRandNum()){
+        pivotPositions.push_back(currentPivot);
+        pivotColumns.push_back(currentPivot.second);
+    }
+
+    bool addPivots = true;
+    int distanceToPivRowInt = 0;
+    int distanceToPivColInt = 0;
+    // generate random pivot positions, take note of pivot columns
+    while (addPivots){
+
+        distanceToPivRowInt = distanceToPivotRow.getRandNum();
+        if (currentPivot.first + distanceToPivRowInt < matrixRows){
+            currentPivot.first += distanceToPivRowInt;
+        }else{
+            addPivots = false;
+        }
+
+        distanceToPivColInt = distanceToPivotCol.getRandNum();
+        if ((currentPivot.second + distanceToPivColInt < matrixCols) && addPivots){
+            currentPivot.second += distanceToPivColInt;
+            pivotPositions.push_back(currentPivot);
+            pivotColumns.push_back(currentPivot.second);
+        }else{
+            addPivots = false;
+        }
+    }
+
+    wwills2::Matrix newMatrix(matrixRows, matrixCols);
+
+    //populate matrix with pivot positions and random values
+    for(auto pivot: pivotPositions){
+
+        newMatrix[pivot.first][pivot.second] = 1;
+
+        for(int j = pivot.second; j < newMatrix.m_numCols; j++){
+
+            if (std::find(pivotColumns.begin(), pivotColumns.end(), j) == pivotColumns.end() &&
+                        makeNonZero.getRandNum()){
+                newMatrix[pivot.first][j] = (double) randElement.getRandNum();
+            }
+        }
+    }
+
+    return newMatrix;
+}
+
+void TestLinearSystem::matrixRandomize(wwills2::Matrix &toRandomize, Random &randRowOP, Random &randRowNum,
+                                       Random &randScalar, const int numIterations) {
+
+    Random invertScalar(0, 1);
+    Random negateScalar(0, 1);
+
+    enum rowOperations {ADD, REPLACE, INTERCHANGE, SCALE};
+    int operation = 0;
+    int iRow = 0;
+    int jRow = 0;
+    double scalar = 0;
+
+    for (int iteration = 0; iteration < numIterations; iteration++){
+
+        operation = randRowOP.getRandNum();
+
+        if (operation == ADD){
+
+            iRow = randRowNum.getRandNum();
+            jRow = randRowNum.getRandNum();
+
+            toRandomize.addRows(iRow, jRow);
+        }else if (operation == REPLACE){
+
+            iRow = randRowNum.getRandNum();
+            jRow = randRowNum.getRandNum();
+            scalar = (double) randScalar.getRandNum();
+
+            if (invertScalar.getRandNum()){
+                scalar = 1 / scalar;
+            }
+
+            if (negateScalar.getRandNum()){
+                scalar *= -1;
+            }
+
+            toRandomize.replaceRows(iRow, jRow, scalar);
+        }else if (operation == INTERCHANGE){
+
+            iRow = randRowNum.getRandNum();
+            jRow = randRowNum.getRandNum();
+
+            toRandomize.interchangeRows(iRow, jRow);
+        }else if (operation == SCALE){
+
+            iRow = randRowNum.getRandNum();
+            scalar = (double) randScalar.getRandNum();
+
+            if (invertScalar.getRandNum()){
+                scalar = 1 / scalar;
+            }
+
+            if (negateScalar.getRandNum()){
+                scalar *= -1;
+            }
+
+            toRandomize.scaleRow(iRow, scalar);
+        }
+    }
 }
 
 void TestLinearSystem::matrixInit() {
@@ -366,7 +506,7 @@ void TestLinearSystem::matrixOverloadedElementOp() {
 
     wwills2::Matrix testMatrix;
 
-    float *row = testMatrix[0];
+    double *row = testMatrix[0];
     assert(row[0] == 1 && row[1] == 2 && row[2] == 3);
 
     wwills2::LinearSystem testSystem;
@@ -401,12 +541,12 @@ void TestLinearSystem::echelonFormTest() {
         int rows = 4;
         int cols = 6;
 
-        float initialMatrix[24] = {0, 3, -6, 6, 4 ,-5,
+        double initialMatrix[24] = {0, 3, -6, 6, 4 ,-5,
                                    3, -7, 8, -5, 8, 9,
                                    0 , 0, 0, 0, 0, 0,
                                    3, -9, 12, -9, 6, 15};
 
-        float initialEchelonMatrix[24] = {3, -9, 12, -9, 6, 15,
+        double initialEchelonMatrix[24] = {3, -9, 12, -9, 6, 15,
                                           0, 2, -4, 4, 2, -6,
                                           0, 0, 0, 0, 1, 4,
                                           0 , 0, 0, 0, 0, 0,};
@@ -440,11 +580,11 @@ void TestLinearSystem::echelonFormTest() {
         int rows = 3;
         int cols = 4;
 
-        float initialMatrix[12] = {1 ,5, 2, -6,
+        double initialMatrix[12] = {1 ,5, 2, -6,
                                    0 ,4, -7, 2 ,
                                    0, 0 , 5, 0};
 
-        float initialEchelonMatrix[12] = {1 ,5, 2, -6,
+        double initialEchelonMatrix[12] = {1 ,5, 2, -6,
                                           0 ,4, -7, 2 ,
                                           0, 0 , 5, 0};
 
@@ -477,12 +617,12 @@ void TestLinearSystem::echelonFormTest() {
         int rows = 4;
         int cols = 5;
 
-        float initialMatrix[20] = {0, -3, -6, 4, 9,
+        double initialMatrix[20] = {0, -3, -6, 4, 9,
                                    -1, -2 , -1, 3, 1,
                                    -2, -3, 0, 3, -1,
                                    1, 4, 5, -9, -7};
 
-        float initialEchelonMatrix[20] = {1, 4, 5, -9, -7,
+        double initialEchelonMatrix[20] = {1, 4, 5, -9, -7,
                                           0, 2, 4, -6, -6,
                                           0, 0 , 0, -5, 0,
                                           0, 0, 0, 0, 0};
@@ -517,11 +657,11 @@ void TestLinearSystem::echelonFormTest() {
         int rows = 3;
         int cols = 4;
 
-        float initialMatrix[12] = {1 ,0, -5, 1,
+        double initialMatrix[12] = {1 ,0, -5, 1,
                                    0 ,1, 1, 4,
                                    0, 0 , 0, 0};
 
-        float initialEchelonMatrix[12] = {1 ,0, -5, 1,
+        double initialEchelonMatrix[12] = {1 ,0, -5, 1,
                                           0 ,1, 1, 4,
                                           0, 0 , 0, 0};
 
@@ -554,11 +694,11 @@ void TestLinearSystem::echelonFormTest() {
         int rows = 3;
         int cols = 4;
 
-        float initialMatrix[12] = {1, 0, -5, 1,
+        double initialMatrix[12] = {1, 0, -5, 1,
                                    0, 0, 0, 0,
                                    0, 1, 1, 4,};
 
-        float initialEchelonMatrix[12] = {1, 0, -5, 1,
+        double initialEchelonMatrix[12] = {1, 0, -5, 1,
                                           0, 1, 1, 4,
                                           0, 0, 0, 0};
 
@@ -591,13 +731,13 @@ void TestLinearSystem::echelonFormTest() {
         int rows = 5;
         int cols = 6;
 
-        float initialMatrix[30] = {1, 6, 2, -5, -2, -4,
+        double initialMatrix[30] = {1, 6, 2, -5, -2, -4,
                                    0, 0, 0, 0, 0, 0,
                                    0, 0, 0, 0, 1, 7,
                                    0, 0, 0, 0, 0, 0,
                                    0, 0, 2, -8, -1, 3};
 
-        float initialEchelonMatrix[30] = {1, 6, 2, -5, -2, -4,
+        double initialEchelonMatrix[30] = {1, 6, 2, -5, -2, -4,
                                           0, 0, 2, -8, -1, 3,
                                           0, 0, 0, 0, 1, 7,
                                           0, 0, 0, 0, 0, 0,
@@ -717,6 +857,53 @@ void TestLinearSystem::echelonFormTest() {
                     }
                 }
             }
+        }
+    }
+}
+
+void TestLinearSystem::reducedEchelonFormTest() {
+
+    int numTests = 100;
+    int maxRowCol = 6;
+    int minRowCol = 5;
+    int matrixRows = 0;
+    int matrixCols = 0;
+    int numIterations = 200;
+    Random randRowColAmnt(minRowCol, maxRowCol);
+    Random randElement(2 ,10);
+    Random randRowOP(1, 5);
+    Random randScalar(1, 5);
+
+
+    for (int testNum = 0; testNum < numTests; testNum++){
+
+        //individual test scope
+        {
+            matrixRows = randRowColAmnt.getRandNum();
+            matrixCols = randRowColAmnt.getRandNum();
+
+            Random randRowNum(0, matrixRows - 1);
+
+            auto controlReducedMatrix = generateRandomReducedMatrix(matrixRows, matrixCols, randElement);
+            auto testMatrix = controlReducedMatrix;
+            cout << "reduced form of matrix at " << &testMatrix << endl;
+            testMatrix.print();
+
+            matrixRandomize(testMatrix, randRowOP, randRowNum, randScalar, numIterations);
+            cout << "matrix at " << &testMatrix << " after randomization" << endl;
+            testMatrix.print();
+
+            testMatrix.makeEchelonForm();
+            cout << "matrix at " << &testMatrix << " after reduction" << endl;
+            testMatrix.print();
+
+            /*
+            for (int i = 0; i < testMatrix.m_numRows; i++){
+                for (int j = 0; j < testMatrix.m_numCols; j++){
+                    assert(testMatrix[i][j] == controlReducedMatrix[i][j]);
+                }
+            }
+             */
         }
     }
 }
