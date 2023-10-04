@@ -1,4 +1,4 @@
-# Install script for directory: /home/zan/CLionProjects/matrix_operations
+# Install script for directory: /home/zan/CLionProjects/git_repos/linear_system_and_matrix
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/zan/CLionProjects/matrix_operations/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/zan/CLionProjects/git_repos/linear_system_and_matrix/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

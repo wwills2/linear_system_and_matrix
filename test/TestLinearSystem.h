@@ -12,25 +12,25 @@ class TestLinearSystem {
 
 public:
 
-    void matrixInit();                          //calls the m_elements constructor to initialize a generic m_elements
-    void matrixAssignOp();                      //calls matrix overloaded assigment operator
-    void matrixCopyInit();                      //calls matrix overloaded copy constructor
-    void buildIdentityMxMTest();                //calls buildIdentityMxMTest
-    void buildIdentityNxNTest();                //calls buildIdentityNxNTest
-    void addRowsTest();                         //calls addRows(float *, float *)
-    void matrixOverloadedElementOp();           //calls the Matrix overloaded [] operator
-    void replaceRowsTest();                     //calls replaceRows(float *, float *, float)
-    void interchangeRowsTest();                 //calls interchangeRows (float *, float *)
-    void echelonFormTest();                     //calls echelonFormTest()
+    static void matrixInit();                          //calls the m_elements constructor to initialize a generic m_elements
+    static void matrixAssignOp();                      //calls matrix overloaded assigment operator
+    static void matrixCopyInit();                      //calls matrix overloaded copy constructor
+    static void buildIdentityMxMTest();                //calls buildIdentityMxMTest
+    static void buildIdentityNxNTest();                //calls buildIdentityNxNTest
+    static void addRowsTest();                         //calls addRows(float *, float *)
+    static void matrixOverloadedElementOp();           //calls the Matrix overloaded [] operator
+    static void replaceRowsTest();                     //calls replaceRows(float *, float *, float)
+    static void interchangeRowsTest();                 //calls interchangeRows (float *, float *)
+    static void echelonFormTest();                     //calls echelonFormTest()
 
-    void linearSysInit();                       //calls the linear system constructor, generic linear system object
-    void addMatrixTest();                       //calls both add matrix functions
-    void sysOverloadedElementOp();              //calls the LinearSystem overloaded [] operator
+    static void linearSysInit();                       //calls the linear system constructor, generic linear system object
+    static void addMatrixTest();                       //calls both add matrix functions
+    static void sysOverloadedElementOp();              //calls the LinearSystem overloaded [] operator
 
     void dotVsOverloadBench();                  //see test file
 
     //builds a random matrix
-    wwills2::Matrix &generateRandomMatrix(const int minRowCol, const int maxRowCol);
+    static auto generateRandomMatrix(const int minRowCol, const int maxRowCol);
 
 
 };

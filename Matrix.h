@@ -20,11 +20,11 @@ namespace wwills2{
 
         Matrix(const Matrix &rhs);
 
-        void print();
+        void print(std::ostream &output);
 
         void makeEchelonForm();
 
-        const Matrix &operator=(const Matrix &rhs);
+        Matrix &operator=(const Matrix &rhs);
 
     private:
 
@@ -52,10 +52,10 @@ namespace wwills2{
 
         int m_numRows;        //num rows
         int m_numCols;        //num cols
-        int m_numElements;    //number of m_elements in the m_elements
+        int m_numElements;    //number of elements in the matrix
         bool m_isEchelon;
         bool m_isReducedEchelon;
-        float **m_elements;   //2d, dynamically allocated, m_elements array
+        float **m_elements;   //2d, dynamically allocated, matrix elements array
         float **m_mxmIdentity;   //identity matrix #rows x #rows
         float **m_nxnIdentity;   //identity matrix #cols x #cols
 

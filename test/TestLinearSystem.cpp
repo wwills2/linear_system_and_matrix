@@ -4,10 +4,13 @@
 
 #include <cassert>
 #include <random>
+#include <fstream>
 #include "TestLinearSystem.h"
 
 using std::cout;
 using std::endl;
+
+static std::ofstream logFile;
 
 inline float *wwills2::Matrix::operator[](const int &row) {
     return m_elements[row];
@@ -61,90 +64,96 @@ private:
 };
 
 int main(){
+
+    logFile.open("./output.txt");
+    if (!logFile){
+        logFile << "failed to open log file" << endl;
+        return -1;
+    }
+
     /*
-    cout << "benchmark dot vs overloaded[] matrix operator" << endl;
+    logFile << "benchmark dot vs overloaded[] matrix operator" << endl;
     {
         TestLinearSystem test;
-        test.dotVsOverloadBench();
+        TestLinearSystem::dotVsOverloadBench();
     }
      */
-
     cout << "testing Matrix buildIdentityMxM()" << endl;
+    logFile << "testing Matrix buildIdentityMxM()" << endl;
     {
-        TestLinearSystem test;
-        test.buildIdentityMxMTest();
+        TestLinearSystem::buildIdentityMxMTest();
     }
 
     cout << "testing Matrix buildIdentityNxN()" << endl;
+    logFile << "testing Matrix buildIdentityNxN()" << endl;
     {
-        TestLinearSystem test;
-        test.buildIdentityNxNTest();
+        TestLinearSystem::buildIdentityNxNTest();
     }
 
     cout << "testing Matrix constructor" << endl;
+    logFile << "testing Matrix constructor" << endl;
     {
-        TestLinearSystem test;
-        test.matrixInit();
+        TestLinearSystem::matrixInit();
     }
 
     cout << "testing Matrix assignment operator" << endl;
+    logFile << "testing Matrix assignment operator" << endl;
     {
-        TestLinearSystem test;
-        test.matrixAssignOp();
+        TestLinearSystem::matrixAssignOp();
     }
 
     cout << "testing Matrix assignment operator" << endl;
+    logFile << "testing Matrix assignment operator" << endl;
     {
-        TestLinearSystem test;
-        test.matrixCopyInit();
+        TestLinearSystem::matrixCopyInit();
     }
 
     cout << "testing LinearSystem constructor" << endl;
+    logFile << "testing LinearSystem constructor" << endl;
     {
-        TestLinearSystem test;
-        test.linearSysInit();
+        TestLinearSystem::linearSysInit();
     }
 
     cout << "testing addMatrix() and addMatrix(rows, cols)" << endl;
+    logFile << "testing addMatrix() and addMatrix(rows, cols)" << endl;
     {
-        TestLinearSystem test;
-        test.addMatrixTest();
+        TestLinearSystem::addMatrixTest();
     }
 
     cout << "testing addRows(float *, float *)" << endl;
+    logFile << "testing addRows(float *, float *)" << endl;
     {
-        TestLinearSystem test;
-        test.addRowsTest();
+        TestLinearSystem::addRowsTest();
     }
 
     cout << "testing LinearSystem overloaded [] operator" << endl;
+    logFile << "testing LinearSystem overloaded [] operator" << endl;
     {
-        TestLinearSystem test;
-        test.sysOverloadedElementOp();
+        TestLinearSystem::sysOverloadedElementOp();
     }
 
     cout << "testing Matrix overloaded [] operator" << endl;
+    logFile << "testing Matrix overloaded [] operator" << endl;
     {
-        TestLinearSystem test;
-        test.matrixOverloadedElementOp();
+        TestLinearSystem::matrixOverloadedElementOp();
     }
 
     cout << "testing replaceRows(float *, float *, float)" << endl;
+    logFile << "testing replaceRows(float *, float *, float)" << endl;
     {
-        TestLinearSystem test;
-        test.replaceRowsTest();
+        TestLinearSystem::replaceRowsTest();
     }
 
     cout << "testing interchangeRows(float *, float *)" << endl;
+    logFile << "testing interchangeRows(float *, float *)" << endl;
     {
-        TestLinearSystem test;
-        test.interchangeRowsTest();
+        TestLinearSystem::interchangeRowsTest();
     }
 
     cout << "testing makeEchelonForm()" << endl;
+    logFile << "testing makeEchelonForm()" << endl;
     {
-        TestLinearSystem test;
-        test.echelonFormTest();
+        TestLinearSystem::echelonFormTest();
     }
 
     return 0;
@@ -176,7 +185,7 @@ void TestLinearSystem::dotVsOverloadBench() {
     stop = clock();
 
     float time = ((float)(stop - start)) / CLOCKS_PER_SEC;
-    cout << "\tdot operator: " << time << " seconds" << endl;
+    logFile << "\tdot operator: " << time << " seconds" << endl;
 
     //start counting clock cycles
     start = clock();
@@ -191,10 +200,10 @@ void TestLinearSystem::dotVsOverloadBench() {
     stop = clock();
 
     time = ((float)(stop - start)) / CLOCKS_PER_SEC;
-    cout << "\toverloaded [] operator: " << time << " seconds" << endl;
+    logFile << "\toverloaded [] operator: " << time << " seconds" << endl;
 }
 
-wwills2::Matrix &TestLinearSystem::generateRandomMatrix(const int minRowCol, const int maxRowCol){
+auto TestLinearSystem::generateRandomMatrix(const int minRowCol, const int maxRowCol){
 
     Random randRowColAmnt(minRowCol, maxRowCol);
     Random randElement(0, 1000);
@@ -203,7 +212,7 @@ wwills2::Matrix &TestLinearSystem::generateRandomMatrix(const int minRowCol, con
     int matrixRows = randRowColAmnt.getRandNum();
     int matrixCols = randRowColAmnt.getRandNum();
 
-    wwills2::Matrix newMatrix(matrixRows, matrixCols);
+    std::unique_ptr<wwills2::Matrix> newMatrix{new wwills2::Matrix(matrixRows, matrixCols)};
 
     for (int row = 0; row < matrixRows; row++){
 
@@ -211,27 +220,29 @@ wwills2::Matrix &TestLinearSystem::generateRandomMatrix(const int minRowCol, con
         if (makeZeroRow.getRandNum() > 2){
 
             for (int col = 0; col < matrixCols; col++){
-                newMatrix.m_elements[row][col] = randElement.getRandNum();
+                newMatrix->m_elements[row][col] = (float) randElement.getRandNum();
             }
         }
     }
+
+    return newMatrix;
 }
 
 void TestLinearSystem::matrixInit() {
 
     wwills2::Matrix testMatrix;
-    testMatrix.print();
+    testMatrix.print(logFile);
     assert(testMatrix.m_numElements == (testMatrix.m_numRows * testMatrix.m_numCols));
 }
 
 void TestLinearSystem::matrixAssignOp() {
 
-    wwills2::Matrix *testMatrix = new wwills2::Matrix;
+    auto *testMatrix = new wwills2::Matrix;
 
     testMatrix->m_elements[0][1] = 5.5;
     testMatrix->m_elements[1][0] = 6.5;
 
-    wwills2::Matrix *copyMatrix = new wwills2::Matrix(10, 4);
+    auto *copyMatrix = new wwills2::Matrix(10, 4);
     *copyMatrix = *testMatrix;
 
     assert(&copyMatrix != &testMatrix);
@@ -242,19 +253,19 @@ void TestLinearSystem::matrixAssignOp() {
     assert(copyMatrix->m_elements[0][1] == 5.5);
     assert(copyMatrix->m_elements[1][0] == 6.5);
 
-    copyMatrix->print();
+    copyMatrix->print(logFile);
 
     delete copyMatrix;
 }
 
 void TestLinearSystem::matrixCopyInit() {
 
-    wwills2::Matrix *testMatrix = new wwills2::Matrix;
+    auto *testMatrix = new wwills2::Matrix;
 
     testMatrix->m_elements[0][1] = 5.5;
     testMatrix->m_elements[1][0] = 6.5;
 
-    wwills2::Matrix *copyMatrix = new wwills2::Matrix(*testMatrix);
+    auto *copyMatrix = new wwills2::Matrix(*testMatrix);
 
     assert(&copyMatrix != &testMatrix);
     assert(copyMatrix->m_elements != testMatrix->m_elements);
@@ -264,7 +275,7 @@ void TestLinearSystem::matrixCopyInit() {
     assert(copyMatrix->m_elements[0][1] == 5.5);
     assert(copyMatrix->m_elements[1][0] == 6.5);
 
-    copyMatrix->print();
+    copyMatrix->print(logFile);
 
     delete copyMatrix;
 }
@@ -314,7 +325,7 @@ void TestLinearSystem::buildIdentityNxNTest() {
                 //assert(testMatrix.m_nxnIdentity[row][col] == 0);
 
                 if (testMatrix.m_nxnIdentity[row][col] != 0){
-                    cout << "bad val std mat [" << row << "][" << col << "] = " << testMatrix.m_nxnIdentity[row][col] << endl;
+                    logFile << "bad val std mat [" << row << "][" << col << "] = " << testMatrix.m_nxnIdentity[row][col] << endl;
                 }
             }
         }
@@ -332,7 +343,7 @@ void TestLinearSystem::buildIdentityNxNTest() {
                 //assert(testMatrixBig.m_nxnIdentity[row][col] == 0);
 
                 if (testMatrixBig.m_nxnIdentity[row][col] != 0){
-                    cout << "bad val [" << row << "][" << col << "] = " << testMatrixBig.m_nxnIdentity[row][col] << endl;
+                    logFile << "bad val [" << row << "][" << col << "] = " << testMatrixBig.m_nxnIdentity[row][col] << endl;
                 }
             }
         }
@@ -348,7 +359,7 @@ void TestLinearSystem::addRowsTest(){
     assert(testMatrix.m_elements[1][1] == 7);
     assert(testMatrix.m_elements[1][2] == 9);
 
-    testMatrix.print();
+    testMatrix.print(logFile);
 }
 
 void TestLinearSystem::matrixOverloadedElementOp() {
@@ -360,7 +371,7 @@ void TestLinearSystem::matrixOverloadedElementOp() {
 
     wwills2::LinearSystem testSystem;
 
-    testSystem.m_matrices["A"].print();
+    testSystem.m_matrices["A"].print(logFile);
     assert(testSystem["A"][1][1] == 5);
 }
 
@@ -383,7 +394,7 @@ void TestLinearSystem::interchangeRowsTest() {
 
 void TestLinearSystem::echelonFormTest() {
 
-    cout << "\tTextbook hardcoded samples" << endl;
+    logFile << "\tTextbook hardcoded samples" << endl;
     {
         //page 31
 
@@ -410,10 +421,10 @@ void TestLinearSystem::echelonFormTest() {
             }
         }
 
-        testMatrix.print();
+        testMatrix.print(logFile);
         testMatrix.makeEchelonForm();
-        testMatrix.print();
-        cout << endl;
+        testMatrix.print(logFile);
+        logFile << endl;
 
         i = 0;
         for (int row = 0; row < rows; row++){
@@ -447,10 +458,10 @@ void TestLinearSystem::echelonFormTest() {
             }
         }
 
-        testMatrix.print();
+        testMatrix.print(logFile);
         testMatrix.makeEchelonForm();
-        testMatrix.print();
-        cout << endl;
+        testMatrix.print(logFile);
+        logFile << endl;
 
         i = 0;
         for (int row = 0; row < rows; row++){
@@ -486,10 +497,10 @@ void TestLinearSystem::echelonFormTest() {
             }
         }
 
-        testMatrix.print();
+        testMatrix.print(logFile);
         testMatrix.makeEchelonForm();
-        testMatrix.print();
-        cout << endl;
+        testMatrix.print(logFile);
+        logFile << endl;
 
         i = 0;
         for (int row = 0; row < rows; row++){
@@ -524,10 +535,10 @@ void TestLinearSystem::echelonFormTest() {
             }
         }
 
-        testMatrix.print();
+        testMatrix.print(logFile);
         testMatrix.makeEchelonForm();
-        testMatrix.print();
-        cout << endl;
+        testMatrix.print(logFile);
+        logFile << endl;
 
         i = 0;
         for (int row = 0; row < rows; row++){
@@ -561,10 +572,10 @@ void TestLinearSystem::echelonFormTest() {
             }
         }
 
-        testMatrix.print();
+        testMatrix.print(logFile);
         testMatrix.makeEchelonForm();
-        testMatrix.print();
-        cout << endl;
+        testMatrix.print(logFile);
+        logFile << endl;
 
         i = 0;
         for (int row = 0; row < rows; row++) {
@@ -602,10 +613,10 @@ void TestLinearSystem::echelonFormTest() {
             }
         }
 
-        testMatrix.print();
+        testMatrix.print(logFile);
         testMatrix.makeEchelonForm();
-        testMatrix.print();
-        cout << endl;
+        testMatrix.print(logFile);
+        logFile << endl;
 
         i = 0;
         for (int row = 0; row < rows; row++) {
@@ -616,52 +627,69 @@ void TestLinearSystem::echelonFormTest() {
         }
     }
 
-    cout << "corner and edge cases" << endl;
+    {
+        logFile << "random generated smoke test samples" << endl;
+
+        int numTests = 100;
+        int maxRowCol = 100;
+        int minRowCol = 10;
+
+        for (int testNum = 0; testNum < numTests; testNum++){
+
+            //individual test scope
+            {
+                auto testMatrix = generateRandomMatrix(minRowCol, maxRowCol);
+                testMatrix->makeEchelonForm();
+            }
+        }
+    }
+
+    logFile << "corner and edge cases" << endl;
     {
         wwills2::Matrix testMatrix(4, 6);
-        testMatrix.print();
+        testMatrix.print(logFile);
         testMatrix.makeEchelonForm();
-        testMatrix.print();
-        cout << endl;
+        testMatrix.print(logFile);
+        logFile << endl;
     }
     {
         wwills2::Matrix testMatrix;
-        testMatrix.print();
+        testMatrix.print(logFile);
         testMatrix.makeEchelonForm();
-        testMatrix.print();
-        cout << endl;
+        testMatrix.print(logFile);
+        logFile << endl;
     }
     {
         wwills2::Matrix testMatrix(1, 1);
         testMatrix[0][0] = 10;
 
-        testMatrix.print();
+        testMatrix.print(logFile);
         testMatrix.makeEchelonForm();
-        testMatrix.print();
-        cout << endl;
+        testMatrix.print(logFile);
+        logFile << endl;
     }
     {
         wwills2::Matrix testMatrix(2, 1);
         testMatrix[0][0] = 10;
         testMatrix[1][0] = 5;
 
-        testMatrix.print();
+        testMatrix.print(logFile);
         testMatrix.makeEchelonForm();
-        testMatrix.print();
-        cout << endl;
+        testMatrix.print(logFile);
+        logFile << endl;
     }
     {
         wwills2::Matrix testMatrix(1, 2);
         testMatrix[0][0] = 10;
         testMatrix[0][1] = 5;
 
-        testMatrix.print();
+        testMatrix.print(logFile);
         testMatrix.makeEchelonForm();
-        testMatrix.print();
-        cout << endl;
+        testMatrix.print(logFile);
+        logFile << endl;
     }
 
-    cout << "moving 1 echelon test" << endl;
+    logFile << "moving 1 echelon test" << endl;
     {
         int numRows = 6;
         int numCols = 5;
@@ -672,11 +700,11 @@ void TestLinearSystem::echelonFormTest() {
                 wwills2::Matrix testMatrix(numRows, numCols);
                 testMatrix[row][col] = 1;
 
-                cout << "before reduction" << endl;
-                testMatrix.print();
+                logFile << "before reduction" << endl;
+                testMatrix.print(logFile);
                 testMatrix.makeEchelonForm();
-                cout << "after reduction" << endl;
-                testMatrix.print();
+                logFile << "after reduction" << endl;
+                testMatrix.print(logFile);
 
 
                 //assert that the 1 has been moved into the first row in the correct col
@@ -691,25 +719,6 @@ void TestLinearSystem::echelonFormTest() {
             }
         }
     }
-
-    /*
-    {
-        cout << "\trandom generated test samples" << endl;
-
-        int numTests = 100;
-        int maxRowCol = 100;
-        int minRowCol = 10;
-
-        for (int testNum = 0; testNum < numTests; testNum++){
-
-            //individual test scope
-            {
-                //auto testMatrix = generateRandomMatrix(minRowCol, maxRowCol);
-                //!needs to be finished
-            }
-        }
-    }
-     */
 }
 
 

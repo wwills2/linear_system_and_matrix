@@ -134,21 +134,21 @@ namespace wwills2{
         }
     }
 
-    void Matrix::print() {
+    void Matrix::print(std::ostream &output) {
 
-        std::cout << "Elements of Matrix at " << this << ":" << std::endl;
+        output << "Elements of Matrix at " << this << ":" << std::endl;
         for (int row = 0; row < m_numRows; row++){
 
-            std::cout << "row " << row << ": [ ";
+            output << "row " << row << ": [ ";
 
             for (int col = 0; col < m_numCols; col++){
-                std::cout << m_elements[row][col] << " ";
+                output << m_elements[row][col] << " ";
             }
 
-            std::cout << "]" << std::endl;
+            output << "]" << std::endl;
         }
 
-        std::cout << std::endl;
+        output << std::endl;
     }
 
     void Matrix::makeEchelonForm() {
