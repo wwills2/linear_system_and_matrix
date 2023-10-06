@@ -20,7 +20,7 @@ namespace wwills2{
 
         Matrix(const Matrix &rhs);
 
-        void print(std::ostream &output);
+        void print(std::ostream &output = std::cout);
 
         void makeEchelonForm();
 

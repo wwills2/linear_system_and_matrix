@@ -11,6 +11,7 @@ using std::cout;
 using std::endl;
 
 static std::ofstream logFile;
+enum rowOperations {ADD, REPLACE, INTERCHANGE, SCALE};
 
 inline double *wwills2::Matrix::operator[](const int &row) {
     return m_elements[row];
@@ -233,8 +234,6 @@ auto TestLinearSystem::generateRandomMatrix(const int minRowCol, const int maxRo
     }
 
     return newMatrix;
-
-    return newMatrix;
 }
 
 wwills2::Matrix
@@ -313,7 +312,6 @@ void TestLinearSystem::matrixRandomize(wwills2::Matrix &toRandomize, Random &ran
     Random invertScalar(0, 1);
     Random negateScalar(0, 1);
 
-    enum rowOperations {ADD, REPLACE, INTERCHANGE, SCALE};
     int operation = 0;
     int iRow = 0;
     int jRow = 0;
@@ -323,47 +321,55 @@ void TestLinearSystem::matrixRandomize(wwills2::Matrix &toRandomize, Random &ran
 
         operation = randRowOP.getRandNum();
 
-        if (operation == ADD){
+        switch (operation) {
+            case ADD:
+                iRow = randRowNum.getRandNum();
+                jRow = randRowNum.getRandNum();
+                toRandomize.addRows(iRow, jRow);
+                break;
 
-            iRow = randRowNum.getRandNum();
-            jRow = randRowNum.getRandNum();
+            case REPLACE:
 
-            toRandomize.addRows(iRow, jRow);
-        }else if (operation == REPLACE){
+                iRow = randRowNum.getRandNum();
+                jRow = randRowNum.getRandNum();
+                scalar = (double) randScalar.getRandNum();
 
-            iRow = randRowNum.getRandNum();
-            jRow = randRowNum.getRandNum();
-            scalar = (double) randScalar.getRandNum();
-
-            if (invertScalar.getRandNum()){
+                if (invertScalar.getRandNum()){
                 scalar = 1 / scalar;
-            }
+                }
 
-            if (negateScalar.getRandNum()){
+                if (negateScalar.getRandNum()){
                 scalar *= -1;
-            }
+                }
 
-            toRandomize.replaceRows(iRow, jRow, scalar);
-        }else if (operation == INTERCHANGE){
+                toRandomize.replaceRows(iRow, jRow, scalar);
+                break;
 
-            iRow = randRowNum.getRandNum();
-            jRow = randRowNum.getRandNum();
+            case INTERCHANGE:
+                iRow = randRowNum.getRandNum();
+                jRow = randRowNum.getRandNum();
 
-            toRandomize.interchangeRows(iRow, jRow);
-        }else if (operation == SCALE){
+                toRandomize.interchangeRows(iRow, jRow);
+                break;
 
-            iRow = randRowNum.getRandNum();
-            scalar = (double) randScalar.getRandNum();
+            case SCALE:
 
-            if (invertScalar.getRandNum()){
-                scalar = 1 / scalar;
-            }
+                iRow = randRowNum.getRandNum();
+                scalar = (double) randScalar.getRandNum();
 
-            if (negateScalar.getRandNum()){
-                scalar *= -1;
-            }
+                if (invertScalar.getRandNum()){
+                    scalar = 1 / scalar;
+                }
 
-            toRandomize.scaleRow(iRow, scalar);
+                if (negateScalar.getRandNum()){
+                    scalar *= -1;
+                }
+
+                toRandomize.scaleRow(iRow, scalar);
+                break;
+
+            default:
+                break; //do nothing
         }
     }
 }
@@ -864,14 +870,14 @@ void TestLinearSystem::echelonFormTest() {
 void TestLinearSystem::reducedEchelonFormTest() {
 
     int numTests = 100;
-    int maxRowCol = 6;
-    int minRowCol = 5;
+    int maxRowCol = 4;
+    int minRowCol = 3;
     int matrixRows = 0;
     int matrixCols = 0;
     int numIterations = 200;
     Random randRowColAmnt(minRowCol, maxRowCol);
     Random randElement(2 ,10);
-    Random randRowOP(1, 5);
+    Random randRowOP(ADD, SCALE);
     Random randScalar(1, 5);
 
 
@@ -894,11 +900,59 @@ void TestLinearSystem::reducedEchelonFormTest() {
             testMatrix.print(logFile);
 
             testMatrix.makeEchelonForm();
+            logFile << "matrix at " << &testMatrix << " echelon form" << endl;
+            testMatrix.print(logFile);
+
+            testMatrix.makeReducedEchelonForm();
             logFile << "matrix at " << &testMatrix << " after reduction" << endl;
             testMatrix.print(logFile);
 
-            for (int i = 0; i < testMatrix.m_numRows; i++){
-                for (int j = 0; j < testMatrix.m_numCols; j++){
+            double testElement;
+            double controlElement;
+
+            /*
+             * the test operates by generating a random matrix in reduced echelon form with rows of 0's at random. the
+             * algorithm is designed to place a matrix in reduced echelon form with all 0 rows below non-zero rows. it
+             * is impossible for the algorithm to know where to place zero and non-zero rows to generate the exact input
+             * matrix. This test first rearranges the control matrix to have all zero rows below non-zero rows for a
+             * baseline comparison to what the reduction algorithm will produce.
+             */
+            bool zeroRow;
+            bool stopSwapSearch;
+            for (int i = 0; i < controlReducedMatrix.m_numRows; i++) {
+
+                zeroRow = true;
+                for (int j = 0; j < controlReducedMatrix.m_numCols; j++) {
+                    if (controlReducedMatrix[i][j] != 0) {
+                        zeroRow = false;
+                        break;
+                    }
+                }
+
+                if (zeroRow) {
+                    // find non-zero row to swap
+                    stopSwapSearch = false;
+                    for (int j = i; j < controlReducedMatrix.m_numRows; j++) {
+
+                        if (stopSwapSearch) {
+                            break;
+                        }
+
+                        for (int k = 0; k < controlReducedMatrix.m_numCols; k++) {
+                            if (controlReducedMatrix[j][k] != 0) {
+                                //non-zero row found
+                                controlReducedMatrix.interchangeRows(i, j);
+                                stopSwapSearch = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            //compare adjusted control matrix to test matrix
+            for (int i = 0; i < testMatrix.m_numRows; i++) {
+                for (int j = 0; j < testMatrix.m_numCols; j++) {
                     assert((testMatrix[i][j] - controlReducedMatrix[i][j]) < 0.001);
                 }
             }

@@ -147,11 +147,9 @@ namespace wwills2{
         for (int row = 0; row < m_numRows; row++){
 
             output << "row " << row << ": [ ";
-
             for (int col = 0; col < m_numCols; col++){
                 output << m_elements[row][col] << " ";
             }
-
             output << "]" << std::endl;
         }
 
@@ -161,21 +159,17 @@ namespace wwills2{
     void Matrix::makeEchelonForm() {
 
         if (!m_isEchelon && !m_isReducedEchelon){
-
             double rowScalar = 0;
             std::pair<int, int> pivot = {0, 0};
 
             //get non-zero into pivot position
             if (m_elements[pivot.first][pivot.second] == 0){
-
                 if(!makeFirstPivotNonZero(pivot)){
                     return;
                 }
             }
 
             m_pivotPositions.push_back(pivot);
-
-            //set echelon var
             m_isEchelon = true;
 
             if (m_elements[pivot.first][pivot.second] != 0){
@@ -231,16 +225,18 @@ namespace wwills2{
 
         //get the matrix in echelon form;
         if (!m_isEchelon){
-
             makeEchelonForm();
         }
 
         double factor = 0;
         double rowScalar = 0;
+        auto currPivot = m_pivotPositions[0];
 
         //loop through pivot positions starting with the last one added / rightmost
-        for (auto currPivot : m_pivotPositions){
+        auto pivotIt = m_pivotPositions.rbegin();
+        for (&pivotIt; pivotIt != m_pivotPositions.rend(); ++pivotIt){
 
+            currPivot = *pivotIt;
             if (m_elements[currPivot.first][currPivot.second] != 1){
 
                 factor = 1 / m_elements[currPivot.first][currPivot.second];
@@ -248,13 +244,12 @@ namespace wwills2{
             }
 
             //search up the pivot column and clear
-            for (int row = currPivot.first; row >= 0; row--){
+            for (int row = currPivot.first - 1; row >= 0; row--){
 
                 if (m_elements[row][currPivot.second] != 0) {
 
                     rowScalar = m_elements[row][currPivot.second];
 
-                    //make scalar negative if the sign is the same
                     //make scalar negative if the sign is the same
                     if ((m_elements[row][currPivot.second] < 0 &&
                          (rowScalar * m_elements[currPivot.first][currPivot.second]) < 0) ||
@@ -463,11 +458,13 @@ namespace wwills2{
 
         for (int col = 0; col < m_numCols; col++){
             m_elements[row][col] *= factor;
+            if (m_elements[row][col] == -0){
+                m_elements[row][col] = 0;
+            }
         }
     }
 
     bool Matrix::makeFirstPivotNonZero(std::pair<int, int> &pivot) {
-
         for (int currCol = pivot.second; currCol < m_numCols; currCol++) {
 
             //search the current column for nonzero, swap if found
@@ -475,7 +472,9 @@ namespace wwills2{
 
                 if (m_elements[currRow][currCol] != 0){
 
-                    //swap the current row with nonzero, up to the row of hte current pivot
+                    //todo: select the number in the pivot column with the largest absolute value. reduces round off
+
+                    //swap the current row with nonzero, up to the row of the current pivot
                     interchangeRows(currRow, pivot.first);
                     pivot.second = currCol;
                     return true;
