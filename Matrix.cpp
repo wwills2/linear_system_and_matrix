@@ -179,9 +179,7 @@ namespace wwills2{
 
                     //perform row operations to clear the pivot column
                     for (int row = pivot.first + 1; row < m_numRows; row++) {
-
                         if (m_elements[row][pivot.second] != 0) {
-
                             rowScalar = m_elements[row][pivot.second] / m_elements[pivot.first][pivot.second];
 
                             //make scalar negative if the sign is the same
@@ -193,8 +191,6 @@ namespace wwills2{
                             }
 
                             replaceRows(pivot.first, row, rowScalar);
-
-                            m_elements[row][pivot.second] = 0;
                         }
                     }
 
@@ -234,7 +230,7 @@ namespace wwills2{
 
         //loop through pivot positions starting with the last one added / rightmost
         auto pivotIt = m_pivotPositions.rbegin();
-        for (&pivotIt; pivotIt != m_pivotPositions.rend(); ++pivotIt){
+        for (; pivotIt != m_pivotPositions.rend(); ++pivotIt){
 
             currPivot = *pivotIt;
             if (m_elements[currPivot.first][currPivot.second] != 1){
@@ -259,6 +255,7 @@ namespace wwills2{
                     }
 
                     replaceRows(currPivot.first, row, rowScalar);
+                    m_elements[row][currPivot.second] = 0; //force clear to prevent precision problems
                 }
             }
         }
@@ -414,7 +411,7 @@ namespace wwills2{
             //add the source row index to the destination row index
             m_elements[destinationRow][col] += m_elements[sourceRow][col];
 
-            if (m_elements[destinationRow][col] == (double) -0){
+            if (m_elements[destinationRow][col] == -0){
                 m_elements[destinationRow][col] = 0;
             }
         }
@@ -433,7 +430,7 @@ namespace wwills2{
 
             m_elements[destinationRow][col] += (m_elements[sourceRow][col] * sourceMultiple);
 
-            if (m_elements[destinationRow][col] == (double) -0){
+            if (std::abs(m_elements[destinationRow][col]) < ZERO_CUTOFF){
                 m_elements[destinationRow][col] = 0;
             }
         }
@@ -458,7 +455,7 @@ namespace wwills2{
 
         for (int col = 0; col < m_numCols; col++){
             m_elements[row][col] *= factor;
-            if (m_elements[row][col] == -0){
+            if (std::abs(m_elements[row][col]) < ZERO_CUTOFF){
                 m_elements[row][col] = 0;
             }
         }

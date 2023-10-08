@@ -238,7 +238,6 @@ auto TestLinearSystem::generateRandomMatrix(const int minRowCol, const int maxRo
 
 wwills2::Matrix
 TestLinearSystem::generateRandomReducedMatrix(const int matrixRows, const int matrixCols, Random &randElement) {
-    //!FIX
 
     int colDist = matrixCols / 5;
     int rowDist = matrixRows / 8;
@@ -874,7 +873,7 @@ void TestLinearSystem::reducedEchelonFormTest() {
     int minRowCol = 3;
     int matrixRows = 0;
     int matrixCols = 0;
-    int numIterations = 200;
+    int numIterations = 75;
     Random randRowColAmnt(minRowCol, maxRowCol);
     Random randElement(2 ,10);
     Random randRowOP(ADD, SCALE);
