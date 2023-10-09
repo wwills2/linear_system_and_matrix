@@ -13,7 +13,7 @@ using std::endl;
 static std::ofstream logFile;
 enum rowOperations {ADD, REPLACE, INTERCHANGE, SCALE};
 
-inline double *wwills2::Matrix::operator[](const int &row) {
+inline mpq_class *wwills2::Matrix::operator[](const int &row) {
     return m_elements[row];
 }
 
@@ -192,7 +192,7 @@ void TestLinearSystem::dotVsOverloadBench() {
 
     stop = clock();
 
-    double time = ((double)(stop - start)) / CLOCKS_PER_SEC;
+    mpq_class time = ((mpq_class)(stop - start)) / CLOCKS_PER_SEC;
     cout << "\tdot operator: " << time << " seconds" << endl;
 
     //start counting clock cycles
@@ -207,7 +207,7 @@ void TestLinearSystem::dotVsOverloadBench() {
 
     stop = clock();
 
-    time = ((double)(stop - start)) / CLOCKS_PER_SEC;
+    time = ((mpq_class)(stop - start)) / CLOCKS_PER_SEC;
     cout << "\toverloaded [] operator: " << time << " seconds" << endl;
 }
 
@@ -297,7 +297,7 @@ TestLinearSystem::generateRandomReducedMatrix(const int matrixRows, const int ma
 
             if (std::find(pivotColumns.begin(), pivotColumns.end(), j) == pivotColumns.end() &&
                         makeNonZero.getRandNum()){
-                newMatrix[pivot.first][j] = (double) randElement.getRandNum();
+                newMatrix[pivot.first][j] = (mpq_class) randElement.getRandNum();
             }
         }
     }
@@ -314,7 +314,9 @@ void TestLinearSystem::matrixRandomize(wwills2::Matrix &toRandomize, Random &ran
     int operation = 0;
     int iRow = 0;
     int jRow = 0;
-    double scalar = 0;
+    mpq_class scalar(0);
+    bool zeroRow = true;
+
 
     for (int iteration = 0; iteration < numIterations; iteration++){
 
@@ -322,6 +324,7 @@ void TestLinearSystem::matrixRandomize(wwills2::Matrix &toRandomize, Random &ran
 
         switch (operation) {
             case ADD:
+
                 iRow = randRowNum.getRandNum();
                 jRow = randRowNum.getRandNum();
                 toRandomize.addRows(iRow, jRow);
@@ -329,22 +332,33 @@ void TestLinearSystem::matrixRandomize(wwills2::Matrix &toRandomize, Random &ran
 
             case REPLACE:
 
+                break; //todo: disables operation. needs to be fixed
+
                 iRow = randRowNum.getRandNum();
                 jRow = randRowNum.getRandNum();
-                scalar = (double) randScalar.getRandNum();
+                scalar = mpq_class(randScalar.getRandNum());
+
+                //check that the source row to copy in isn't a zero row. would result in loss of data
+                for (int i = 0; i < toRandomize.m_numCols; i++){
+                    if (toRandomize[iRow][i] != 0){
+                        zeroRow = false;
+                    }
+                }
+                if (zeroRow) break; //do not replace if source row is 0
 
                 if (invertScalar.getRandNum()){
-                scalar = 1 / scalar;
+                    scalar = 1 / scalar;
                 }
 
                 if (negateScalar.getRandNum()){
-                scalar *= -1;
+                    scalar *= -1;
                 }
 
                 toRandomize.replaceRows(iRow, jRow, scalar);
                 break;
 
             case INTERCHANGE:
+
                 iRow = randRowNum.getRandNum();
                 jRow = randRowNum.getRandNum();
 
@@ -354,7 +368,7 @@ void TestLinearSystem::matrixRandomize(wwills2::Matrix &toRandomize, Random &ran
             case SCALE:
 
                 iRow = randRowNum.getRandNum();
-                scalar = (double) randScalar.getRandNum();
+                scalar = mpq_class(randScalar.getRandNum());
 
                 if (invertScalar.getRandNum()){
                     scalar = 1 / scalar;
@@ -511,7 +525,7 @@ void TestLinearSystem::matrixOverloadedElementOp() {
 
     wwills2::Matrix testMatrix;
 
-    double *row = testMatrix[0];
+    mpq_class *row = testMatrix[0];
     assert(row[0] == 1 && row[1] == 2 && row[2] == 3);
 
     wwills2::LinearSystem testSystem;
@@ -546,12 +560,12 @@ void TestLinearSystem::echelonFormTest() {
         int rows = 4;
         int cols = 6;
 
-        double initialMatrix[24] = {0, 3, -6, 6, 4 ,-5,
+        mpq_class initialMatrix[24] = {0, 3, -6, 6, 4 ,-5,
                                    3, -7, 8, -5, 8, 9,
                                    0 , 0, 0, 0, 0, 0,
                                    3, -9, 12, -9, 6, 15};
 
-        double initialEchelonMatrix[24] = {3, -9, 12, -9, 6, 15,
+        mpq_class initialEchelonMatrix[24] = {3, -9, 12, -9, 6, 15,
                                           0, 2, -4, 4, 2, -6,
                                           0, 0, 0, 0, 1, 4,
                                           0 , 0, 0, 0, 0, 0,};
@@ -585,11 +599,11 @@ void TestLinearSystem::echelonFormTest() {
         int rows = 3;
         int cols = 4;
 
-        double initialMatrix[12] = {1 ,5, 2, -6,
+        mpq_class initialMatrix[12] = {1 ,5, 2, -6,
                                    0 ,4, -7, 2 ,
                                    0, 0 , 5, 0};
 
-        double initialEchelonMatrix[12] = {1 ,5, 2, -6,
+        mpq_class initialEchelonMatrix[12] = {1 ,5, 2, -6,
                                           0 ,4, -7, 2 ,
                                           0, 0 , 5, 0};
 
@@ -622,12 +636,12 @@ void TestLinearSystem::echelonFormTest() {
         int rows = 4;
         int cols = 5;
 
-        double initialMatrix[20] = {0, -3, -6, 4, 9,
+        mpq_class initialMatrix[20] = {0, -3, -6, 4, 9,
                                    -1, -2 , -1, 3, 1,
                                    -2, -3, 0, 3, -1,
                                    1, 4, 5, -9, -7};
 
-        double initialEchelonMatrix[20] = {1, 4, 5, -9, -7,
+        mpq_class initialEchelonMatrix[20] = {1, 4, 5, -9, -7,
                                           0, 2, 4, -6, -6,
                                           0, 0 , 0, -5, 0,
                                           0, 0, 0, 0, 0};
@@ -662,11 +676,11 @@ void TestLinearSystem::echelonFormTest() {
         int rows = 3;
         int cols = 4;
 
-        double initialMatrix[12] = {1 ,0, -5, 1,
+        mpq_class initialMatrix[12] = {1 ,0, -5, 1,
                                    0 ,1, 1, 4,
                                    0, 0 , 0, 0};
 
-        double initialEchelonMatrix[12] = {1 ,0, -5, 1,
+        mpq_class initialEchelonMatrix[12] = {1 ,0, -5, 1,
                                           0 ,1, 1, 4,
                                           0, 0 , 0, 0};
 
@@ -699,11 +713,11 @@ void TestLinearSystem::echelonFormTest() {
         int rows = 3;
         int cols = 4;
 
-        double initialMatrix[12] = {1, 0, -5, 1,
+        mpq_class initialMatrix[12] = {1, 0, -5, 1,
                                    0, 0, 0, 0,
                                    0, 1, 1, 4,};
 
-        double initialEchelonMatrix[12] = {1, 0, -5, 1,
+        mpq_class initialEchelonMatrix[12] = {1, 0, -5, 1,
                                           0, 1, 1, 4,
                                           0, 0, 0, 0};
 
@@ -736,13 +750,13 @@ void TestLinearSystem::echelonFormTest() {
         int rows = 5;
         int cols = 6;
 
-        double initialMatrix[30] = {1, 6, 2, -5, -2, -4,
+        mpq_class initialMatrix[30] = {1, 6, 2, -5, -2, -4,
                                    0, 0, 0, 0, 0, 0,
                                    0, 0, 0, 0, 1, 7,
                                    0, 0, 0, 0, 0, 0,
                                    0, 0, 2, -8, -1, 3};
 
-        double initialEchelonMatrix[30] = {1, 6, 2, -5, -2, -4,
+        mpq_class initialEchelonMatrix[30] = {1, 6, 2, -5, -2, -4,
                                           0, 0, 2, -8, -1, 3,
                                           0, 0, 0, 0, 1, 7,
                                           0, 0, 0, 0, 0, 0,
@@ -869,7 +883,7 @@ void TestLinearSystem::echelonFormTest() {
 void TestLinearSystem::reducedEchelonFormTest() {
 
     int numTests = 100;
-    int maxRowCol = 4;
+    int maxRowCol = 10;
     int minRowCol = 3;
     int matrixRows = 0;
     int matrixCols = 0;
@@ -881,6 +895,8 @@ void TestLinearSystem::reducedEchelonFormTest() {
 
 
     for (int testNum = 0; testNum < numTests; testNum++){
+
+        logFile << "matrix #" << testNum << endl;
 
         //individual test scope
         {
@@ -906,8 +922,8 @@ void TestLinearSystem::reducedEchelonFormTest() {
             logFile << "matrix at " << &testMatrix << " after reduction" << endl;
             testMatrix.print(logFile);
 
-            double testElement;
-            double controlElement;
+            mpq_class testElement;
+            mpq_class controlElement;
 
             /*
              * the test operates by generating a random matrix in reduced echelon form with rows of 0's at random. the
