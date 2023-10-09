@@ -5,30 +5,45 @@
 #ifndef MATRIX_OPERATIONS_TESTLINEARSYSTEM_H
 #define MATRIX_OPERATIONS_TESTLINEARSYSTEM_H
 
+#include <random>
+#include <algorithm>
 #include "../LinearSystem.h"
 #include "../Matrix.h"
+
+#define LOG_FILE "./test_output.txt"
+class Random;
 
 class TestLinearSystem {
 
 public:
 
+    static void matrixInit();                          //calls the m_elements constructor to initialize a generic m_elements
+    static void matrixAssignOp();                      //calls matrix overloaded assigment operator
+    static void matrixCopyInit();                      //calls matrix overloaded copy constructor
+    static void buildIdentityMxMTest();                //calls buildIdentityMxMTest
+    static void buildIdentityNxNTest();                //calls buildIdentityNxNTest
+    static void addRowsTest();                         //calls addRows(float *, float *)
+    static void matrixOverloadedElementOp();           //calls the Matrix overloaded [] operator
+    static void replaceRowsTest();                     //calls replaceRows(float *, float *, float)
+    static void interchangeRowsTest();                 //calls interchangeRows (float *, float *)
+    static void echelonFormTest();                     //calls echelonFormTest()
+    static void reducedEchelonFormTest();              //calls makeReducedEchelonForm()
 
-    void matrixInit();                          //calls the elements constructor to initialize a generic elements
-    void matrixAssignOp();                      //tests assigning one matrix to another
-    void buildIdentityMxMTest();                //calls buildIdentityMxMTest
-    void buildIdentityNxNTest();                //calls buildIdentityNxNTest
-    void addRowsTest();                         //calls addRows(float *, float *)
-    void matrixOverloadedElementOp();           //calls the Matrix overloaded [] operator
-    void replaceRowsTest();                     //calls replaceRows(float *, float *, float)
-    void echelonFormTest();                      //calls echelonFormTest()
-
-    void linearSysInit();                       //calls the linear system constructor, generic linear system object
-    void addMatrixTest();                       //calls both add matrix functions
-    void sysOverloadedElementOp();              //calls the LinearSystem overloaded [] operator
+    static void linearSysInit();                       //calls the linear system constructor, generic linear system object
+    static void addMatrixTest();                       //calls both add matrix functions
+    static void sysOverloadedElementOp();              //calls the LinearSystem overloaded [] operator
 
     void dotVsOverloadBench();                  //see test file
 
+    //builds a random matrix
+    static auto generateRandomMatrix(const int minRowCol, const int maxRowCol);
 
+    //builds random reduced matrix
+    static wwills2::Matrix generateRandomReducedMatrix(const int matrixRows, const int matrixCols, Random &randElement);
+
+    //randomizes reduced matrix with random row operations
+    static void matrixRandomize(wwills2::Matrix &toRandomize, Random &randRowOP, Random &randRowNum,
+                                Random &randScalar, const int numIterations);
 };
 
 

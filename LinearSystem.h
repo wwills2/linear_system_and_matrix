@@ -9,10 +9,11 @@
 #include <map>
 #include <iostream>
 #include <string>
+#include <thread>
 
 class TestLinearSystem;
 
-namespace wwills {
+namespace wwills2 {
 
     class LinearSystem;
     class Matrix;
@@ -36,8 +37,8 @@ namespace wwills {
     private:
 
         //data members
-        int numMatrices;
-        std::map<std::string, Matrix> matrices;
+        int m_numMatrices;
+        std::map<std::string, Matrix> m_matrices;
     };
 }
 

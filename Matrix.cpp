@@ -4,232 +4,530 @@
 
 #include "Matrix.h"
 
-namespace wwills{
+namespace wwills2{
     Matrix::Matrix() {
 
-        numRows = 2;
-        numCols = 3;
-        numElements = numRows * numCols;
+        m_numRows = 2;
+        m_numCols = 3;
+        m_numElements = m_numRows * m_numCols;
+        m_isEchelon = false;
+        m_isReducedEchelon = false;
+        m_mxmIdentity = nullptr;
+        m_nxnIdentity = nullptr;
 
-        //initialize elements
-        float num = 1;
+        //allocate array of mpq_class array pointers
+        m_elements = new mpq_class *[m_numRows];
 
-        for (int row = 0; row < numRows; row++){
+        //initialize array and allocate individual m_elements
+        mpq_class num = 1;
 
-            elements.emplace_back(std::vector<float>(numCols));
-
-            for (int col = 0; col < numCols; col++){
-                elements[row][col] = num;
+        for (int row = 0; row < m_numRows; row++){
+            m_elements[row] = new mpq_class[m_numCols];
+            for (int col = 0; col < m_numCols; col++){
+                m_elements[row][col] = num;
                 num++;
             }
         }
+
+        //build this matrix's identity matrices
+        buildIdentityMxM();
+        buildIdentityNxN();
+
     }
 
     Matrix::~Matrix() {
 
-        //zero data
-        for (int row = 0; row < numRows; row++){
-            for (int col = 0; col < numCols; col++){
-                elements[row][col] = 0;
+        //zero and deallocate matrix data
+        for (int row = 0; row < m_numRows; row++){
+            for (int col = 0; col < m_numCols; col++){
+                m_elements[row][col] = 0;
+            }
+        }
+
+        for (int row = 0; row < m_numRows; row++){
+
+            delete[] m_elements[row];
+            m_elements[row] = nullptr;
+        }
+
+        delete[] m_elements;
+        m_elements = nullptr;
+
+        //deallocate MxM identity matrix
+        for (int row = 0; row < m_numRows; row++){
+
+            delete[] m_mxmIdentity[row];
+            m_mxmIdentity[row] = nullptr;
+        }
+
+        delete[] m_mxmIdentity;
+        m_mxmIdentity = nullptr;
+
+        //deallocate NxN identity matrix
+        for (int row = 0; row < m_numCols; row++){
+
+            delete[] m_nxnIdentity[row];
+            m_nxnIdentity[row] = nullptr;
+        }
+
+        delete[] m_nxnIdentity;
+        m_nxnIdentity = nullptr;
+
+    }
+
+    Matrix::Matrix(int rows, int cols, bool isEchelon, bool isReducedEchelon) {
+
+        m_numRows = rows;
+        m_numCols = cols;
+        m_numElements = m_numRows * m_numCols;
+        m_isEchelon = isEchelon;
+        m_isReducedEchelon = isReducedEchelon;
+        m_mxmIdentity = nullptr;
+        m_nxnIdentity = nullptr;
+
+        //allocate array of mpq_class array pointers
+        m_elements = new mpq_class *[m_numRows];
+
+        //initialize array and allocate individual m_elements
+        for (int row = 0; row < m_numRows; row++){
+            m_elements[row] = new mpq_class[m_numCols];
+            for (int col = 0; col < m_numCols; col++){
+                m_elements[row][col] = 0;
+            }
+        }
+
+        buildIdentityMxM();
+        buildIdentityNxN();
+    }
+
+    Matrix::Matrix(const Matrix &rhs) {
+
+        //self assignment guard
+        if (this != &rhs) {
+
+            //copy static members
+            m_numRows = rhs.m_numRows;
+            m_numCols = rhs.m_numCols;
+            m_numElements = rhs.m_numElements;
+            m_isEchelon = rhs.m_isEchelon;
+            m_isReducedEchelon = rhs.m_isReducedEchelon;
+            m_pivotPositions = rhs.m_pivotPositions;
+
+            //dynamically initialize m_elements
+            m_elements = new mpq_class *[m_numRows];
+
+            for (int row = 0; row < m_numRows; row++) {
+                m_elements[row] = new mpq_class[m_numCols];
+                for (int col = 0; col < m_numCols; col++) {
+                    m_elements[row][col] = rhs.m_elements[row][col];
+                }
+            }
+
+            //allocate and copy MxM identity matrix
+            m_mxmIdentity = new mpq_class *[m_numRows];
+
+            for (int row = 0; row < m_numRows; row++){
+                m_mxmIdentity[row] = new mpq_class[m_numRows];
+                for (int col = 0; col < m_numRows; col++){
+                    m_mxmIdentity[row][col] = rhs.m_mxmIdentity[row][col];
+                }
+            }
+
+            //allocate and copy NxN identity matrix
+            m_nxnIdentity = new mpq_class *[m_numCols];
+
+            for (int row = 0; row < m_numCols; row++){
+                m_nxnIdentity[row] = new mpq_class[m_numCols];
+                for (int col = 0; col < m_numCols; col++){
+                    m_nxnIdentity[row][col] = rhs.m_nxnIdentity[row][col];
+                }
             }
         }
     }
 
-    Matrix::Matrix(int rows, int cols) {
+    void Matrix::print(std::ostream &output) {
 
-        numRows = rows;
-        numCols = cols;
-        numElements = numRows * numCols;
+        output << "Elements of Matrix at " << this << ":" << std::endl;
+        for (int row = 0; row < m_numRows; row++){
 
-        //initialize array and allocate individual elements
-        for (int row = 0; row < numRows; row++){
-
-            elements.emplace_back(std::vector<float>(numCols));
-
-            for (int col = 0; col < numCols; col++){
-                elements[row][col] = 0;
+            output << "row " << row << ": [ ";
+            for (int col = 0; col < m_numCols; col++){
+                output << m_elements[row][col] << " ";
             }
+            output << "]" << std::endl;
         }
+
+        output << std::endl;
     }
 
-    void Matrix::print() {
+    void Matrix::makeEchelonForm() {
 
-        for (int row = 0; row < numRows; row++){
+        if (!m_isEchelon && !m_isReducedEchelon){
+            mpq_class rowScalar = 0;
+            std::pair<int, int> pivot = {0, 0};
 
-            std::cout << "row " << row << ": [ ";
-
-            for (int col = 0; col < numCols; col++){
-                std::cout << elements[row][col] << " ";
+            //get non-zero into pivot position
+            if (m_elements[pivot.first][pivot.second] == 0){
+                if(!makeFirstPivotNonZero(pivot)){
+                    return;
+                }
             }
 
-            std::cout << "]" << std::endl;
-        }
+            m_pivotPositions.push_back(pivot);
+            m_isEchelon = true;
 
-        std::cout << std::endl;
-    }
+            if (m_elements[pivot.first][pivot.second] != 0){
 
-    void Matrix::echelonForm() {
+                //loop through all pivot positions and perform forward operations
+                for (int i = 0; i < m_numRows; i++) {
 
-        float rowScalar = 0;
-        std::pair<int, int> pivot = {0, 0};
-        bool matrixIsNonZero = false;
-        int tryRow = numRows - 1;
+                    //perform row operations to clear the pivot column
+                    for (int row = pivot.first + 1; row < m_numRows; row++) {
+                        if (m_elements[row][pivot.second] != 0) {
+                            rowScalar = m_elements[row][pivot.second] / m_elements[pivot.first][pivot.second];
 
-        //get non-zero into pivot position
-        while (pivot.second != numCols && elements[pivot.first][pivot.second] == 0){
+                            //make scalar negative if the sign is the same
+                            if ((m_elements[row][pivot.second] < 0 &&
+                                    (rowScalar * m_elements[pivot.first][pivot.second]) < 0) ||
+                                (m_elements[row][pivot.second] > 0 &&
+                                    (rowScalar * m_elements[pivot.first][pivot.second])> 0)) {
+                                rowScalar *= -1;
+                            }
 
-            //swap current row with first row if non-zero found
-            if (elements[tryRow][pivot.second] != 0) {
-
-                elements[tryRow].swap(elements[pivot.first]);
-                matrixIsNonZero = true;
-
-            }else if (tryRow == numRows - 1) {
-
-                //move the pivot column over 1 and try to find a non-zero entry
-                pivot.second++;
-                tryRow = numRows - 1;
-
-            }else if ((tryRow + 1) < numRows){
-
-                tryRow--;
-            }
-        }
-
-        if (matrixIsNonZero){
-
-            int searchCol = 0;
-            int searchRow = 0;      //used when searching for pivot
-            bool rowSwapNeeded = false;
-
-            //loop through all pivot positions and perform forward operations
-            for (int i = 0; i < numRows; i++){
-
-                //perform row operations to clear the pivot column
-                for (int row = pivot.first + 1; row < numRows; row++) {
-
-                    if (elements[row][pivot.second] != 0) {
-
-                        rowScalar = elements[row][pivot.second] / elements[pivot.first][pivot.second];
-
-                        //make scalar negative if the sign is the same
-                        if ((elements[row][pivot.second] < 0 && elements[pivot.first][pivot.second] < 0) ||
-                            (elements[row][pivot.second] > 0 && elements[pivot.first][pivot.second] > 0)) {
-                            rowScalar *= -1;
+                            replaceRows(pivot.first, row, rowScalar);
+                            m_elements[row][pivot.second] = 0; //force clear to prevent precision problems
                         }
+                    }
 
-                        replaceRows(pivot.first, row, rowScalar);
+                    if (pivot.first + 1 < m_numRows){
+                        pivot.first++;
+                    }
+
+                    if (pivot.second + 1 < m_numCols){
+                        pivot.second++;
+                    }
+
+
+                    if (m_elements[pivot.first][pivot.second] == 0){
+
+                        if (!findAndSwapForPivot(pivot)){
+                            //no new pivot found, stop
+                            return;
+                        }
+                    }
+
+                    m_pivotPositions.push_back(pivot);
+                }
+            }
+        }
+    }
+
+    void Matrix::makeReducedEchelonForm() {
+
+        //get the matrix in echelon form;
+        if (!m_isEchelon){
+            makeEchelonForm();
+        }
+
+        mpq_class factor = 0;
+        mpq_class rowScalar = 0;
+        auto currPivot = m_pivotPositions[0];
+
+        //loop through pivot positions starting with the last one added / rightmost
+        auto pivotIt = m_pivotPositions.rbegin();
+        for (; pivotIt != m_pivotPositions.rend(); ++pivotIt){
+
+            currPivot = *pivotIt;
+            if (m_elements[currPivot.first][currPivot.second] != 1){
+
+                factor = 1 / m_elements[currPivot.first][currPivot.second];
+                scaleRow(currPivot.first, factor);
+            }
+
+            //search up the pivot column and clear
+            for (int row = currPivot.first - 1; row >= 0; row--){
+
+                if (m_elements[row][currPivot.second] != 0) {
+
+                    rowScalar = m_elements[row][currPivot.second];
+
+                    //make scalar negative if the sign is the same
+                    if ((m_elements[row][currPivot.second] < 0 &&
+                         (rowScalar * m_elements[currPivot.first][currPivot.second]) < 0) ||
+                        (m_elements[row][currPivot.second] > 0 &&
+                         (rowScalar * m_elements[currPivot.first][currPivot.second])> 0)) {
+                        rowScalar *= -1;
+                    }
+
+                    replaceRows(currPivot.first, row, rowScalar);
+                    m_elements[row][currPivot.second] = 0; //force clear to prevent precision problems
+                }
+            }
+        }
+    }
+
+
+    Matrix &Matrix::operator=(const Matrix &rhs) {
+
+        bool rebuildIdentity = false;
+
+        //self assignment guard
+        if (this == &rhs){
+            return *this;
+        }else{
+
+            //reallocate array if dimensions are different
+            if (m_numCols != rhs.m_numCols || m_numRows != rhs.m_numRows){
+
+                rebuildIdentity = true;
+
+                //delete current array
+                for (int row = 0; row < m_numRows; row++){
+
+                    delete[] m_elements[row];
+                    m_elements[row] = nullptr;
+                }
+                delete[] m_elements;
+
+                //realloc matrix to match rhs dimensions
+                m_elements = new mpq_class*[rhs.m_numRows];
+                for (int row = 0; row < rhs.m_numRows; row++){
+
+                    m_elements[row] = new mpq_class[rhs.m_numCols];
+                }
+
+                //delete MxM identity matrix
+                for (int row = 0; row < m_numRows; row++){
+
+                    delete[] m_mxmIdentity[row];
+                    m_mxmIdentity[row] = nullptr;
+                }
+
+                delete[] m_mxmIdentity;
+
+                //delete NxN identity matrix
+                for (int row = 0; row < m_numCols; row++){
+
+                    delete[] m_nxnIdentity[row];
+                    m_nxnIdentity[row] = nullptr;
+                }
+                delete[] m_nxnIdentity;
+            }
+
+            //copy static members
+            m_numRows = rhs.m_numRows;
+            m_numCols = rhs.m_numCols;
+            m_numElements = rhs.m_numElements;
+            m_isEchelon = rhs.m_isEchelon;
+            m_isReducedEchelon = rhs.m_isReducedEchelon;
+            m_pivotPositions = rhs.m_pivotPositions;
+
+            //copy m_elements
+            for (int row = 0; row < m_numRows; row++){
+                for (int col = 0; col < m_numCols; col++){
+                    m_elements[row][col] = rhs.m_elements[row][col];
+                }
+            }
+
+            if (rebuildIdentity){
+
+                //reallocate and copy MxM identity matrix
+                m_mxmIdentity = new mpq_class *[m_numRows];
+
+                for (int row = 0; row < m_numRows; row++){
+                    m_mxmIdentity[row] = new mpq_class[m_numRows];
+                    for (int col = 0; col < m_numRows; col++){
+                        m_mxmIdentity[row][col] = rhs.m_mxmIdentity[row][col];
                     }
                 }
 
-                pivot.first++;
-                pivot.second++;
+                //reallocate and copy NxN identity matrix
+                m_nxnIdentity = new mpq_class *[m_numCols];
 
-                //find next pivot if not in the last column
-                if (pivot.second < numCols - 1){
-
-                    searchRow = pivot.first;
-                    searchCol = pivot.second;
-                    rowSwapNeeded = false;
-
-                    //find the next pivot position, if all entries in row are zero, then swap
-                    while (searchRow < numRows && elements[searchRow][searchCol] == 0){
-
-                        //move back to current pivot column if at the end of the row and there is another row
-                        if ((searchCol == numCols - 1) && (searchRow + 1 < numRows)){
-
-                            searchCol = pivot.second;
-                            rowSwapNeeded = true;
-                            searchRow++;
-                        }else if (searchCol + 1 < numCols){
-
-                            searchCol++;
-                        }
+                for (int row = 0; row < m_numCols; row++){
+                    m_nxnIdentity[row] = new mpq_class[m_numCols];
+                    for (int col = 0; col < m_numCols; col++){
+                        m_nxnIdentity[row][col] = rhs.m_nxnIdentity[row][col];
                     }
-
-                    //swap rows to move non-zero into pivot
-                    if (rowSwapNeeded){
-
-                        //move the new pivot row up via swap
-                        elements[pivot.first].swap(elements[searchRow]);
-                    }
-
-                    pivot.second = searchCol;
                 }
             }
+
+            return *this;
         }
     }
 
     //private + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
-    Matrix Matrix::buildIdentityMxM() {
+    void Matrix::buildIdentityMxM() {
+
+        //allocate array of mpq_class array pointers
+        m_mxmIdentity = new mpq_class *[m_numRows];
 
         //build m x m matrix
-        Matrix identity(numRows, numRows);
+        std::vector<std::thread> threads;
+        const unsigned int numThreads = std::thread::hardware_concurrency() - 1;
 
-
-        for (int row = 0; row < numRows; row++){
-            for (int col = 0; col < numRows; col++){
-
-                // place 1 down the diagonal
-                if (row == col){
-                    identity.elements[row][col] = 1;
-                }else{
-                    identity.elements[row][col] = 0;
-                }
-            }
+        for (unsigned int i = 0; i < numThreads; i++){
+            threads.emplace_back(&Matrix::buildIdentityMxMThread, this, i, numThreads);
         }
 
-        return identity;
+        for (unsigned int i = 0; i < numThreads; i++){
+            threads[i].join();
+        }
     }
 
-    Matrix Matrix::buildIdentityNxN() {
+    void Matrix::buildIdentityMxMThread(const int &startRow, const int &numThreads) {
+
+        for (int row = startRow; row < m_numRows; row += numThreads){
+            m_mxmIdentity[row] = new mpq_class[m_numRows]{};
+            m_mxmIdentity[row][row] = 1;
+        }
+    }
+
+    void Matrix::buildIdentityNxN() {
+
+        //allocate array of mpq_class array pointers
+        m_nxnIdentity = new mpq_class *[m_numCols];
 
         //build n x n matrix
-        Matrix identity(numCols, numCols);
+        std::vector<std::thread> threads;
+        const unsigned int numThreads = std::thread::hardware_concurrency();
 
+        for (unsigned int i = 0; i < numThreads; i++){
+            threads.emplace_back(&Matrix::buildIdentityNxNThread, this, i, numThreads);
+        }
 
-        for (int row = 0; row < numCols; row++){
-            for (int col = 0; col < numCols; col++){
+        for (unsigned int i = 0; i < numThreads; i++){
+            threads[i].join();
+        }
+    }
 
-                // place 1 down the diagonal
-                if (row == col){
-                    identity.elements[row][col] = 1;
-                }else{
-                    identity.elements[row][col] = 0;
+    void Matrix::buildIdentityNxNThread(const int &startRow, const int &numThreads) {
+
+        for (int row = startRow; row < m_numCols; row += numThreads){
+
+            m_nxnIdentity[row] = new mpq_class[m_numCols]{};
+            m_nxnIdentity[row][row] = 1;
+        }
+    }
+
+    inline mpq_class *Matrix::operator[](const int &row) {
+        return m_elements[row];
+    }
+
+    void Matrix::addRows(const int &sourceRow, const int &destinationRow) {
+
+        for (int col = 0; col < m_numCols; col++){
+
+            //add the source row index to the destination row index
+            m_elements[destinationRow][col] += m_elements[sourceRow][col];
+
+            if (m_elements[destinationRow][col] == -0){
+                m_elements[destinationRow][col] = 0;
+            }
+        }
+    }
+
+    void Matrix::replaceRows(const int &sourceRow, const int &destinationRow, const mpq_class &sourceMultiple) {
+
+        //multiply entries in the source row and add them to the destination row
+        for (int col = 0; col < m_numCols; col++){
+
+            ///REMOVE
+            mpq_class destElement = m_elements[destinationRow][col];
+            mpq_class srcElement = m_elements[sourceRow][col];
+            mpq_class scaledSrcElement = m_elements[sourceRow][col] * sourceMultiple;
+            mpq_class result = destElement + scaledSrcElement;
+
+            m_elements[destinationRow][col] += (m_elements[sourceRow][col] * sourceMultiple);
+
+            /*
+            if (abs(m_elements[destinationRow][col]) < ZERO_CUTOFF){
+                m_elements[destinationRow][col] = 0;
+            }
+             */
+        }
+    }
+
+    void Matrix::interchangeRows(const int &swapRow1, const int &swapRow2) {
+
+        int i;
+
+        //copy swap row 1 to temp location
+        auto *tempArray = new mpq_class[m_numCols];
+        for (i = 0; i < m_numCols; i++){
+            tempArray[i] = m_elements[swapRow1][i];
+        }
+
+        //copy swap row 2 to swap row 1
+        for (i = 0; i < m_numCols; i++){
+            m_elements[swapRow1][i] = m_elements[swapRow2][i];
+        }
+
+        //copy temp to swap row 2
+        for (i = 0; i < m_numCols; i++){
+            m_elements[swapRow2][i] = tempArray[i];
+        }
+
+        delete[] tempArray;
+    }
+
+    void Matrix::scaleRow(const int &row, const mpq_class &factor) {
+
+        for (int col = 0; col < m_numCols; col++){
+            m_elements[row][col] *= factor;
+
+            /*
+            if (std::abs(m_elements[row][col]) < ZERO_CUTOFF){
+                m_elements[row][col] = 0;
+            }
+             */
+        }
+    }
+
+    bool Matrix::makeFirstPivotNonZero(std::pair<int, int> &pivot) {
+        for (int currCol = pivot.second; currCol < m_numCols; currCol++) {
+
+            //search the current column for nonzero, swap if found
+            for (int currRow = m_numRows - 1; currRow >= 0; currRow--){
+
+                if (m_elements[currRow][currCol] != 0){
+
+                    //todo: select the number in the pivot column with the largest absolute value. reduces round off
+
+                    //swap the current row with nonzero, up to the row of the current pivot
+                    interchangeRows(currRow, pivot.first);
+                    pivot.second = currCol;
+                    return true;
                 }
             }
         }
 
-        return identity;
+        return false;
     }
 
-    inline std::vector<float> &Matrix::operator[](const int &row) {
-        return elements[row];
-    }
+    bool Matrix::findAndSwapForPivot(std::pair<int, int> &pivot) {
 
-    void Matrix::addRows(const int &source, const int &destination) {
+        for (int currCol = pivot.second; currCol < m_numCols; currCol++) {
 
-        for (int col = 0; col < numCols; col++){
+            //search the current column for nonzero, swap if found
+            for (int currRow = pivot.first; currRow < m_numRows; currRow++) {
 
-            //add the source row index to the destination row index
-            elements[destination][col] += elements[source][col];
+                if ((m_elements[currRow][currCol] != 0) && (currRow > pivot.first)){
+
+                    //swap the current row with nonzero, up to the row of hte current pivot
+                    interchangeRows(currRow, pivot.first);
+                    pivot.second = currCol;
+                    return true;
+                }else if (m_elements[currRow][currCol] != 0){
+
+                    pivot.second = currCol;
+                    return true;
+                }
+            }
         }
-    }
 
-    void Matrix::replaceRows(const int &source, const int &destination, const float sourceMultiple) {
-
-        //multiply entries in the source row and add them to the destination row
-        for (int col = 0; col < numCols; col++){
-            elements[destination][col] += (elements[source][col] * sourceMultiple);
-        }
-    }
-
-    void Matrix::scaleRow(const int &row, float factor) {
-
-        for (int col = 0; col < numCols; col++){
-            elements[row][col] *= factor;
-        }
+        return false;
     }
 
 } // wwills2

@@ -6,9 +6,13 @@
 #define MATRIX_OPERATIONS_MATRIX_H
 
 #include <cstring>
+#include <algorithm>
+#include <iterator>
+#include <gmpxx.h>
 #include "LinearSystem.h"
 
-namespace wwills{
+namespace wwills2{
+#define ZERO_CUTOFF 1e-10
 
     class Matrix {
     public:
@@ -16,32 +20,51 @@ namespace wwills{
         Matrix();
         ~Matrix();
 
-        Matrix(int rows, int cols);
+        Matrix(int rows, int cols, bool isEchelon=false, bool isReducedEchelon=false);
 
-        void print();
+        Matrix(const Matrix &rhs);
 
-        //! important: column zero must be non-zero to work properly
-        void echelonForm();
+        void print(std::ostream &output = std::cout);
 
+        void makeEchelonForm();
+
+        void makeReducedEchelonForm();
+
+        Matrix &operator=(const Matrix &rhs);
 
     private:
 
-        Matrix buildIdentityMxM();
+        void buildIdentityMxM();
 
-        Matrix buildIdentityNxN();
+        void buildIdentityMxMThread(const int &startRow, const int &numThreads);
 
-        std::vector<float> &operator[](const int &row);
+        void buildIdentityNxN();
 
-        void addRows(const int &source, const int &destination);
+        void buildIdentityNxNThread(const int &startRow, const int &numThreads);
 
-        void replaceRows(const int &source, const int &destination, const float sourceMultiple);
+        mpq_class *operator[](const int &row);
 
-        void scaleRow(const int &row, float factor);
+        void addRows(const int &sourceRow, const int &destinationRow);
 
-        int numRows;        //num rows
-        int numCols;        //num cols
-        int numElements;    //number of elements in the elements
-        std::vector< std::vector<float> > elements;   //2d, dynamically allocated, elements array
+        void replaceRows(const int &sourceRow, const int &destinationRow, const mpq_class &sourceMultiple);
+
+        void interchangeRows(const int &swapRow1, const int &swapRow2);
+
+        void scaleRow(const int &row, const mpq_class &factor);
+
+        bool makeFirstPivotNonZero(std::pair<int, int> &pivot);
+
+        bool findAndSwapForPivot(std::pair<int, int> &pivot);
+
+        int m_numRows;                                      //num rows
+        int m_numCols;                                      //num cols
+        int m_numElements;                                  //number of m_elements in the m_elements
+        bool m_isEchelon;                                   //tracks if the matrix is in echelon form
+        bool m_isReducedEchelon;                            //tracks if the matrix has been reduced
+        std::vector<std::pair<int, int>> m_pivotPositions;  //the pivot positions of the matrix
+        mpq_class **m_elements;                                 //2d, dynamically allocated, m_elements array
+        mpq_class **m_mxmIdentity;                              //identity matrix #rows x #rows
+        mpq_class **m_nxnIdentity;                              //identity matrix #cols x #cols
 
         friend LinearSystem;
 

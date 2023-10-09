@@ -1,7 +1,29 @@
 //scale the pivot row to get 1 in pivot position
-            if (elements[pivot.first][pivot.second] != 1){
+            if (m_elements[pivot.first][pivot.second] != 1){
 
                  //scale pivot row to get 1 in the pivot position
-                float scaleFactor = 1 / elements[pivot.first][pivot.second];
-                scaleRow(elements[pivot.first], scaleFactor);
+                float scaleFactor = 1 / m_elements[pivot.first][pivot.second];
+                scaleRow(m_elements[pivot.first], scaleFactor);
             }
+
+
+prototyped column-first pivot search code vvvv
+
+//find the next pivot position, look down columns for swaps, moving across rows
+                    while ((searchCol < m_numCols) && (m_elements[searchRow][searchCol] == 0)){
+
+                        //move back to current pivot row if at the bottom of column, and there is another row
+                        if ((searchRow == m_numRows - 1) && (searchCol + 1 < m_numCols)){
+
+                            searchRow = pivot.first;
+                            rowSwapNeeded = true;
+                            searchCol++;
+                        }else if (searchRow + 1 < m_numRows){
+
+                            searchRow++;
+                        }else{
+
+                            //at the end of a column and there are no more rows to search, end
+                            searchCol = m_numCols;
+                        }
+                    }
