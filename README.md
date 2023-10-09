@@ -1,6 +1,8 @@
 # Matrix and Vector Operations  Library
 ## Author: Zan Wills
 
+# DEPRECATED BRANCH
+
 ### Motivations
 
 - to gain functional experience with implementing mathematical (linear algebraic) concepts in c++ code 
