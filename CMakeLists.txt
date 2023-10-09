@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(matrix_operations)
 
-# compile with debugging
-set(DEBUG OFF)
+set(DEBUG OFF) # compile with debugging
 
 set(CMAKE_CXX_STANDARD 14)
 set(STATIC_LIB_DIR "/usr/lib/x86_64-linux-gnu") # set to directory where static libaries are located
