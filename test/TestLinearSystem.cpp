@@ -66,7 +66,7 @@ private:
 
 int main(){
 
-    logFile.open("./output.txt");
+    logFile.open(LOG_FILE);
     if (!logFile){
         logFile << "failed to open log file" << endl;
         return -1;
