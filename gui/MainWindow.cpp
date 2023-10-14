@@ -48,16 +48,73 @@
 **
 ****************************************************************************/
 
-#include "gui/MainWindow.h"
+#include "MainWindow.h"
 
-#include <QApplication>
+#include <QAction>
+#include <QFileDialog>
+#include <QMenuBar>
 
 //! [0]
-int main(int argc, char *argv[])
+MainWindow::MainWindow()
 {
-    QApplication app(argc, argv);
-    MainWindow mw;
-    mw.show();
-    return app.exec();
+    createMenus();
+    setWindowTitle(tr("Address Book"));
 }
 //! [0]
+
+//! [1a]
+void MainWindow::createMenus()
+{
+    fileMenu = menuBar()->addMenu(tr("&File"));
+
+    openAct = new QAction(tr("&Open..."), this);
+    fileMenu->addAction(openAct);
+    connect(openAct, &QAction::triggered, this, &MainWindow::openFile);
+//! [1a]
+
+    saveAct = new QAction(tr("&Save As..."), this);
+    fileMenu->addAction(saveAct);
+    connect(saveAct, &QAction::triggered, this, &MainWindow::saveFile);
+
+    fileMenu->addSeparator();
+
+    exitAct = new QAction(tr("E&xit"), this);
+    fileMenu->addAction(exitAct);
+    connect(exitAct, &QAction::triggered, this, &QWidget::close);
+
+    toolMenu = menuBar()->addMenu(tr("&Tools"));
+
+    addAct = new QAction(tr("&Add Entry..."), this);
+    toolMenu->addAction(addAct);
+
+//! [1b]
+    editAct = new QAction(tr("&Edit Entry..."), this);
+    editAct->setEnabled(false);
+    toolMenu->addAction(editAct);
+
+    toolMenu->addSeparator();
+
+    removeAct = new QAction(tr("&Remove Entry"), this);
+    removeAct->setEnabled(false);
+    toolMenu->addAction(removeAct);
+
+}
+//! [1b]
+
+//! [2]
+void MainWindow::openFile()
+{
+    QString fileName = QFileDialog::getOpenFileName(this);
+    if (!fileName.isEmpty())
+        ;//todo: add open file action
+}
+//! [2]
+
+//! [3]
+void MainWindow::saveFile()
+{
+    QString fileName = QFileDialog::getSaveFileName(this);
+    if (!fileName.isEmpty())
+        ;//todo: add save file action
+}
+//! [3]
