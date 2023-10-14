@@ -145,6 +145,14 @@ namespace wwills2{
         }
     }
 
+    std::unique_ptr<matrix_dimensions> Matrix::getDimensions() const {
+        std::unique_ptr<matrix_dimensions> matrixDims(new matrix_dimensions);
+        matrixDims->numRows = m_numRows;
+        matrixDims->numColumns = m_numCols;
+
+        return matrixDims;
+    }
+
     void Matrix::print(std::ostream &output) {
 
         output << "Elements of Matrix at " << this << ":" << std::endl;

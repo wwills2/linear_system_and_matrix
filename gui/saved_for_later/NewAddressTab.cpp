@@ -48,91 +48,41 @@
 **
 ****************************************************************************/
 
-#include "MainWindow.h"
+#include "adddialog.h"
+#include "NewAddressTab.h"
 
-#include <QAction>
-#include <QFileDialog>
-#include <QMenuBar>
-#include <QMessageBox>
+#include <QtWidgets>
 
-MainWindow::MainWindow() {
-
-    m_displayWidget = new CoreWidget;
-    setCentralWidget(m_displayWidget);
-
-
-    createMenus();
-    setWindowTitle(tr(WINDOW_NAME));
-}
-
-MainWindow::~MainWindow() {
-
-    delete m_displayWidget;
-
-    delete m_fileMenu;
-    delete m_actionMenu;
-
-    delete m_openAct;
-    delete m_saveAct;
-    delete m_exitAct;
-    delete m_addAct;
-    delete m_editAct;
-    delete m_removeAct;
-}
-
-void MainWindow::createMenus() {
-
-    m_fileMenu = menuBar()->addMenu(tr("&File"));
-
-    m_openAct = new QAction(tr("&Open..."), this);
-    m_fileMenu->addAction(m_openAct);
-    connect(m_openAct, &QAction::triggered, this, &MainWindow::openFile);
-
-    m_saveAct = new QAction(tr("&Save As..."), this);
-    m_fileMenu->addAction(m_saveAct);
-    connect(m_saveAct, &QAction::triggered, this, &MainWindow::saveFile);
-
-    m_fileMenu->addSeparator();
-
-    m_exitAct = new QAction(tr("E&xit"), this);
-    m_fileMenu->addAction(m_exitAct);
-    connect(m_exitAct, &QAction::triggered, this, &QWidget::close);
-
-    m_actionMenu = menuBar()->addMenu(tr("&Actions"));
-
-    m_addAct = new QAction(tr("&Add Entry..."), this);
-    m_actionMenu->addAction(m_addAct);
-
-    m_editAct = new QAction(tr("&Edit Entry..."), this);
-    m_editAct->setEnabled(false);
-    m_actionMenu->addAction(m_editAct);
-
-    m_actionMenu->addSeparator();
-
-    m_removeAct = new QAction(tr("&Remove Entry"), this);
-    m_removeAct->setEnabled(false);
-    m_actionMenu->addAction(m_removeAct);
-}
-
-void MainWindow::openFile()
+//! [0]
+NewAddressTab::NewAddressTab(QWidget *parent)
 {
+    Q_UNUSED(parent);
 
-    //todo: undo
-    QMessageBox::information(this, tr("not implemented"), tr("this feature is not implemented"));
-    return;
+    descriptionLabel = new QLabel(tr("There are currently no contacts in your address book. "
+                                      "\nClick Add to add new contacts."));
 
-    QString fileName = QFileDialog::getOpenFileName(this);
-    if (!fileName.isEmpty())
-        ;//todo: add open file action
+    addButton = new QPushButton(tr("Add"));
+
+    connect(addButton, &QAbstractButton::clicked, this, &NewAddressTab::addEntry);
+
+    mainLayout = new QVBoxLayout;
+    mainLayout->addWidget(descriptionLabel);
+    mainLayout->addWidget(addButton, 0, Qt::AlignCenter);
+
+    setLayout(mainLayout);
 }
+//! [0]
 
-void MainWindow::saveFile()
+//! [1]
+void NewAddressTab::addEntry()
 {
-    //todo: undo
-    QMessageBox::information(this, tr("not implemented"), tr("this feature is not implemented"));
-    return;
+    AddDialog aDialog;
 
-    QString fileName = QFileDialog::getSaveFileName(this);
-    if (!fileName.isEmpty())
-        ;//todo: add save file action
+    if (aDialog.exec()) {
+        QString name = aDialog.nameText->text();
+        QString address = aDialog.addressText->toPlainText();
+
+        emit sendDetails(name, address);
+    }
 }
+//! [1]

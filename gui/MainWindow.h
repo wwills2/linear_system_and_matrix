@@ -52,14 +52,15 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "CoreWidget.h"
 
 //! [0]
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
     MainWindow();
+    ~MainWindow() override;
 
 private slots:
     void openFile();
@@ -68,15 +69,17 @@ private slots:
 private:
     void createMenus();
 
-    QMenu *fileMenu;
-    QMenu *toolMenu;
-    QAction *openAct;
-    QAction *saveAct;
-    QAction *exitAct;
-    QAction *addAct;
-    QAction *editAct;
-    QAction *removeAct;
+    QGroupBox *m_displayWidget;
+
+    QMenu *m_fileMenu;
+    QMenu *m_actionMenu;
+
+    QAction *m_openAct;
+    QAction *m_saveAct;
+    QAction *m_exitAct;
+    QAction *m_addAct;
+    QAction *m_editAct;
+    QAction *m_removeAct;
 };
-//! [0]
 
 #endif // MAINWINDOW_H

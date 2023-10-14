@@ -8,11 +8,17 @@
 #include <cstring>
 #include <algorithm>
 #include <iterator>
+#include <memory>
 #include <gmpxx.h>
 #include "LinearSystem.h"
 
 namespace wwills2{
 #define ZERO_CUTOFF 1e-10
+
+    struct matrix_dimensions{
+        int numRows;
+        int numColumns;
+    };
 
     class Matrix {
     public:
@@ -23,6 +29,8 @@ namespace wwills2{
         Matrix(int rows, int cols, bool isEchelon=false, bool isReducedEchelon=false);
 
         Matrix(const Matrix &rhs);
+
+        std::unique_ptr<matrix_dimensions> getDimensions() const;
 
         void print(std::ostream &output = std::cout);
 

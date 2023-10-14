@@ -48,91 +48,56 @@
 **
 ****************************************************************************/
 
-#include "MainWindow.h"
+#ifndef TABLEMODEL_H
+#define TABLEMODEL_H
 
-#include <QAction>
-#include <QFileDialog>
-#include <QMenuBar>
-#include <QMessageBox>
+#include <QAbstractTableModel>
+#include <QList>
 
-MainWindow::MainWindow() {
+//! [0]
 
-    m_displayWidget = new CoreWidget;
-    setCentralWidget(m_displayWidget);
-
-
-    createMenus();
-    setWindowTitle(tr(WINDOW_NAME));
-}
-
-MainWindow::~MainWindow() {
-
-    delete m_displayWidget;
-
-    delete m_fileMenu;
-    delete m_actionMenu;
-
-    delete m_openAct;
-    delete m_saveAct;
-    delete m_exitAct;
-    delete m_addAct;
-    delete m_editAct;
-    delete m_removeAct;
-}
-
-void MainWindow::createMenus() {
-
-    m_fileMenu = menuBar()->addMenu(tr("&File"));
-
-    m_openAct = new QAction(tr("&Open..."), this);
-    m_fileMenu->addAction(m_openAct);
-    connect(m_openAct, &QAction::triggered, this, &MainWindow::openFile);
-
-    m_saveAct = new QAction(tr("&Save As..."), this);
-    m_fileMenu->addAction(m_saveAct);
-    connect(m_saveAct, &QAction::triggered, this, &MainWindow::saveFile);
-
-    m_fileMenu->addSeparator();
-
-    m_exitAct = new QAction(tr("E&xit"), this);
-    m_fileMenu->addAction(m_exitAct);
-    connect(m_exitAct, &QAction::triggered, this, &QWidget::close);
-
-    m_actionMenu = menuBar()->addMenu(tr("&Actions"));
-
-    m_addAct = new QAction(tr("&Add Entry..."), this);
-    m_actionMenu->addAction(m_addAct);
-
-    m_editAct = new QAction(tr("&Edit Entry..."), this);
-    m_editAct->setEnabled(false);
-    m_actionMenu->addAction(m_editAct);
-
-    m_actionMenu->addSeparator();
-
-    m_removeAct = new QAction(tr("&Remove Entry"), this);
-    m_removeAct->setEnabled(false);
-    m_actionMenu->addAction(m_removeAct);
-}
-
-void MainWindow::openFile()
+struct Contact
 {
+    QString name;
+    QString address;
 
-    //todo: undo
-    QMessageBox::information(this, tr("not implemented"), tr("this feature is not implemented"));
-    return;
+    bool operator==(const Contact &other) const
+    {
+        return name == other.name && address == other.address;
+    }
+};
 
-    QString fileName = QFileDialog::getOpenFileName(this);
-    if (!fileName.isEmpty())
-        ;//todo: add open file action
-}
-
-void MainWindow::saveFile()
+inline QDataStream &operator<<(QDataStream &stream, const Contact &contact)
 {
-    //todo: undo
-    QMessageBox::information(this, tr("not implemented"), tr("this feature is not implemented"));
-    return;
-
-    QString fileName = QFileDialog::getSaveFileName(this);
-    if (!fileName.isEmpty())
-        ;//todo: add save file action
+    return stream << contact.name << contact.address;
 }
+
+inline QDataStream &operator>>(QDataStream &stream, Contact &contact)
+{
+    return stream >> contact.name >> contact.address;
+}
+
+class TableModel : public QAbstractTableModel
+{
+    Q_OBJECT
+
+public:
+    TableModel(QObject *parent = 0);
+    TableModel(QList<Contact> contacts, QObject *parent = 0);
+
+    int rowCount(const QModelIndex &parent) const override;
+    int columnCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+    bool insertRows(int position, int rows, const QModelIndex &index = QModelIndex()) override;
+    bool removeRows(int position, int rows, const QModelIndex &index = QModelIndex()) override;
+    QList<Contact> getContacts() const;
+
+private:
+    QList<Contact> contacts;
+};
+//! [0]
+
+#endif // TABLEMODEL_H

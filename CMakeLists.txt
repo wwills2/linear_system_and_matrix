@@ -13,7 +13,7 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 set(GUI_DIR gui)
 set(TESTING_DIR test)
 
-add_definitions( -DGUI=${GUI_DIR}/)
+add_definitions( -DWINDOW_NAME="Linear System Tool")
 
 if (DEBUG)
     add_compile_options(-Wall -pedantic -g3)
@@ -37,7 +37,9 @@ add_executable(qt_application
         Matrix.cpp
         Matrix.h
         ${GUI_DIR}/MainWindow.cpp
-        ${GUI_DIR}/MainWindow.h)
+        ${GUI_DIR}/MainWindow.h
+        gui/CoreWidget.cpp
+        gui/CoreWidget.h)
 
 add_executable(testLinearSystem
         ${TESTING_DIR}/TestLinearSystem.cpp

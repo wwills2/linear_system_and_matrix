@@ -48,91 +48,37 @@
 **
 ****************************************************************************/
 
-#include "MainWindow.h"
+#ifndef NEWADDRESSTAB_H
+#define NEWADDRESSTAB_H
 
-#include <QAction>
-#include <QFileDialog>
-#include <QMenuBar>
-#include <QMessageBox>
+#include <QWidget>
 
-MainWindow::MainWindow() {
+QT_BEGIN_NAMESPACE
+class QLabel;
+class QPushButton;
+class QVBoxLayout;
+QT_END_NAMESPACE
 
-    m_displayWidget = new CoreWidget;
-    setCentralWidget(m_displayWidget);
-
-
-    createMenus();
-    setWindowTitle(tr(WINDOW_NAME));
-}
-
-MainWindow::~MainWindow() {
-
-    delete m_displayWidget;
-
-    delete m_fileMenu;
-    delete m_actionMenu;
-
-    delete m_openAct;
-    delete m_saveAct;
-    delete m_exitAct;
-    delete m_addAct;
-    delete m_editAct;
-    delete m_removeAct;
-}
-
-void MainWindow::createMenus() {
-
-    m_fileMenu = menuBar()->addMenu(tr("&File"));
-
-    m_openAct = new QAction(tr("&Open..."), this);
-    m_fileMenu->addAction(m_openAct);
-    connect(m_openAct, &QAction::triggered, this, &MainWindow::openFile);
-
-    m_saveAct = new QAction(tr("&Save As..."), this);
-    m_fileMenu->addAction(m_saveAct);
-    connect(m_saveAct, &QAction::triggered, this, &MainWindow::saveFile);
-
-    m_fileMenu->addSeparator();
-
-    m_exitAct = new QAction(tr("E&xit"), this);
-    m_fileMenu->addAction(m_exitAct);
-    connect(m_exitAct, &QAction::triggered, this, &QWidget::close);
-
-    m_actionMenu = menuBar()->addMenu(tr("&Actions"));
-
-    m_addAct = new QAction(tr("&Add Entry..."), this);
-    m_actionMenu->addAction(m_addAct);
-
-    m_editAct = new QAction(tr("&Edit Entry..."), this);
-    m_editAct->setEnabled(false);
-    m_actionMenu->addAction(m_editAct);
-
-    m_actionMenu->addSeparator();
-
-    m_removeAct = new QAction(tr("&Remove Entry"), this);
-    m_removeAct->setEnabled(false);
-    m_actionMenu->addAction(m_removeAct);
-}
-
-void MainWindow::openFile()
+//! [0]
+class NewAddressTab : public QWidget
 {
+    Q_OBJECT
 
-    //todo: undo
-    QMessageBox::information(this, tr("not implemented"), tr("this feature is not implemented"));
-    return;
+public:
+    NewAddressTab(QWidget *parent = 0);
 
-    QString fileName = QFileDialog::getOpenFileName(this);
-    if (!fileName.isEmpty())
-        ;//todo: add open file action
-}
+public slots:
+    void addEntry();
 
-void MainWindow::saveFile()
-{
-    //todo: undo
-    QMessageBox::information(this, tr("not implemented"), tr("this feature is not implemented"));
-    return;
+signals:
+    void sendDetails(QString name, QString address);
 
-    QString fileName = QFileDialog::getSaveFileName(this);
-    if (!fileName.isEmpty())
-        ;//todo: add save file action
-}
+private:
+    QLabel *descriptionLabel;
+    QPushButton *addButton;
+    QVBoxLayout *mainLayout;
+
+};
+//! [0]
+
+#endif

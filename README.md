@@ -13,3 +13,6 @@
 algebra. The code is a mix of C++ OOP paradigms and C features such as raw pointers and arrays. Though this mix isn't 
 practical in most production environments, it is used here to show competency with both languages.
 
+### GUI Design
+- Qt5 based UI
+- Simple table view to represent the matrix and display the output of reduction.

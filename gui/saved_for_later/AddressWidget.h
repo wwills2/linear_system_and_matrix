@@ -48,91 +48,46 @@
 **
 ****************************************************************************/
 
-#include "MainWindow.h"
+#ifndef ADDRESSWIDGET_H
+#define ADDRESSWIDGET_H
 
-#include <QAction>
-#include <QFileDialog>
-#include <QMenuBar>
-#include <QMessageBox>
+#include "NewAddressTab.h"
+#include "TableModel.h"
 
-MainWindow::MainWindow() {
+#include <QItemSelection>
+#include <QTabWidget>
 
-    m_displayWidget = new CoreWidget;
-    setCentralWidget(m_displayWidget);
+QT_BEGIN_NAMESPACE
+class QSortFilterProxyModel;
+class QItemSelectionModel;
+QT_END_NAMESPACE
 
-
-    createMenus();
-    setWindowTitle(tr(WINDOW_NAME));
-}
-
-MainWindow::~MainWindow() {
-
-    delete m_displayWidget;
-
-    delete m_fileMenu;
-    delete m_actionMenu;
-
-    delete m_openAct;
-    delete m_saveAct;
-    delete m_exitAct;
-    delete m_addAct;
-    delete m_editAct;
-    delete m_removeAct;
-}
-
-void MainWindow::createMenus() {
-
-    m_fileMenu = menuBar()->addMenu(tr("&File"));
-
-    m_openAct = new QAction(tr("&Open..."), this);
-    m_fileMenu->addAction(m_openAct);
-    connect(m_openAct, &QAction::triggered, this, &MainWindow::openFile);
-
-    m_saveAct = new QAction(tr("&Save As..."), this);
-    m_fileMenu->addAction(m_saveAct);
-    connect(m_saveAct, &QAction::triggered, this, &MainWindow::saveFile);
-
-    m_fileMenu->addSeparator();
-
-    m_exitAct = new QAction(tr("E&xit"), this);
-    m_fileMenu->addAction(m_exitAct);
-    connect(m_exitAct, &QAction::triggered, this, &QWidget::close);
-
-    m_actionMenu = menuBar()->addMenu(tr("&Actions"));
-
-    m_addAct = new QAction(tr("&Add Entry..."), this);
-    m_actionMenu->addAction(m_addAct);
-
-    m_editAct = new QAction(tr("&Edit Entry..."), this);
-    m_editAct->setEnabled(false);
-    m_actionMenu->addAction(m_editAct);
-
-    m_actionMenu->addSeparator();
-
-    m_removeAct = new QAction(tr("&Remove Entry"), this);
-    m_removeAct->setEnabled(false);
-    m_actionMenu->addAction(m_removeAct);
-}
-
-void MainWindow::openFile()
+//! [0]
+class AddressWidget : public QTabWidget
 {
+    Q_OBJECT
 
-    //todo: undo
-    QMessageBox::information(this, tr("not implemented"), tr("this feature is not implemented"));
-    return;
+public:
+    AddressWidget(QWidget *parent = 0);
+    void readFromFile(const QString &fileName);
+    void writeToFile(const QString &fileName);
 
-    QString fileName = QFileDialog::getOpenFileName(this);
-    if (!fileName.isEmpty())
-        ;//todo: add open file action
-}
+public slots:
+    void showAddEntryDialog();
+    void addEntry(QString name, QString address);
+    void editEntry();
+    void removeEntry();
 
-void MainWindow::saveFile()
-{
-    //todo: undo
-    QMessageBox::information(this, tr("not implemented"), tr("this feature is not implemented"));
-    return;
+signals:
+    void selectionChanged (const QItemSelection &selected);
 
-    QString fileName = QFileDialog::getSaveFileName(this);
-    if (!fileName.isEmpty())
-        ;//todo: add save file action
-}
+private:
+    void setupTabs();
+
+    TableModel *table;
+    NewAddressTab *newAddressTab;
+    QSortFilterProxyModel *proxyModel;
+};
+//! [0]
+
+#endif // ADDRESSWIDGET_H
