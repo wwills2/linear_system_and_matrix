@@ -6,30 +6,36 @@
 #include "Matrix.h"
 
 namespace wwills2 {
-    LinearSystem::LinearSystem() {
 
-        m_numMatrices = 1;
-        m_matrices["A"];   //new templated m_elements called A
-    }
-
+    LinearSystem::LinearSystem() = default;
     LinearSystem::~LinearSystem() = default;
 
-    void LinearSystem::addMatrix(const std::string &name) {
-
-        m_numMatrices++;
-        m_matrices[name];   //new templated m_elements called A
-    }
-
     void LinearSystem::addMatrix(const std::string &name, const int &rows, const int &cols) {
-
-        m_numMatrices++;
-        Matrix matrix(rows, cols);
-
-        //perform a memory move into the map to reduce copy operation overhead
-        m_matrices.insert(std::pair<std::string, Matrix>(name, std::move(matrix)));
+        m_matrices.insert(std::pair<std::string, Matrix>(name, Matrix(rows, cols)));
     }
 
-    Matrix &LinearSystem::operator[](const std::string &name) {
+    void LinearSystem::addMatrix(const std::string &name, const Matrix &matrixToAdd) {
+        m_matrices.insert(std::pair<std::string, Matrix>(name, matrixToAdd));
+    }
+
+    void LinearSystem::removeMatrix(const std::string &name) {
+
+        auto it = m_matrices.find(name);
+        if (it != m_matrices.end()){
+            m_matrices.erase(it);
+        }
+    }
+
+    Matrix &LinearSystem::getMatrix(const std::string &name){
+
+        auto it = m_matrices.find(name);
+        if (it == m_matrices.end()){
+            throw std::invalid_argument("matrix \"" + name + "\" does not exist");
+        }
         return m_matrices[name];
+    }
+
+    int LinearSystem::getNumMatrices() {
+        return (int) m_matrices.size();
     }
 }

@@ -14,7 +14,6 @@
 #include "LinearSystem.h"
 
 namespace wwills2{
-#define ZERO_CUTOFF 1e-10
 
     struct matrix_dimensions{
         int numRows;

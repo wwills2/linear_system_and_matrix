@@ -10,6 +10,7 @@
 #include <iostream>
 #include <string>
 #include <thread>
+#include <stdexcept>
 
 class TestLinearSystem;
 
@@ -28,16 +29,17 @@ namespace wwills2 {
 
         ~LinearSystem();
 
-        void addMatrix(const std::string &name);
-
         void addMatrix(const std::string &name, const int &rows, const int &cols);
 
-        Matrix &operator[](const std::string &name);
+        void addMatrix(const std::string &name, const Matrix &matrixToAdd);
+
+        void removeMatrix(const std::string &name);
+
+        Matrix &getMatrix(const std::string &name);
+
+        int getNumMatrices();
 
     private:
-
-        //data members
-        int m_numMatrices;
         std::map<std::string, Matrix> m_matrices;
     };
 }

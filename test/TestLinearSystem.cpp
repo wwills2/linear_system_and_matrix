@@ -116,12 +116,6 @@ int main(){
         TestLinearSystem::linearSysInit();
     }
 
-    cout << "testing addMatrix() and addMatrix(rows, cols)" << endl;
-    logFile << "testing addMatrix() and addMatrix(rows, cols)" << endl;
-    {
-        TestLinearSystem::addMatrixTest();
-    }
-
     cout << "testing addRows(float *, float *)" << endl;
     logFile << "testing addRows(float *, float *)" << endl;
     {
@@ -531,7 +525,7 @@ void TestLinearSystem::matrixOverloadedElementOp() {
     wwills2::LinearSystem testSystem;
 
     testSystem.m_matrices["A"].print(logFile);
-    assert(testSystem["A"][1][1] == 5);
+    assert(testSystem.getMatrix("A")[1][1] == 5);
 }
 
 void TestLinearSystem::replaceRowsTest() {
@@ -978,28 +972,13 @@ void TestLinearSystem::reducedEchelonFormTest() {
 
 //LinearSystem Tests + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
-void TestLinearSystem::addMatrixTest() {
-
-
-    wwills2::LinearSystem testSystem;
-    testSystem.addMatrix("testDefault");
-
-    assert(testSystem.m_matrices["testDefault"].m_elements[0][0] == 1);
-
-    testSystem.addMatrix("testArguments", 4, 5);
-
-    for (int i = 0; i < testSystem.m_matrices["testArguments"].m_numRows; i++){
-        for (int j = 0; j < testSystem.m_matrices["testArguments"].m_numCols; j++){
-            assert(testSystem.m_matrices["testArguments"].m_elements[i][j] == 0);
-        }
-    }
-}
-
 
 void TestLinearSystem::linearSysInit() {
 
     wwills2::LinearSystem testSystem;
-    assert(testSystem.m_numMatrices == 1);
+    wwills2::Matrix matrixDefault;
+    testSystem.addMatrix("A", matrixDefault);
+    assert(testSystem.getNumMatrices() == 1);
     assert(testSystem.m_matrices["A"].m_numElements == 6);
     assert(testSystem.m_matrices["A"].m_elements[0][0] == 1);
 }
@@ -1009,5 +988,5 @@ void TestLinearSystem::sysOverloadedElementOp() {
     wwills2::LinearSystem testSystem;
 
     testSystem.addMatrix("test", 3, 1);
-    assert(testSystem["test"].m_elements[2][0] == 0);
+    assert(testSystem.getMatrix("test").m_elements[2][0] == 0);
 }
