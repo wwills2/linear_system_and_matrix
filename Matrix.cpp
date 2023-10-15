@@ -79,6 +79,11 @@ namespace wwills2{
 
         m_numRows = rows;
         m_numCols = cols;
+
+        if (m_numRows < 0 || m_numCols < 0){
+            throw std::invalid_argument("matrix must have at least one row and column");
+        }
+
         m_numElements = m_numRows * m_numCols;
         m_isEchelon = isEchelon;
         m_isReducedEchelon = isReducedEchelon;
@@ -364,6 +369,14 @@ namespace wwills2{
         }
     }
 
+    Matrix::Iterator Matrix::begin() {
+        return Iterator{this};
+    }
+
+    Matrix::Iterator Matrix::end() {
+        return Iterator{nullptr, -1, -1};
+    }
+
     //private + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
     void Matrix::buildIdentityMxM() {
@@ -536,6 +549,57 @@ namespace wwills2{
         }
 
         return false;
+    }
+
+    Matrix::Iterator::Iterator(Matrix *matrix) {
+        m_matrix = matrix;
+        m_row = 0;
+        m_col = 0;
+    }
+
+    Matrix::Iterator::Iterator(Matrix *matrix, int row, int col) {
+        m_matrix = matrix;
+        m_row = row;
+        m_col = col;
+    }
+
+    Matrix::Iterator &Matrix::Iterator::operator++() {
+
+        if (m_matrix == nullptr){
+            return *this;
+        }
+
+        if (++m_col == m_matrix->m_numCols) {
+            if (++m_row == m_matrix->m_numRows){
+                m_matrix = nullptr;
+                m_row = -1;
+                m_col = -1;
+            }else{
+                m_col = 0;
+            }
+        }
+
+        return *this;
+    }
+
+    const mpq_class &Matrix::Iterator::operator*() const {
+        return m_matrix->m_elements[m_row][m_col];
+    }
+
+    bool Matrix::Iterator::operator==(const Matrix::Iterator &rhs) const {
+        if (m_row != rhs.m_row || m_col != rhs.m_col|| m_matrix != rhs.m_matrix){
+            return false;
+        }
+
+        return true;
+    }
+
+    bool Matrix::Iterator::operator!=(const Matrix::Iterator &rhs) const {
+        if (m_row == rhs.m_row || m_col == rhs.m_col|| m_matrix == rhs.m_matrix){
+            return false;
+        }
+
+        return true;
     }
 
 } // wwills2

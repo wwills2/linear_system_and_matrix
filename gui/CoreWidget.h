@@ -17,7 +17,8 @@ public:
 
 private:
 
-
+    void setUpTable();
+    void loadMatrixIntoTable();
 
     QGridLayout *m_matrixGridLayout;
     QTableWidget *m_matrixAsTable;

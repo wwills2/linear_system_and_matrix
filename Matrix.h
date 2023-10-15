@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <iterator>
 #include <memory>
+#include <stdexcept>
 #include <gmpxx.h>
 #include "LinearSystem.h"
 
@@ -22,6 +23,8 @@ namespace wwills2{
 
     class Matrix {
     public:
+
+        class Iterator;
 
         Matrix();
         ~Matrix();
@@ -39,6 +42,10 @@ namespace wwills2{
         void makeReducedEchelonForm();
 
         Matrix &operator=(const Matrix &rhs);
+
+        Iterator begin();
+
+        Iterator end();
 
     private:
 
@@ -75,8 +82,31 @@ namespace wwills2{
         mpq_class **m_nxnIdentity;                              //identity matrix #cols x #cols
 
         friend LinearSystem;
+        friend Iterator;
 
         friend TestLinearSystem;
+    };
+
+    //read only, forward iterator
+    class Matrix::Iterator {
+    public:
+        explicit Iterator(Matrix *matrix);
+
+        Iterator &operator++();
+
+        const mpq_class &operator*() const;
+
+        bool operator==(const Matrix::Iterator &rhs) const;
+
+        bool operator!=(const Matrix::Iterator &rhs) const;
+
+    private:
+        friend Matrix::Iterator Matrix::end();
+        explicit Iterator(Matrix *matrix, int row, int col);
+
+        Matrix *m_matrix;
+        int m_row;
+        int m_col;
     };
 
 } // wwills2
