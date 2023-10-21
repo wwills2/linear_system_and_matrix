@@ -57,9 +57,18 @@
 
 MainWindow::MainWindow() {
 
-    m_displayWidget = new CoreWidget;
-    setCentralWidget(m_displayWidget);
+    QSizePolicy qSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setSizePolicy(qSizePolicy);
 
+    //main view must be contained in widget.
+    m_coreLayoutWidget = new QWidget(this);
+    m_coreLayoutWidget->setSizePolicy(qSizePolicy);
+
+    m_mainLayout = new MainLayout(m_coreLayoutWidget);
+    m_coreLayoutWidget->setLayout(m_mainLayout);
+
+    //set widget with main layout as central widget
+    setCentralWidget(m_coreLayoutWidget);
 
     createMenus();
     setWindowTitle(tr(WINDOW_NAME));
@@ -67,7 +76,7 @@ MainWindow::MainWindow() {
 
 MainWindow::~MainWindow() {
 
-    delete m_displayWidget;
+    delete m_mainLayout;
 
     delete m_fileMenu;
     delete m_actionMenu;
@@ -100,13 +109,14 @@ void MainWindow::createMenus() {
 
     m_actionMenu = menuBar()->addMenu(tr("&Actions"));
 
-    m_addAct = new QAction(tr("&Add Entry..."), this);
+    m_addAct = new QAction(tr("&Configure"), this);
     m_actionMenu->addAction(m_addAct);
 
+    /* todo: add more actions down the line
     m_editAct = new QAction(tr("&Edit Entry..."), this);
     m_editAct->setEnabled(false);
     m_actionMenu->addAction(m_editAct);
-
+     */
     m_actionMenu->addSeparator();
 
     m_removeAct = new QAction(tr("&Remove Entry"), this);

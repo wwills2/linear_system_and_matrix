@@ -12,6 +12,8 @@ set(STATIC_LIB_DIR /usr/lib/x86_64-linux-gnu) # set to directory where static li
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 set(GUI_DIR gui)
 set(TESTING_DIR test)
+file(GLOB GUI_SOURCE ${GUI_DIR}/*.cpp)
+file(GLOB GUI_HEADERS ${GUI_DIR}*.h)
 
 add_definitions( -DWINDOW_NAME="Linear System Tool")
 
@@ -36,10 +38,9 @@ add_executable(qt_application
         LinearSystem.cpp
         Matrix.cpp
         Matrix.h
-        ${GUI_DIR}/MainWindow.cpp
-        ${GUI_DIR}/MainWindow.h
-        gui/CoreWidget.cpp
-        gui/CoreWidget.h)
+        ${GUI_SOURCE}
+        ${GUI_HEADERS}
+)
 
 add_executable(testLinearSystem
         ${TESTING_DIR}/TestLinearSystem.cpp

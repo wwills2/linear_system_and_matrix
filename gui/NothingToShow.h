@@ -48,35 +48,28 @@
 **
 ****************************************************************************/
 
-#ifndef NEWADDRESSTAB_H
-#define NEWADDRESSTAB_H
+#ifndef NOTHIINGTOSHOW_H
+#define NOTHIINGTOSHOW_H
 
 #include <QWidget>
 
 QT_BEGIN_NAMESPACE
 class QLabel;
-class QPushButton;
 class QVBoxLayout;
 QT_END_NAMESPACE
 
-//! [0]
-class NewAddressTab : public QWidget
-{
+/**
+ * @brief nothing to show widget displayed by the main grid view on startup
+ */
+class NothingToShow : public QWidget {
     Q_OBJECT
 
 public:
-    NewAddressTab(QWidget *parent = 0);
-
-public slots:
-    void addEntry();
-
-signals:
-    void sendDetails(QString name, QString address);
+    explicit NothingToShow(QWidget *parent = 0);
 
 private:
     QLabel *descriptionLabel;
-    QPushButton *addButton;
-    QVBoxLayout *mainLayout;
+    QVBoxLayout *m_layout;
 
 };
 //! [0]

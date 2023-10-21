@@ -52,10 +52,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "CoreWidget.h"
+#include "MainLayout.h"
 
-//! [0]
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow{
     Q_OBJECT
 
 public:
@@ -69,7 +68,8 @@ private slots:
 private:
     void createMenus();
 
-    QGroupBox *m_displayWidget;
+    QWidget *m_coreLayoutWidget;
+    MainLayout *m_mainLayout;
 
     QMenu *m_fileMenu;
     QMenu *m_actionMenu;
