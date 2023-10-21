@@ -54,17 +54,14 @@
 #include <QDialog>
 
 QT_BEGIN_NAMESPACE
-class QAction;
 class QDialogButtonBox;
 class QGroupBox;
-class QLabel;
-class QLineEdit;
-class QMenu;
-class QMenuBar;
-class QPushButton;
-class QTextEdit;
 QT_END_NAMESPACE
 
+/**
+ * @brief dialog opened to for the user to enter the number of variables and equations
+ * @extends QDialogue
+ */
 class ConfigureDialog : public QDialog
 {
     Q_OBJECT
@@ -73,26 +70,10 @@ public:
     ConfigureDialog();
 
 private:
-    void createMenu();
-    void createHorizontalGroupBox();
-    void createGridGroupBox();
-    void createFormGroupBox();
+    void createConfigureGroupBox();
 
-    enum { NumGridRows = 3, NumButtons = 4 };
-
-    QMenuBar *menuBar;
-    QGroupBox *horizontalGroupBox;
-    QGroupBox *gridGroupBox;
-    QGroupBox *formGroupBox;
-    QTextEdit *smallEditor;
-    QTextEdit *bigEditor;
-    QLabel *labels[NumGridRows];
-    QLineEdit *lineEdits[NumGridRows];
-    QPushButton *buttons[NumButtons];
-    QDialogButtonBox *buttonBox;
-
-    QMenu *fileMenu;
-    QAction *exitAction;
+    QGroupBox *m_ConfigureGroupBox;
+    QDialogButtonBox *m_buttonBox;
 };
 
 #endif // DIALOG_H
