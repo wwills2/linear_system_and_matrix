@@ -48,43 +48,51 @@
 **
 ****************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef DIALOG_H
+#define DIALOG_H
 
-#include <QMainWindow>
-#include "MainLayout.h"
-#include "ConfigureDialog.h"
+#include <QDialog>
 
-/**
- * @brief main window for the application. controls configuration and macro actions
- */
-class MainWindow : public QMainWindow{
+QT_BEGIN_NAMESPACE
+class QAction;
+class QDialogButtonBox;
+class QGroupBox;
+class QLabel;
+class QLineEdit;
+class QMenu;
+class QMenuBar;
+class QPushButton;
+class QTextEdit;
+QT_END_NAMESPACE
+
+class ConfigureDialog : public QDialog
+{
     Q_OBJECT
 
 public:
-    MainWindow();
-    ~MainWindow() override;
-
-private slots:
-    void openFile();
-    void saveFile();
-    void configure();
+    ConfigureDialog();
 
 private:
-    void createMenus();
+    void createMenu();
+    void createHorizontalGroupBox();
+    void createGridGroupBox();
+    void createFormGroupBox();
 
-    QWidget *m_coreLayoutWidget;
-    MainLayout *m_mainLayout;
+    enum { NumGridRows = 3, NumButtons = 4 };
 
-    QMenu *m_fileMenu;
-    QMenu *m_actionMenu;
+    QMenuBar *menuBar;
+    QGroupBox *horizontalGroupBox;
+    QGroupBox *gridGroupBox;
+    QGroupBox *formGroupBox;
+    QTextEdit *smallEditor;
+    QTextEdit *bigEditor;
+    QLabel *labels[NumGridRows];
+    QLineEdit *lineEdits[NumGridRows];
+    QPushButton *buttons[NumButtons];
+    QDialogButtonBox *buttonBox;
 
-    QAction *m_openAct;
-    QAction *m_saveAct;
-    QAction *m_exitAct;
-    QAction *m_configureAct;
-    QAction *m_editAct;
-    QAction *m_runAct;
+    QMenu *fileMenu;
+    QAction *exitAction;
 };
 
-#endif // MAINWINDOW_H
+#endif // DIALOG_H

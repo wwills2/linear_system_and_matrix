@@ -84,9 +84,9 @@ MainWindow::~MainWindow() {
     delete m_openAct;
     delete m_saveAct;
     delete m_exitAct;
-    delete m_addAct;
+    delete m_configureAct;
     delete m_editAct;
-    delete m_removeAct;
+    delete m_runAct;
 }
 
 void MainWindow::createMenus() {
@@ -109,8 +109,9 @@ void MainWindow::createMenus() {
 
     m_actionMenu = menuBar()->addMenu(tr("&Actions"));
 
-    m_addAct = new QAction(tr("&Configure"), this);
-    m_actionMenu->addAction(m_addAct);
+    m_configureAct = new QAction(tr("&Configure"), this);
+    m_actionMenu->addAction(m_configureAct);
+    connect(m_configureAct, &QAction::triggered, this, &MainWindow::configure);
 
     /* todo: add more actions down the line
     m_editAct = new QAction(tr("&Edit Entry..."), this);
@@ -119,13 +120,12 @@ void MainWindow::createMenus() {
      */
     m_actionMenu->addSeparator();
 
-    m_removeAct = new QAction(tr("&Remove Entry"), this);
-    m_removeAct->setEnabled(false);
-    m_actionMenu->addAction(m_removeAct);
+    m_runAct = new QAction(tr("&Run"), this);
+    m_runAct->setEnabled(false);
+    m_actionMenu->addAction(m_runAct);
 }
 
-void MainWindow::openFile()
-{
+void MainWindow::openFile() {
 
     //todo: undo
     QMessageBox::information(this, tr("not implemented"), tr("this feature is not implemented"));
@@ -136,8 +136,7 @@ void MainWindow::openFile()
         ;//todo: add open file action
 }
 
-void MainWindow::saveFile()
-{
+void MainWindow::saveFile() {
     //todo: undo
     QMessageBox::information(this, tr("not implemented"), tr("this feature is not implemented"));
     return;
@@ -145,4 +144,12 @@ void MainWindow::saveFile()
     QString fileName = QFileDialog::getSaveFileName(this);
     if (!fileName.isEmpty())
         ;//todo: add save file action
+}
+
+void MainWindow::configure() {
+
+    ConfigureDialog configureDialog;
+    if (configureDialog.exec()){
+        QMessageBox::information(this, tr("closed"), tr("the dialog box has been closed"));
+    }
 }
