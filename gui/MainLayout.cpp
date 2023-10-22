@@ -10,8 +10,8 @@
 
 MainLayout::MainLayout(QWidget *parent) : QGridLayout(parent) {
 
-    m_dataEntryWidget = new WrapperScrollBox(tr("Linear System Data Entry"));
-    m_resultsWidget = new WrapperScrollBox(tr("Linear System Analysis Results"));
+    m_dataEntryScrollBox = new WrapperScrollBox(tr("Linear System Data Entry"));
+    m_resultsScrollBox = new WrapperScrollBox(tr("Linear System Analysis Results"));
 
     m_nothingToShow = new NothingToShow;
     //display nothing to show screen
@@ -29,14 +29,14 @@ void MainLayout::setUpLayout(ConfigureDialog &configureDialog) noexcept(false){
         {
             int equationCount = configureDialog.m_numEquations;
             int variableCount = configureDialog.m_numVariables;
-            m_dataEntryWidget->setWidget(new LinearSystemDataEntry(equationCount,variableCount,
-                                                                   m_dataEntryWidget->m_scrollArea));
+            m_dataEntryScrollBox->setWidget(new LinearSystemDataEntry(equationCount, variableCount,
+                                                                      m_dataEntryScrollBox->m_scrollArea));
             // replace existing nothing to show with the data entry widget
-            replaceWidget(m_nothingToShow, m_dataEntryWidget);
+            replaceWidget(m_nothingToShow, m_dataEntryScrollBox);
 
             // add results widget
-            m_resultsWidget->setWidget(m_nothingToShow); //todo: replace with proper results widget
-            addWidget(m_resultsWidget, LOWER);
+            m_resultsScrollBox->setWidget(m_nothingToShow); //todo: replace with proper results widget
+            addWidget(m_resultsScrollBox, LOWER);
         }
 
         case ConfigureDialog::ARITHMETIC:

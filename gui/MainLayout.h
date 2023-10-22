@@ -38,8 +38,8 @@ private:
     class WrapperScrollBox;
 
     NothingToShow *m_nothingToShow;
-    WrapperScrollBox *m_dataEntryWidget;
-    WrapperScrollBox *m_resultsWidget;
+    WrapperScrollBox *m_dataEntryScrollBox;
+    WrapperScrollBox *m_resultsScrollBox;
 };
 
 

@@ -6,6 +6,8 @@
 #define MATRIX_OPERATIONS_LINEARSYSTEMDATAENTRY_H
 
 #include <QGridLayout>
+#include <QLineEdit>
+#include <QLabel>
 #include "NothingToShow.h" //todo: remove
 
 /**
