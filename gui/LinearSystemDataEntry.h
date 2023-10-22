@@ -12,9 +12,9 @@
 
 /**
  * @brief Layout for entering coefficient values for a linear system
- * @extends QWidget, QGridLayout
+ * @extends QWidget
  */
-class LinearSystemDataEntry : public QWidget, private QGridLayout{
+class LinearSystemDataEntry : public QWidget{
 
 public:
 
@@ -24,6 +24,7 @@ private:
 
     int m_numEquations;
     int m_numVars;
+    QGridLayout *m_entryGrid;
 };
 
 #endif //MATRIX_OPERATIONS_LINEARSYSTEMDATAENTRY_H

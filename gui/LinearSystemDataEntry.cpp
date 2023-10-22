@@ -3,10 +3,12 @@
 //
 #include "LinearSystemDataEntry.h"
 
-#define LINE_EDIT_PERCENT_WIDGET_WIDTH (int) 10
+#define MIN_LINE_EDIT_WIDTH 100
 
 LinearSystemDataEntry::LinearSystemDataEntry(int numEquations, int numVars, QWidget *parent) :
-        QGridLayout(parent), m_numEquations(numEquations), m_numVars(numVars) {
+        QWidget(parent), m_numEquations(numEquations), m_numVars(numVars) {
+
+    m_entryGrid = new QGridLayout(this);
 
     QSizePolicy qSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setSizePolicy(qSizePolicy);
@@ -19,8 +21,9 @@ LinearSystemDataEntry::LinearSystemDataEntry(int numEquations, int numVars, QWid
         for(int j = 0; j < numWidgetsInRow; j++){
 
             xCoeffEdit = new QLineEdit;
-            xCoeffEdit->setMinimumWidth(width() / LINE_EDIT_PERCENT_WIDGET_WIDTH);
-            addWidget(xCoeffEdit, i, j);
+            xCoeffEdit->setMinimumWidth(MIN_LINE_EDIT_WIDTH);
+            xCoeffEdit->setMaximumWidth(MIN_LINE_EDIT_WIDTH);
+            m_entryGrid->addWidget(xCoeffEdit, i, j);
 
             xnDisplay = new QLabel;
             if (j != numWidgetsInRow - 2){
@@ -28,7 +31,7 @@ LinearSystemDataEntry::LinearSystemDataEntry(int numEquations, int numVars, QWid
             }else{
                 xnDisplay->setText("x" + QString::number(j / 2));
             }
-            addWidget(xnDisplay, i, ++j);
+            m_entryGrid->addWidget(xnDisplay, i, ++j);
         }
     }
 }

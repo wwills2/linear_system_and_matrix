@@ -50,6 +50,7 @@ MainLayout::WrapperScrollBox::WrapperScrollBox(const QString &title) : QGroupBox
 
     m_widgetSet = false;
     m_scrollArea = new QScrollArea();
+    m_scrollArea->setWidgetResizable(false);
 
     auto *layoutForGroupBox = new QVBoxLayout(this); // need layout in group box, cannot directly set widget
     layoutForGroupBox->addWidget(m_scrollArea);
