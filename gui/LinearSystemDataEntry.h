@@ -6,12 +6,13 @@
 #define MATRIX_OPERATIONS_LINEARSYSTEMDATAENTRY_H
 
 #include <QGridLayout>
+#include "NothingToShow.h" //todo: remove
 
 /**
  * @brief Layout for entering coefficient values for a linear system
- * @extends QGridLayout
+ * @extends QWidget, QGridLayout
  */
-class LinearSystemDataEntry : public QGridLayout{
+class LinearSystemDataEntry : public QWidget, private QGridLayout{
 
 public:
 

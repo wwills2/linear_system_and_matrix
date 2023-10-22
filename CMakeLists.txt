@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(matrix_operations)
 
-set(DEBUG OFF) # compile with debugging
+set(DEBUG ON) # compile with debugging
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)

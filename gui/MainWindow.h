@@ -73,7 +73,11 @@ private slots:
 private:
     void createMenus();
 
-    QWidget *m_coreLayoutWidget;
+    /**
+     * @brief the main window exists as widget containing a layout. this widget serves as a wrapper for the main layout
+     * to be set as the window's central widget
+     */
+    QWidget *m_mainLayoutWrapperWidget;
     MainLayout *m_mainLayout;
 
     QMenu *m_fileMenu;

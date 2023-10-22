@@ -56,6 +56,7 @@
 QT_BEGIN_NAMESPACE
 class QDialogButtonBox;
 class QGroupBox;
+class QSpinBox;
 QT_END_NAMESPACE
 
 /**
@@ -67,13 +68,22 @@ class ConfigureDialog : public QDialog
     Q_OBJECT
 
 public:
+
+    enum Operation {NOT_CONFIGURED, ANALYZE, ARITHMETIC};
     ConfigureDialog();
 
-private:
-    void createConfigureGroupBox();
+    Operation m_operation;
+    int m_numEquations;
+    int m_numVariables;
 
-    QGroupBox *m_ConfigureGroupBox;
+private:
+    QGroupBox *m_configureGroupBox;
+    QSpinBox *m_varCountSpin;
+    QSpinBox *m_eqCountSpin;
     QDialogButtonBox *m_buttonBox;
+    void createConfigureGroupBox();
+    void accept() override;
+    void reject() override;
 };
 
 #endif // DIALOG_H

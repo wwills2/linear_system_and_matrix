@@ -60,15 +60,15 @@ MainWindow::MainWindow() {
     QSizePolicy qSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setSizePolicy(qSizePolicy);
 
-    //main view must be contained in widget.
-    m_coreLayoutWidget = new QWidget(this);
-    m_coreLayoutWidget->setSizePolicy(qSizePolicy);
+    //main layout must be wrapped in a widget.
+    m_mainLayoutWrapperWidget = new QWidget(this);
+    m_mainLayoutWrapperWidget->setSizePolicy(qSizePolicy);
 
-    m_mainLayout = new MainLayout(m_coreLayoutWidget);
-    m_coreLayoutWidget->setLayout(m_mainLayout);
+    m_mainLayout = new MainLayout(m_mainLayoutWrapperWidget);
+    m_mainLayoutWrapperWidget->setLayout(m_mainLayout);
 
     //set widget with main layout as central widget
-    setCentralWidget(m_coreLayoutWidget);
+    setCentralWidget(m_mainLayoutWrapperWidget);
 
     createMenus();
     setWindowTitle(tr(WINDOW_NAME));
@@ -85,7 +85,7 @@ MainWindow::~MainWindow() {
     delete m_saveAct;
     delete m_exitAct;
     delete m_configureAct;
-    delete m_editAct;
+    //delete m_editAct; todo: undo if using var
     delete m_runAct;
 }
 
@@ -150,6 +150,6 @@ void MainWindow::configure() {
 
     ConfigureDialog configureDialog;
     if (configureDialog.exec()){
-        QMessageBox::information(this, tr("closed"), tr("the dialog box has been closed"));
+        m_mainLayout->setUpLayout(configureDialog);
     }
 }

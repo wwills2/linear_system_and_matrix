@@ -3,15 +3,74 @@
 //
 
 #include "MainLayout.h"
+#include "ConfigureDialog.h"
 
 #define UPPER 0, 0
 #define LOWER 1, 0
 
-MainLayout::MainLayout(QWidget *parent) {
+MainLayout::MainLayout(QWidget *parent) : QGridLayout(parent) {
 
-    Q_UNUSED(parent)
+    m_dataEntryWidget = new WrapperScrollBox(tr("Linear System Data Entry"));
+    m_resultsWidget = new WrapperScrollBox(tr("Linear System Analysis Results"));
 
-    m_dataEntryWidget = new NothingToShow();
-    m_resultsWidget = new NothingToShow();
-    addWidget(m_dataEntryWidget, UPPER);
+    m_nothingToShow = new NothingToShow;
+    //display nothing to show screen
+    addWidget(m_nothingToShow, UPPER);
+}
+
+void MainLayout::setUpLayout(ConfigureDialog &configureDialog) noexcept(false){
+
+    switch (configureDialog.m_operation){
+
+        case ConfigureDialog::NOT_CONFIGURED:
+            return; // if an operation has not been selected, stop
+
+        case ConfigureDialog::ANALYZE:
+        {
+            int equationCount = configureDialog.m_numEquations;
+            int variableCount = configureDialog.m_numVariables;
+            m_dataEntryWidget->setWidget(new LinearSystemDataEntry(equationCount,variableCount,
+                                                                   m_dataEntryWidget->m_scrollArea));
+            // replace existing nothing to show with the data entry widget
+            replaceWidget(m_nothingToShow, m_dataEntryWidget);
+
+            // add results widget
+            m_resultsWidget->setWidget(m_nothingToShow); //todo: replace with proper results widget
+            addWidget(m_resultsWidget, LOWER);
+        }
+
+        case ConfigureDialog::ARITHMETIC:
+            break; // for future matrix addition, multiply, etc
+    }
+}
+
+// WrapperScrollBox functions ------------------------------------------------------------------------------------------
+
+MainLayout::WrapperScrollBox::WrapperScrollBox(const QString &title) : QGroupBox(title){
+
+    m_widgetSet = false;
+    m_scrollArea = new QScrollArea();
+
+    auto *layoutForGroupBox = new QVBoxLayout(this); // need layout in group box, cannot directly set widget
+    layoutForGroupBox->addWidget(m_scrollArea);
+    setLayout(layoutForGroupBox);
+}
+
+void MainLayout::WrapperScrollBox::setWidget(QWidget *widget) noexcept(false) {
+
+    if (widget != nullptr){
+        m_widgetSet = true;
+        m_scrollArea->setWidget(widget);
+    }else{
+        throw std::invalid_argument("main layout wrapper scroll box widget cannot be null");
+    }
+}
+
+QWidget *MainLayout::WrapperScrollBox::getWidget() noexcept(false) {
+
+    if (m_widgetSet){
+        return m_scrollArea->widget();
+    }else{
+        throw std::runtime_error("cannot retrieve ");
+    }
 }

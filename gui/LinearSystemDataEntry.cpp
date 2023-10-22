@@ -6,6 +6,7 @@
 LinearSystemDataEntry::LinearSystemDataEntry(int numEquations, int numVars, QWidget *parent) :
         QGridLayout(parent), m_numEquations(numEquations), m_numVars(numVars) {
 
-    //todo: build view
+    //todo: build view, undo trest code below
+    addWidget(new NothingToShow);
 }
 
