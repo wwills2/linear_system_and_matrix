@@ -3,7 +3,7 @@
 //
 #include "LinearSystemDataEntry.h"
 
-#define MIN_LINE_EDIT_WIDTH 100
+#define LINE_EDIT_WIDTH 100
 
 LinearSystemDataEntry::LinearSystemDataEntry(int numEquations, int numVars, QWidget *parent) :
         QWidget(parent), m_numEquations(numEquations), m_numVars(numVars) {
@@ -21,8 +21,8 @@ LinearSystemDataEntry::LinearSystemDataEntry(int numEquations, int numVars, QWid
         for(int j = 0; j < numWidgetsInRow; j++){
 
             xCoeffEdit = new QLineEdit;
-            xCoeffEdit->setMinimumWidth(MIN_LINE_EDIT_WIDTH);
-            xCoeffEdit->setMaximumWidth(MIN_LINE_EDIT_WIDTH);
+            xCoeffEdit->setMinimumWidth(LINE_EDIT_WIDTH);
+            xCoeffEdit->setMaximumWidth(LINE_EDIT_WIDTH);
             m_entryGrid->addWidget(xCoeffEdit, i, j);
 
             xnDisplay = new QLabel;

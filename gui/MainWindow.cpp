@@ -148,7 +148,8 @@ void MainWindow::saveFile() {
 
 void MainWindow::configure() {
 
-    ConfigureDialog configureDialog;
+    ConfigureDialog configureDialog(this);
+    configureDialog.setModal(true);
     if (configureDialog.exec()){
         m_mainLayout->setUpLayout(configureDialog);
     }

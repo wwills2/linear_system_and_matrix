@@ -70,7 +70,7 @@ class ConfigureDialog : public QDialog
 public:
 
     enum Operation {NOT_CONFIGURED, ANALYZE, ARITHMETIC};
-    ConfigureDialog();
+    explicit ConfigureDialog(QWidget *parent);
 
     Operation m_operation;
     int m_numEquations;

@@ -3,7 +3,7 @@
 
 #include "ConfigureDialog.h"
 
-ConfigureDialog::ConfigureDialog(){
+ConfigureDialog::ConfigureDialog(QWidget *parent) : QDialog(parent){
 
     createConfigureGroupBox();
     m_operation = NOT_CONFIGURED;

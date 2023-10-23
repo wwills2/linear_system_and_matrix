@@ -18,6 +18,10 @@ MainLayout::MainLayout(QWidget *parent) : QGridLayout(parent) {
     addWidget(m_nothingToShow, UPPER);
 }
 
+MainLayout::~MainLayout(){
+    delete m_nothingToShow; //explict delete because may not belong to QObject on exit
+}
+
 void MainLayout::setUpLayout(ConfigureDialog &configureDialog) noexcept(false){
 
     switch (configureDialog.m_operation){
@@ -36,7 +40,7 @@ void MainLayout::setUpLayout(ConfigureDialog &configureDialog) noexcept(false){
 
             // add results widget
             m_resultsScrollBox->setWidget(m_nothingToShow); //todo: replace with proper results widget
-            addWidget(m_resultsScrollBox, LOWER);
+            addWidget(m_resultsScrollBox, LOWER); //todo:  fix memory leak here
         }
 
         case ConfigureDialog::ARITHMETIC:

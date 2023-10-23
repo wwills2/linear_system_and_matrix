@@ -27,6 +27,7 @@ class MainLayout : public QGridLayout{
 
 public:
     explicit MainLayout(QWidget *parent) noexcept(false);
+    ~MainLayout();
 
     void setUpLayout(ConfigureDialog &configureDialog) noexcept(false);
 
