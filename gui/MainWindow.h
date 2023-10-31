@@ -52,6 +52,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include "../MatrixManager.h"
 #include "MainLayout.h"
 #include "ConfigureDialog.h"
 
@@ -62,16 +63,21 @@ class MainWindow : public QMainWindow{
     Q_OBJECT
 
 public:
-    MainWindow();
+    MainWindow() = delete;
+    MainWindow(wwills2::MatrixManager &matrixManager);
     ~MainWindow() override;
 
 private slots:
     void openFile();
     void saveFile();
     void configure();
+    void run();
 
 private:
     void createMenus();
+
+    wwills2::MatrixManager m_matrixManager;
+    ConfigureDialog::Operation m_operation;
 
     /**
      * @brief the main window exists as widget containing a layout. this widget serves as a wrapper for the main layout

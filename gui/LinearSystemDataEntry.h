@@ -8,18 +8,23 @@
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QLabel>
-#include "NothingToShow.h" //todo: remove
+#include "IntfDataEntry.h"
+#include "../Matrix.h"
 
 /**
  * @brief Layout for entering coefficient values for a linear system
  * @extends QWidget
  */
-class LinearSystemDataEntry : public QWidget{
+class LinearSystemDataEntry : public IntfDataEntry, public QWidget{
 
 public:
 
     LinearSystemDataEntry() = delete;
     explicit LinearSystemDataEntry(int numEquations, int numVars, QWidget *parent);
+
+    bool loadUiData(wwills2::MatrixManager &matrixManager);
+
+    const std::string m_matrixName = "matrix";
 private:
 
     int m_numEquations;

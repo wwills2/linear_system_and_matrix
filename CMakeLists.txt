@@ -34,19 +34,21 @@ set(STATIC_LIBRARIES
 
 add_executable(qt_application
         main.cpp
-        LinearSystem.h
-        LinearSystem.cpp
+        MatrixManager.h
+        MatrixManager.cpp
         Matrix.cpp
         Matrix.h
         ${GUI_SOURCE}
         ${GUI_HEADERS}
+        gui/IntfDataEntry.cpp
+        gui/IntfDataEntry.h
 )
 
 add_executable(testLinearSystem
         ${TESTING_DIR}/TestLinearSystem.cpp
         ${TESTING_DIR}/TestLinearSystem.h
-        LinearSystem.cpp
-        LinearSystem.h
+        MatrixManager.cpp
+        MatrixManager.h
         Matrix.cpp
         Matrix.h)
 

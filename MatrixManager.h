@@ -2,8 +2,8 @@
 // Created by zan on 6/15/22.
 //
 
-#ifndef MATRIX_OPERATIONS_LINEARSYSTEM_H
-#define MATRIX_OPERATIONS_LINEARSYSTEM_H
+#ifndef MATRIX_OPERATIONS_MATRIXMANAGER_H
+#define MATRIX_OPERATIONS_MATRIXMANAGER_H
 
 #include <vector>
 #include <map>
@@ -16,22 +16,18 @@ class TestLinearSystem;
 
 namespace wwills2 {
 
-    class LinearSystem;
+    class MatrixManager;
     class Matrix;
 
     //holds the matrices and all other data about the linear system of equations and the problem to be solved
-    class LinearSystem {
+    class MatrixManager {
 
     public:
         friend TestLinearSystem;
 
-        LinearSystem();
+        void createMatrix(const std::string &name, const int &rows, const int &cols);
 
-        ~LinearSystem();
-
-        void addMatrix(const std::string &name, const int &rows, const int &cols);
-
-        void addMatrix(const std::string &name, const Matrix &matrixToAdd);
+        void insertMatrix(const std::string &name, const Matrix &matrixToAdd);
 
         void removeMatrix(const std::string &name);
 
@@ -44,4 +40,4 @@ namespace wwills2 {
     };
 }
 
-#endif //MATRIX_OPERATIONS_LINEARSYSTEM_H
+#endif //MATRIX_OPERATIONS_MATRIXMANAGER_H

@@ -36,3 +36,20 @@ LinearSystemDataEntry::LinearSystemDataEntry(int numEquations, int numVars, QWid
     }
 }
 
+bool LinearSystemDataEntry::loadUiData(wwills2::MatrixManager &matrixManager) {
+
+    matrixManager.createMatrix(m_matrixName, m_numEquations, m_numVars);
+
+    auto matrixIt = matrixManager.getMatrix(m_matrixName).begin();
+    for (int i = 0; i < m_numEquations; i++){
+        for (int j = 0; j < m_numVars; j += 2){
+
+            try {
+                mpq_class input(m_entryGrid->itemAtPosition(i ,j);
+            } catch (std::exception &e) {
+
+            }
+        }
+    }
+}
+

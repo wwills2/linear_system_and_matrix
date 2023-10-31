@@ -110,8 +110,8 @@ int main(){
         TestLinearSystem::matrixCopyInit();
     }
 
-    cout << "testing LinearSystem constructor" << endl;
-    logFile << "testing LinearSystem constructor" << endl;
+    cout << "testing MatrixManager constructor" << endl;
+    logFile << "testing MatrixManager constructor" << endl;
     {
         TestLinearSystem::linearSysInit();
     }
@@ -122,8 +122,8 @@ int main(){
         TestLinearSystem::addRowsTest();
     }
 
-    cout << "testing LinearSystem overloaded [] operator" << endl;
-    logFile << "testing LinearSystem overloaded [] operator" << endl;
+    cout << "testing MatrixManager overloaded [] operator" << endl;
+    logFile << "testing MatrixManager overloaded [] operator" << endl;
     {
         TestLinearSystem::sysOverloadedElementOp();
     }
@@ -522,7 +522,7 @@ void TestLinearSystem::matrixOverloadedElementOp() {
     mpq_class *row = testMatrix[0];
     assert(row[0] == 1 && row[1] == 2 && row[2] == 3);
 
-    wwills2::LinearSystem testSystem;
+    wwills2::MatrixManager testSystem;
 
     testSystem.m_matrices["A"].print(logFile);
     assert(testSystem.getMatrix("A")[1][1] == 5);
@@ -970,14 +970,14 @@ void TestLinearSystem::reducedEchelonFormTest() {
 }
 
 
-//LinearSystem Tests + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
+//MatrixManager Tests + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
 
 void TestLinearSystem::linearSysInit() {
 
-    wwills2::LinearSystem testSystem;
+    wwills2::MatrixManager testSystem;
     wwills2::Matrix matrixDefault;
-    testSystem.addMatrix("A", matrixDefault);
+    testSystem.insertMatrix("A", matrixDefault);
     assert(testSystem.getNumMatrices() == 1);
     assert(testSystem.m_matrices["A"].m_numElements == 6);
     assert(testSystem.m_matrices["A"].m_elements[0][0] == 1);
@@ -985,8 +985,8 @@ void TestLinearSystem::linearSysInit() {
 
 void TestLinearSystem::sysOverloadedElementOp() {
 
-    wwills2::LinearSystem testSystem;
+    wwills2::MatrixManager testSystem;
 
-    testSystem.addMatrix("test", 3, 1);
+    testSystem.createMatrix("test", 3, 1);
     assert(testSystem.getMatrix("test").m_elements[2][0] == 0);
 }

@@ -11,7 +11,7 @@
 #include <memory>
 #include <stdexcept>
 #include <gmpxx.h>
-#include "LinearSystem.h"
+#include "MatrixManager.h"
 
 namespace wwills2{
 
@@ -80,7 +80,7 @@ namespace wwills2{
         mpq_class **m_mxmIdentity;                              //identity matrix #rows x #rows
         mpq_class **m_nxnIdentity;                              //identity matrix #cols x #cols
 
-        friend LinearSystem;
+        friend MatrixManager;
         friend Iterator;
 
         friend TestLinearSystem;

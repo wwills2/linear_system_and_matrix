@@ -48,15 +48,18 @@
 **
 ****************************************************************************/
 
-#include "gui/MainWindow.h"
-
 #include <QApplication>
+
+#include "gui/MainWindow.h"
+#include "MatrixManager.h"
 
 int main(int argc, char *argv[])
 {
 
+    wwills2::MatrixManager matrixManager;
+
     QApplication app(argc, argv);
-    MainWindow mw;
+    MainWindow mw(matrixManager);
     mw.resize(1440, 810);
     //mw.setWindowIcon(); todo: decide on what this should be
     mw.show();

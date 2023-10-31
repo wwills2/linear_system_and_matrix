@@ -65,7 +65,7 @@ class NothingToShow : public QWidget {
     Q_OBJECT
 
 public:
-    explicit NothingToShow(QWidget *parent = 0);
+    explicit NothingToShow(QWidget *parent = nullptr);
 
 private:
     QLabel *descriptionLabel;

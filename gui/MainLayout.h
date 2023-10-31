@@ -13,6 +13,7 @@
 #include "NothingToShow.h"
 #include "ConfigureDialog.h"
 #include "LinearSystemDataEntry.h"
+#include "../MatrixManager.h"
 
 QT_BEGIN_NAMESPACE
 class QWidget;
@@ -27,9 +28,10 @@ class MainLayout : public QGridLayout{
 
 public:
     explicit MainLayout(QWidget *parent) noexcept(false);
-    ~MainLayout();
+    ~MainLayout() override;
 
     void setUpLayout(ConfigureDialog &configureDialog) noexcept(false);
+    IntfDataEntry *getInputLayout() noexcept(false);
 
 private:
 
@@ -38,9 +40,14 @@ private:
      */
     class WrapperScrollBox;
 
+    bool m_layoutConfigured;
     NothingToShow *m_nothingToShow;
+
     WrapperScrollBox *m_dataEntryScrollBox;
+    IntfDataEntry *m_dataEntryIntf;
+
     WrapperScrollBox *m_resultsScrollBox;
+    IntfDataEntry *m_resultsLayout;
 };
 
 
@@ -51,14 +58,14 @@ public:
     explicit WrapperScrollBox(const QString &title);
 
     void setWidget(QWidget *widget) noexcept(false);
-    QWidget *getWidget();
+    QWidget *getWidget() noexcept(false);
 
 private:
     QScrollArea *m_scrollArea;
     bool m_widgetSet;
 
     // friend function to allow setting the scroll area of the widget being added
-    friend void MainLayout::setUpLayout(ConfigureDialog &configureDialog);
+    friend void MainLayout::setUpLayout(ConfigureDialog &configureDialog) noexcept(false);
 };
 
 #endif //MATRIX_OPERATIONS_MAINLAYOUT_H

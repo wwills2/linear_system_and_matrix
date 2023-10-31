@@ -2,23 +2,20 @@
 // Created by zan on 6/15/22.
 //
 
-#include "LinearSystem.h"
+#include "MatrixManager.h"
 #include "Matrix.h"
 
 namespace wwills2 {
 
-    LinearSystem::LinearSystem() = default;
-    LinearSystem::~LinearSystem() = default;
-
-    void LinearSystem::addMatrix(const std::string &name, const int &rows, const int &cols) {
+    void MatrixManager::createMatrix(const std::string &name, const int &rows, const int &cols) {
         m_matrices.insert(std::pair<std::string, Matrix>(name, Matrix(rows, cols)));
     }
 
-    void LinearSystem::addMatrix(const std::string &name, const Matrix &matrixToAdd) {
+    void MatrixManager::insertMatrix(const std::string &name, const Matrix &matrixToAdd) {
         m_matrices.insert(std::pair<std::string, Matrix>(name, matrixToAdd));
     }
 
-    void LinearSystem::removeMatrix(const std::string &name) {
+    void MatrixManager::removeMatrix(const std::string &name) {
 
         auto it = m_matrices.find(name);
         if (it != m_matrices.end()){
@@ -26,7 +23,7 @@ namespace wwills2 {
         }
     }
 
-    Matrix &LinearSystem::getMatrix(const std::string &name){
+    Matrix &MatrixManager::getMatrix(const std::string &name){
 
         auto it = m_matrices.find(name);
         if (it == m_matrices.end()){
@@ -35,7 +32,7 @@ namespace wwills2 {
         return m_matrices[name];
     }
 
-    int LinearSystem::getNumMatrices() {
+    int MatrixManager::getNumMatrices() {
         return (int) m_matrices.size();
     }
 }

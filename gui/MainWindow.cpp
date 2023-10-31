@@ -55,7 +55,10 @@
 #include <QMenuBar>
 #include <QMessageBox>
 
-MainWindow::MainWindow() {
+MainWindow::MainWindow(wwills2::MatrixManager &matrixManager) {
+
+    m_matrixManager = matrixManager;
+    m_operation = ConfigureDialog::NOT_CONFIGURED;
 
     QSizePolicy qSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setSizePolicy(qSizePolicy);
@@ -123,6 +126,7 @@ void MainWindow::createMenus() {
     m_runAct = new QAction(tr("&Run"), this);
     m_runAct->setEnabled(false);
     m_actionMenu->addAction(m_runAct);
+    connect(m_runAct, &QAction::triggered, this, )
 }
 
 void MainWindow::openFile() {
@@ -151,6 +155,15 @@ void MainWindow::configure() {
     ConfigureDialog configureDialog(this);
     configureDialog.setModal(true);
     if (configureDialog.exec()){
+
+        m_operation = configureDialog.m_operation;
         m_mainLayout->setUpLayout(configureDialog);
     }
 }
+
+void MainWindow::run() {
+
+    m_mainLayout->
+}
+
+

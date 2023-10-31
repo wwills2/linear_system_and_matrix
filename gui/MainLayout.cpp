@@ -10,8 +10,12 @@
 
 MainLayout::MainLayout(QWidget *parent) : QGridLayout(parent) {
 
+    m_layoutConfigured = false;
     m_dataEntryScrollBox = new WrapperScrollBox(tr("Linear System Data Entry"));
     m_resultsScrollBox = new WrapperScrollBox(tr("Linear System Analysis Results"));
+
+    m_dataEntryIntf = nullptr;
+    m_resultsLayout = nullptr;
 
     m_nothingToShow = new NothingToShow;
     //display nothing to show screen
@@ -33,18 +37,31 @@ void MainLayout::setUpLayout(ConfigureDialog &configureDialog) noexcept(false){
         {
             int equationCount = configureDialog.m_numEquations;
             int variableCount = configureDialog.m_numVariables;
-            m_dataEntryScrollBox->setWidget(new LinearSystemDataEntry(equationCount, variableCount,
-                                                                      m_dataEntryScrollBox->m_scrollArea));
+            LinearSystemDataEntry *linearSystemDataEntry = new LinearSystemDataEntry(equationCount, variableCount,
+                                                                                     m_dataEntryScrollBox->m_scrollArea);
+            m_dataEntryIntf = linearSystemDataEntry;
+            m_dataEntryScrollBox->setWidget(linearSystemDataEntry);
+
             // replace existing nothing to show with the data entry widget
             replaceWidget(m_nothingToShow, m_dataEntryScrollBox);
 
             // add results widget
+            // m_resultsLayout = new results layout todo
             m_resultsScrollBox->setWidget(m_nothingToShow); //todo: replace with proper results widget
             addWidget(m_resultsScrollBox, LOWER); //todo:  fix memory leak here
+            m_layoutConfigured = true;
         }
 
         case ConfigureDialog::ARITHMETIC:
             break; // for future matrix addition, multiply, etc
+    }
+}
+
+IntfDataEntry *MainLayout::getInputLayout() noexcept(false){
+    if (m_layoutConfigured){
+        return m_dataEntryIntf;
+    }else{
+        throw std::runtime_error("main layout has not been configured, cannot return data entry layout");
     }
 }
 
@@ -61,9 +78,13 @@ MainLayout::WrapperScrollBox::WrapperScrollBox(const QString &title) : QGroupBox
     setLayout(layoutForGroupBox);
 }
 
-void MainLayout::WrapperScrollBox::setWidget(QWidget *widget) noexcept(false) {
+void MainLayout::WrapperScrollBox::setWidget(QWidget *widget) noexcept(false){
 
-    if (widget != nullptr){
+    if (widget != nullptr && m_widgetSet) {
+        //delete current widget and replace
+        m_scrollArea->setWidget(widget);
+    }else if (widget != nullptr){
+        // widget has not been set, set it
         m_widgetSet = true;
         m_scrollArea->setWidget(widget);
     }else{
@@ -76,6 +97,6 @@ QWidget *MainLayout::WrapperScrollBox::getWidget() noexcept(false) {
     if (m_widgetSet){
         return m_scrollArea->widget();
     }else{
-        throw std::runtime_error("cannot retrieve ");
+        throw std::runtime_error("Widget has not been set");
     }
 }
