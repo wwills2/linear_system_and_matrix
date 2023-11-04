@@ -37,12 +37,12 @@ void MainLayout::setUpLayout(ConfigureDialog &configureDialog) noexcept(false){
         {
             int equationCount = configureDialog.m_numEquations;
             int variableCount = configureDialog.m_numVariables;
-            LinearSystemDataEntry *linearSystemDataEntry = new LinearSystemDataEntry(equationCount, variableCount,
+            auto *linearSystemDataEntry = new LinearSystemDataEntry(equationCount, variableCount,
                                                                                      m_dataEntryScrollBox->m_scrollArea);
             m_dataEntryIntf = linearSystemDataEntry;
             m_dataEntryScrollBox->setWidget(linearSystemDataEntry);
 
-            // replace existing nothing to show with the data entry widget
+            // replace existing NothingToShow widget with the data entry widget
             replaceWidget(m_nothingToShow, m_dataEntryScrollBox);
 
             // add results widget

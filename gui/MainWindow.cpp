@@ -126,7 +126,7 @@ void MainWindow::createMenus() {
     m_runAct = new QAction(tr("&Run"), this);
     m_runAct->setEnabled(false);
     m_actionMenu->addAction(m_runAct);
-    connect(m_runAct, &QAction::triggered, this, )
+    connect(m_runAct, &QAction::triggered, this, &MainWindow::run);
 }
 
 void MainWindow::openFile() {
@@ -158,12 +158,14 @@ void MainWindow::configure() {
 
         m_operation = configureDialog.m_operation;
         m_mainLayout->setUpLayout(configureDialog);
+        m_runAct->setEnabled(true);
     }
 }
 
 void MainWindow::run() {
 
-    m_mainLayout->
+    IntfDataEntry *entryLayout = m_mainLayout->getInputLayout();
+    entryLayout->loadUiData(m_matrixManager);
 }
 
 

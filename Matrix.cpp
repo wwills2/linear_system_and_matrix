@@ -582,7 +582,7 @@ namespace wwills2{
         return *this;
     }
 
-    const mpq_class &Matrix::Iterator::operator*() const {
+    mpq_class &Matrix::Iterator::operator*() const {
         return m_matrix->m_elements[m_row][m_col];
     }
 

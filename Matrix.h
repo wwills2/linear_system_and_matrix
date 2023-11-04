@@ -93,7 +93,7 @@ namespace wwills2{
 
         Iterator &operator++();
 
-        const mpq_class &operator*() const;
+        mpq_class &operator*() const;
 
         bool operator==(const Matrix::Iterator &rhs) const;
 

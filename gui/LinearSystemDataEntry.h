@@ -29,6 +29,7 @@ private:
 
     int m_numEquations;
     int m_numVars;
+    std::vector<QLineEdit *> m_lineEdits;
     QGridLayout *m_entryGrid;
 };
 
