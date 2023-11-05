@@ -30,7 +30,7 @@ public:
     static void reducedEchelonFormTest();              //calls makeReducedEchelonForm()
 
     static void linearSysInit();                       //calls the linear system constructor, generic linear system object
-    static void sysOverloadedElementOp();              //calls the MatrixManager overloaded [] operator
+    static void sysGetMatrix();                        //calls the MatrixManager getMatrix(std::string &) method
 
     void dotVsOverloadBench();                  //see test file
 

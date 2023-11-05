@@ -125,7 +125,7 @@ int main(){
     cout << "testing MatrixManager overloaded [] operator" << endl;
     logFile << "testing MatrixManager overloaded [] operator" << endl;
     {
-        TestLinearSystem::sysOverloadedElementOp();
+        TestLinearSystem::sysGetMatrix();
     }
 
     cout << "testing Matrix overloaded [] operator" << endl;
@@ -522,10 +522,10 @@ void TestLinearSystem::matrixOverloadedElementOp() {
     mpq_class *row = testMatrix[0];
     assert(row[0] == 1 && row[1] == 2 && row[2] == 3);
 
-    wwills2::MatrixManager testSystem;
+    wwills2::MatrixManager testManager;
 
-    testSystem.m_matrices["A"].print(logFile);
-    assert(testSystem.getMatrix("A")[1][1] == 5);
+    testManager.m_matrices["A"].print(logFile);
+    assert(testManager.getMatrix("A")[1][1] == 5);
 }
 
 void TestLinearSystem::replaceRowsTest() {
@@ -975,18 +975,27 @@ void TestLinearSystem::reducedEchelonFormTest() {
 
 void TestLinearSystem::linearSysInit() {
 
-    wwills2::MatrixManager testSystem;
+    wwills2::MatrixManager testManager;
     wwills2::Matrix matrixDefault;
-    testSystem.insertMatrix("A", matrixDefault);
-    assert(testSystem.getNumMatrices() == 1);
-    assert(testSystem.m_matrices["A"].m_numElements == 6);
-    assert(testSystem.m_matrices["A"].m_elements[0][0] == 1);
+    testManager.insertMatrix("A", matrixDefault);
+    assert(testManager.getNumMatrices() == 1);
+    assert(testManager.m_matrices["A"].m_numElements == 6);
+    assert(testManager.m_matrices["A"].m_elements[0][0] == 1);
 }
 
-void TestLinearSystem::sysOverloadedElementOp() {
+void TestLinearSystem::sysGetMatrix() {
 
-    wwills2::MatrixManager testSystem;
+    wwills2::MatrixManager testManager;
 
-    testSystem.createMatrix("test", 3, 1);
-    assert(testSystem.getMatrix("test").m_elements[2][0] == 0);
+    testManager.createMatrix("test", 3, 1);
+    assert(testManager.getMatrix("test").m_elements[2][0] == 0);
+    assert(testManager.getMatrix("test").m_elements[1][0] == 0);
+
+    auto matrixByElementOp = testManager.m_matrices["test"];
+    matrixByElementOp[1][0] = 3;
+    assert(testManager.getMatrix("test").m_elements[1][0] == 3);
+
+    auto matrixByGet = testManager.getMatrix("test");
+    matrixByGet[2][0] = 5;
+    assert(testManager.getMatrix("test").m_elements[2][0] == 5);
 }

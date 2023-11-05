@@ -8,11 +8,24 @@
 namespace wwills2 {
 
     void MatrixManager::createMatrix(const std::string &name, const int &rows, const int &cols) {
-        m_matrices.insert(std::pair<std::string, Matrix>(name, Matrix(rows, cols)));
+
+        auto it = m_matrices.find(name);
+        if (it != m_matrices.end()){
+            throw std::invalid_argument("matrix \"" + name + "\" already exists");
+        }
+
+        Matrix matrix(rows, cols);
+        m_matrices.emplace(name, matrix);
     }
 
     void MatrixManager::insertMatrix(const std::string &name, const Matrix &matrixToAdd) {
-        m_matrices.insert(std::pair<std::string, Matrix>(name, matrixToAdd));
+
+        auto it = m_matrices.find(name);
+        if (it != m_matrices.end()){
+            throw std::invalid_argument("matrix \"" + name + "\" already exists");
+        }
+
+        m_matrices.emplace(name, matrixToAdd);
     }
 
     void MatrixManager::removeMatrix(const std::string &name) {
