@@ -8,6 +8,8 @@
 #include <QGridLayout>
 #include <QLineEdit>
 #include <QLabel>
+#include <QGroupBox>
+
 #include "IntfDataEntry.h"
 #include "../Matrix.h"
 
@@ -22,13 +24,13 @@ public:
     LinearSystemDataEntry() = delete;
     explicit LinearSystemDataEntry(int numEquations, int numVars, QWidget *parent);
 
-    bool loadUiData(wwills2::MatrixManager &matrixManager);
+    bool loadUiData(wwills2::MatrixManager &matrixManager) override;
 
     const std::string m_matrixName = "matrix";
 private:
 
     int m_numEquations;
-    int m_numVars;
+    int m_numEdits;
     std::vector<QLineEdit *> m_lineEdits;
     QGridLayout *m_entryGrid;
 };

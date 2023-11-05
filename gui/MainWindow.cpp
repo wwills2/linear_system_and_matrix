@@ -165,7 +165,10 @@ void MainWindow::configure() {
 void MainWindow::run() {
 
     IntfDataEntry *entryLayout = m_mainLayout->getInputLayout();
-    entryLayout->loadUiData(m_matrixManager);
+    bool loadResult = entryLayout->loadUiData(m_matrixManager);
+    if (!loadResult){
+        //todo
+    }
 }
 
 

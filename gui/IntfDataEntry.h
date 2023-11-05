@@ -5,10 +5,9 @@
 #ifndef MATRIX_OPERATIONS_INTFDATAENTRY_H
 #define MATRIX_OPERATIONS_INTFDATAENTRY_H
 
-#include <vector>
 #include "../MatrixManager.h"
 
-class IntfDataEntry {
+class IntfDataEntry{
 public:
 
     ~IntfDataEntry() = default;

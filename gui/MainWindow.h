@@ -64,7 +64,7 @@ class MainWindow : public QMainWindow{
 
 public:
     MainWindow() = delete;
-    MainWindow(wwills2::MatrixManager &matrixManager);
+    explicit MainWindow(wwills2::MatrixManager &matrixManager);
     ~MainWindow() override;
 
 private slots:

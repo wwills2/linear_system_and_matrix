@@ -40,8 +40,10 @@ add_executable(qt_application
         Matrix.h
         ${GUI_SOURCE}
         ${GUI_HEADERS}
-        gui/IntfDataEntry.cpp
         gui/IntfDataEntry.h
+        gui/LinearSystemResultsDisplay.cpp
+        gui/LinearSystemResultsDisplay.h
+        gui/IntfResultsDisplay.h
 )
 
 add_executable(testLinearSystem

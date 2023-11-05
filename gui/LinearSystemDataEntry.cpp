@@ -3,10 +3,10 @@
 //
 #include "LinearSystemDataEntry.h"
 
-#define LINE_EDIT_WIDTH 100
+#define LINE_EDIT_WIDTH 100 //pixels
 
 LinearSystemDataEntry::LinearSystemDataEntry(int numEquations, int numVars, QWidget *parent) :
-        QWidget(parent), m_numEquations(numEquations), m_numVars(numVars), m_lineEdits(m_numEquations * m_numVars) {
+        QWidget(parent), m_numEquations(numEquations), m_numEdits(numVars + 1), m_lineEdits(m_numEquations * m_numEdits) {
 
     m_entryGrid = new QGridLayout(this);
 
@@ -15,11 +15,12 @@ LinearSystemDataEntry::LinearSystemDataEntry(int numEquations, int numVars, QWid
 
     QLineEdit *xCoeffEdit;
     QLabel *xnDisplay;
-    int numWidgetsInRow = m_numVars * 2;
+    int numWidgetsInRow = m_numEdits * 2;
     auto lineEditIt = m_lineEdits.begin();
 
+    //todo: openMP parallelism
     for (int i = 0; i < m_numEquations; i++){
-        for(int j = 0; j < numWidgetsInRow; j++){
+        for(int j = 0; j < numWidgetsInRow; j++) {
 
             xCoeffEdit = new QLineEdit;
             xCoeffEdit->setMinimumWidth(LINE_EDIT_WIDTH);
@@ -31,19 +32,22 @@ LinearSystemDataEntry::LinearSystemDataEntry(int numEquations, int numVars, QWid
             lineEditIt++;
 
             xnDisplay = new QLabel;
-            if (j != numWidgetsInRow - 2){
+            if (j == numWidgetsInRow - 4) {
+                xnDisplay->setText("x" + QString::number(j / 2) + "\t=\t");
+                m_entryGrid->addWidget(xnDisplay, i, ++j);
+            }else if (j < numWidgetsInRow - 4){
                 xnDisplay->setText("x" + QString::number(j / 2) + " + ");
+                m_entryGrid->addWidget(xnDisplay, i, ++j);
             }else{
-                xnDisplay->setText("x" + QString::number(j / 2));
+                j++;
             }
-            m_entryGrid->addWidget(xnDisplay, i, ++j);
         }
     }
 }
 
 bool LinearSystemDataEntry::loadUiData(wwills2::MatrixManager &matrixManager) {
 
-    matrixManager.createMatrix(m_matrixName, m_numEquations, m_numVars);
+    matrixManager.createMatrix(m_matrixName, m_numEquations, m_numEdits);
     auto matrix = matrixManager.getMatrix(m_matrixName);
 
     auto matrixIt = matrix.begin();
@@ -60,5 +64,8 @@ bool LinearSystemDataEntry::loadUiData(wwills2::MatrixManager &matrixManager) {
             (*matrixIt) = mpq_class(mpf.get_d());
         }
     }
+
+    return true;
+
 }
 

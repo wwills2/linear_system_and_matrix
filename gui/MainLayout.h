@@ -15,10 +15,6 @@
 #include "LinearSystemDataEntry.h"
 #include "../MatrixManager.h"
 
-QT_BEGIN_NAMESPACE
-class QWidget;
-QT_END_NAMESPACE
-
 /**
  * @brief Layout instantiated in the main window
  * @extends QGridLayout
