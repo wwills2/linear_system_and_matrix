@@ -23,7 +23,7 @@ public:
 private:
 
     void calcNumDisplayCharacters(wwills2::Matrix &matrix);
-    std::string getFormattedQstring(const mpq_class &element);
+    std::string getFormattedQstring(const mpq_class &element) const;
 
     size_t m_numDisplayCharacters;
 };

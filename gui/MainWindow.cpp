@@ -166,6 +166,10 @@ void MainWindow::run() {
 
     IntfDataEntry *entryLayout = m_mainLayout->getInputLayout();
     bool loadResult = entryLayout->loadUiData(m_matrixManager);
+
+    //todo: remove
+    m_matrixManager.getMatrix("matrix").print();
+
     if (!loadResult){
         //todo
     }

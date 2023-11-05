@@ -66,7 +66,7 @@ void LinearSystemResultsDisplay::calcNumDisplayCharacters(wwills2::Matrix &matri
     }
 }
 
-std::string LinearSystemResultsDisplay::getFormattedQstring(const mpq_class &element) {
+std::string LinearSystemResultsDisplay::getFormattedQstring(const mpq_class &element) const {
 
     auto stringRepr= std::to_string(element.get_d());
 

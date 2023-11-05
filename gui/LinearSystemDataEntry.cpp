@@ -65,7 +65,8 @@ bool LinearSystemDataEntry::loadUiData(wwills2::MatrixManager &matrixManager) {
         }
     }
 
-    return true;
 
+
+    return true;
 }
 
