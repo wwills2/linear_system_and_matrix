@@ -17,12 +17,12 @@ bool LinearSystemResultsDisplay::setResultsUiData(wwills2::MatrixManager &matrix
 
     QString formattedDisplayString = "";
     auto matrixToLoad = matrixManager.getMatrix(m_matrixName);
-    int cols = matrixToLoad.getDimensions()->numColumns;
+    int cols = matrixToLoad->getDimensions()->numColumns;
 
-    calcNumDisplayCharacters(matrixToLoad);
+    calcNumDisplayCharacters(*matrixToLoad);
 
     int i = 0;
-    for (auto &element : matrixToLoad){
+    for (auto &element : *matrixToLoad){
         QString stringFormattedElement(getFormattedQstring(element).c_str());
 
         if (i == 0){
@@ -42,6 +42,7 @@ bool LinearSystemResultsDisplay::setResultsUiData(wwills2::MatrixManager &matrix
     }
 
     setText(formattedDisplayString);
+    return true;
 }
 
 void LinearSystemResultsDisplay::calcNumDisplayCharacters(wwills2::Matrix &matrix) {

@@ -31,12 +31,12 @@ namespace wwills2 {
 
         void removeMatrix(const std::string &name);
 
-        Matrix &getMatrix(const std::string &name);
+        std::shared_ptr<Matrix> & getMatrix(const std::string &name);
 
         int getNumMatrices();
 
     private:
-        std::map<std::string, Matrix> m_matrices;
+        std::map<std::string, std::shared_ptr<Matrix>> m_matrices;
     };
 }
 

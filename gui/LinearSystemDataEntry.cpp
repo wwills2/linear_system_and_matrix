@@ -50,10 +50,10 @@ bool LinearSystemDataEntry::loadUiData(wwills2::MatrixManager &matrixManager) {
     matrixManager.createMatrix(m_matrixName, m_numEquations, m_numEdits);
     auto matrix = matrixManager.getMatrix(m_matrixName);
 
-    auto matrixIt = matrix.begin();
+    auto matrixIt = matrix->begin();
     auto lineEditIt = m_lineEdits.begin();
 
-    for (/*declared above*/ ;matrixIt != matrix.end() && lineEditIt != m_lineEdits.end(); ++matrixIt, lineEditIt++){
+    for (/*declared above*/ ;matrixIt != matrix->end() && lineEditIt != m_lineEdits.end(); ++matrixIt, lineEditIt++){
 
         try{
             (*matrixIt) = mpq_class((*lineEditIt)->text().toStdString());

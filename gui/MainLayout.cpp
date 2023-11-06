@@ -15,7 +15,7 @@ MainLayout::MainLayout(QWidget *parent) : QGridLayout(parent) {
     m_resultsScrollBox = new WrapperScrollBox(tr("Linear System Analysis Results"));
 
     m_dataEntryIntf = nullptr;
-    m_resultsLayout = nullptr;
+    m_resultsDisplayIntf = nullptr;
 
     m_nothingToShow = new NothingToShow;
     //display nothing to show screen
@@ -46,9 +46,10 @@ void MainLayout::setUpLayout(ConfigureDialog &configureDialog) noexcept(false){
             replaceWidget(m_nothingToShow, m_dataEntryScrollBox);
 
             // add results widget
-            // m_resultsLayout = new results layout todo
-            m_resultsScrollBox->setWidget(m_nothingToShow); //todo: replace with proper results widget
-            addWidget(m_resultsScrollBox, LOWER); //todo:  fix memory leak here
+            auto *linearSystemResultsDisplay = new LinearSystemResultsDisplay(m_resultsScrollBox->m_scrollArea);
+            m_resultsDisplayIntf = linearSystemResultsDisplay;
+            m_resultsScrollBox->setWidget(linearSystemResultsDisplay);
+            addWidget(m_resultsScrollBox, LOWER);
             m_layoutConfigured = true;
         }
 
@@ -60,6 +61,14 @@ void MainLayout::setUpLayout(ConfigureDialog &configureDialog) noexcept(false){
 IntfDataEntry *MainLayout::getInputLayout() noexcept(false){
     if (m_layoutConfigured){
         return m_dataEntryIntf;
+    }else{
+        throw std::runtime_error("main layout has not been configured, cannot return data entry layout");
+    }
+}
+
+IntfResultsDisplay *MainLayout::getResultsLayout() noexcept(false) {
+    if (m_layoutConfigured){
+        return m_resultsDisplayIntf;
     }else{
         throw std::runtime_error("main layout has not been configured, cannot return data entry layout");
     }

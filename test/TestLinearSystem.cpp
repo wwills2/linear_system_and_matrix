@@ -383,14 +383,14 @@ void TestLinearSystem::matrixRandomize(wwills2::Matrix &toRandomize, Random &ran
 
 void TestLinearSystem::matrixInit() {
 
-    wwills2::Matrix testMatrix;
+    wwills2::Matrix testMatrix(2, 3);
     testMatrix.print(logFile);
     assert(testMatrix.m_numElements == (testMatrix.m_numRows * testMatrix.m_numCols));
 }
 
 void TestLinearSystem::matrixAssignOp() {
 
-    auto *testMatrix = new wwills2::Matrix;
+    auto *testMatrix = new wwills2::Matrix(2, 3);
 
     testMatrix->m_elements[0][1] = 5.5;
     testMatrix->m_elements[1][0] = 6.5;
@@ -413,7 +413,7 @@ void TestLinearSystem::matrixAssignOp() {
 
 void TestLinearSystem::matrixCopyInit() {
 
-    auto *testMatrix = new wwills2::Matrix;
+    auto *testMatrix = new wwills2::Matrix(2, 3);
 
     testMatrix->m_elements[0][1] = 5.5;
     testMatrix->m_elements[1][0] = 6.5;
@@ -505,7 +505,12 @@ void TestLinearSystem::buildIdentityNxNTest() {
 
 void TestLinearSystem::addRowsTest(){
 
-    wwills2::Matrix testMatrix;
+    wwills2::Matrix testMatrix(2, 3);
+    int i = 1;
+    for (auto &element : testMatrix){
+        element = i;
+        i++;
+    }
 
     testMatrix.addRows(0, 1);
     assert(testMatrix.m_elements[1][0] == 5);
@@ -517,20 +522,31 @@ void TestLinearSystem::addRowsTest(){
 
 void TestLinearSystem::matrixOverloadedElementOp() {
 
-    wwills2::Matrix testMatrix;
+    wwills2::Matrix testMatrix(2, 3);
+    int i = 1;
+    for (auto &element : testMatrix){
+        element = i;
+        i++;
+    }
 
     mpq_class *row = testMatrix[0];
     assert(row[0] == 1 && row[1] == 2 && row[2] == 3);
 
     wwills2::MatrixManager testManager;
+    testManager.insertMatrix("A", testMatrix);
 
-    testManager.m_matrices["A"].print(logFile);
-    assert(testManager.getMatrix("A")[1][1] == 5);
+    auto matrix = testManager.getMatrix("A");
+    assert((*matrix)[1][1] == 5);
 }
 
 void TestLinearSystem::replaceRowsTest() {
 
-    wwills2::Matrix testMatrix;
+    wwills2::Matrix testMatrix(2, 3);
+    int i = 1;
+    for (auto &element : testMatrix){
+        element = i;
+        i++;
+    }
 
     testMatrix.replaceRows(0, 1, -2);
     assert(testMatrix[1][0] == 2 && testMatrix[1][1] == 1 && testMatrix[1][2] == 0);
@@ -538,7 +554,12 @@ void TestLinearSystem::replaceRowsTest() {
 
 void TestLinearSystem::interchangeRowsTest() {
 
-    wwills2::Matrix testMatrix;
+    wwills2::Matrix testMatrix(2, 3);
+    int i = 1;
+    for (auto &element : testMatrix){
+        element = i;
+        i++;
+    }
 
     testMatrix.interchangeRows(0, 1);
     assert(testMatrix[0][0] == 4 && testMatrix[0][1] == 5 && testMatrix[0][2]);
@@ -787,6 +808,7 @@ void TestLinearSystem::echelonFormTest() {
         int maxRowCol = 100;
         int minRowCol = 10;
 
+        cout << "progress: " << std::flush;
         for (int testNum = 0; testNum < numTests; testNum++){
 
             //individual test scope
@@ -794,7 +816,9 @@ void TestLinearSystem::echelonFormTest() {
                 auto testMatrix = generateRandomMatrix(minRowCol, maxRowCol);
                 testMatrix->makeEchelonForm();
             }
+            cout << "*" << std::flush;
         }
+        cout << endl;
     }
 
     logFile << "corner and edge cases" << endl;
@@ -806,7 +830,7 @@ void TestLinearSystem::echelonFormTest() {
         logFile << endl;
     }
     {
-        wwills2::Matrix testMatrix;
+        wwills2::Matrix testMatrix(2, 3);
         testMatrix.print(logFile);
         testMatrix.makeEchelonForm();
         testMatrix.print(logFile);
@@ -976,11 +1000,13 @@ void TestLinearSystem::reducedEchelonFormTest() {
 void TestLinearSystem::linearSysInit() {
 
     wwills2::MatrixManager testManager;
-    wwills2::Matrix matrixDefault;
-    testManager.insertMatrix("A", matrixDefault);
+    wwills2::Matrix matrix(2, 3);
+    matrix[0][0] = 1;
+
+    testManager.insertMatrix("A", matrix);
     assert(testManager.getNumMatrices() == 1);
-    assert(testManager.m_matrices["A"].m_numElements == 6);
-    assert(testManager.m_matrices["A"].m_elements[0][0] == 1);
+    assert(testManager.m_matrices.find("A")->second->m_numElements == 6);
+    assert(testManager.m_matrices.find("A")->second->m_elements[0][0] == 1);
 }
 
 void TestLinearSystem::sysGetMatrix() {
@@ -988,14 +1014,14 @@ void TestLinearSystem::sysGetMatrix() {
     wwills2::MatrixManager testManager;
 
     testManager.createMatrix("test", 3, 1);
-    assert(testManager.getMatrix("test").m_elements[2][0] == 0);
-    assert(testManager.getMatrix("test").m_elements[1][0] == 0);
+    assert(testManager.getMatrix("test")->m_elements[2][0] == 0);
+    assert(testManager.getMatrix("test")->m_elements[1][0] == 0);
 
     auto matrixByElementOp = testManager.m_matrices["test"];
-    matrixByElementOp[1][0] = 3;
-    assert(testManager.getMatrix("test").m_elements[1][0] == 3);
+    (*matrixByElementOp)[1][0] = 3;
+    assert(testManager.getMatrix("test")->m_elements[1][0] == 3);
 
     auto matrixByGet = testManager.getMatrix("test");
-    matrixByGet[2][0] = 5;
-    assert(testManager.getMatrix("test").m_elements[2][0] == 5);
+    (*matrixByGet)[2][0] = 5;
+    assert(testManager.getMatrix("test")->m_elements[2][0] == 5);
 }

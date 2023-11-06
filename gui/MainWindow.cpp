@@ -165,14 +165,20 @@ void MainWindow::configure() {
 void MainWindow::run() {
 
     IntfDataEntry *entryLayout = m_mainLayout->getInputLayout();
+    IntfResultsDisplay *resultsLayout = m_mainLayout->getResultsLayout();
+
     bool loadResult = entryLayout->loadUiData(m_matrixManager);
 
     //todo: remove
-    m_matrixManager.getMatrix("matrix").print();
+    m_matrixManager.getMatrix("matrix")->print();
 
     if (!loadResult){
-        //todo
+        exit(-1);//todo
     }
+
+    m_matrixManager.getMatrix("matrix")->makeReducedEchelonForm();
+    resultsLayout->setResultsUiData(m_matrixManager);
+
 }
 
 

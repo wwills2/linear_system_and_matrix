@@ -5,35 +5,6 @@
 #include "Matrix.h"
 
 namespace wwills2{
-    Matrix::Matrix() {
-
-        m_numRows = 2;
-        m_numCols = 3;
-        m_numElements = m_numRows * m_numCols;
-        m_isEchelon = false;
-        m_isReducedEchelon = false;
-        m_mxmIdentity = nullptr;
-        m_nxnIdentity = nullptr;
-
-        //allocate array of mpq_class array pointers
-        m_elements = new mpq_class *[m_numRows];
-
-        //initialize array and allocate individual m_elements
-        mpq_class num = 1;
-
-        for (int row = 0; row < m_numRows; row++){
-            m_elements[row] = new mpq_class[m_numCols];
-            for (int col = 0; col < m_numCols; col++){
-                m_elements[row][col] = num;
-                num++;
-            }
-        }
-
-        //build this matrix's identity matrices
-        buildIdentityMxM();
-        buildIdentityNxN();
-
-    }
 
     Matrix::~Matrix() {
 

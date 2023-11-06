@@ -14,8 +14,7 @@ namespace wwills2 {
             throw std::invalid_argument("matrix \"" + name + "\" already exists");
         }
 
-        Matrix matrix(rows, cols);
-        m_matrices.emplace(name, matrix);
+        m_matrices.emplace(name, std::make_unique<Matrix>(Matrix(rows, cols)));
     }
 
     void MatrixManager::insertMatrix(const std::string &name, const Matrix &matrixToAdd) {
@@ -25,7 +24,7 @@ namespace wwills2 {
             throw std::invalid_argument("matrix \"" + name + "\" already exists");
         }
 
-        m_matrices.emplace(name, matrixToAdd);
+        m_matrices.emplace(name, std::make_unique<Matrix>(matrixToAdd));
     }
 
     void MatrixManager::removeMatrix(const std::string &name) {
@@ -36,13 +35,13 @@ namespace wwills2 {
         }
     }
 
-    Matrix &MatrixManager::getMatrix(const std::string &name){
+    std::shared_ptr<Matrix> & MatrixManager::getMatrix(const std::string &name){
 
         auto it = m_matrices.find(name);
         if (it == m_matrices.end()){
             throw std::invalid_argument("matrix \"" + name + "\" does not exist");
         }
-        return m_matrices[name];
+        return it->second;
     }
 
     int MatrixManager::getNumMatrices() {

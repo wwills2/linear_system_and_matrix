@@ -25,7 +25,7 @@ namespace wwills2{
 
         class Iterator;
 
-        Matrix();
+        Matrix() = delete;
         ~Matrix();
 
         Matrix(int rows, int cols, bool isEchelon=false, bool isReducedEchelon=false);

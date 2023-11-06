@@ -10,9 +10,11 @@
 #include <QGroupBox>
 #include <QScrollArea>
 #include <QVBoxLayout>
+
 #include "NothingToShow.h"
 #include "ConfigureDialog.h"
 #include "LinearSystemDataEntry.h"
+#include "LinearSystemResultsDisplay.h"
 #include "../MatrixManager.h"
 
 /**
@@ -28,6 +30,7 @@ public:
 
     void setUpLayout(ConfigureDialog &configureDialog) noexcept(false);
     IntfDataEntry *getInputLayout() noexcept(false);
+    IntfResultsDisplay *getResultsLayout() noexcept(false);
 
 private:
 
@@ -43,7 +46,7 @@ private:
     IntfDataEntry *m_dataEntryIntf;
 
     WrapperScrollBox *m_resultsScrollBox;
-    IntfDataEntry *m_resultsLayout;
+    IntfResultsDisplay *m_resultsDisplayIntf;
 };
 
 
