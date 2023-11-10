@@ -6,6 +6,7 @@
 #include "../Matrix.h"
 
 #define NUM_DECIMAL_PLACES (char) 3
+#define REDUCTION_DISPLAY_LOC 0, 0
 
 LinearSystemResultsDisplay::LinearSystemResultsDisplay(QWidget *parent) : QWidget(parent), m_numDisplayCharacters(0){
 
@@ -46,7 +47,7 @@ bool LinearSystemResultsDisplay::setResultsUiData(wwills2::MatrixManager &matrix
     auto *displayLabel = new QLabel(this);
     displayLabel->setText(formattedDisplayString);
 
-    m_displayBox->addWidget(displayLabel);
+    m_displayBox->addWidget(displayLabel, REDUCTION_DISPLAY_LOC);
     return true;
 }
 

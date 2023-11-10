@@ -35,6 +35,16 @@ namespace wwills2 {
         }
     }
 
+    bool MatrixManager::hasMatrix(const std::string &name) {
+
+        auto it = m_matrices.find(name);
+        if (it == m_matrices.end()){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     std::shared_ptr<Matrix> & MatrixManager::getMatrix(const std::string &name){
 
         auto it = m_matrices.find(name);

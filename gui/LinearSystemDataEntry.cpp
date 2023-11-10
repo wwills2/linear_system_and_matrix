@@ -47,7 +47,10 @@ LinearSystemDataEntry::LinearSystemDataEntry(int numEquations, int numVars, QWid
 
 bool LinearSystemDataEntry::loadUiData(wwills2::MatrixManager &matrixManager) {
 
-    matrixManager.createMatrix(m_matrixName, m_numEquations, m_numEdits);
+    if (!matrixManager.hasMatrix("matrix")){
+        matrixManager.createMatrix(m_matrixName, m_numEquations, m_numEdits);
+    }
+
     auto matrix = matrixManager.getMatrix(m_matrixName);
 
     auto matrixIt = matrix->begin();
@@ -64,8 +67,6 @@ bool LinearSystemDataEntry::loadUiData(wwills2::MatrixManager &matrixManager) {
             (*matrixIt) = mpq_class(mpf.get_d());
         }
     }
-
-
 
     return true;
 }

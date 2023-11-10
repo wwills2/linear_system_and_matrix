@@ -31,6 +31,8 @@ namespace wwills2 {
 
         void removeMatrix(const std::string &name);
 
+        bool hasMatrix(const std::string &name);
+
         std::shared_ptr<Matrix> & getMatrix(const std::string &name);
 
         int getNumMatrices();
