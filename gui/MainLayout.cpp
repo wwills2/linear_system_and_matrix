@@ -43,7 +43,7 @@ void MainLayout::setUpLayout(ConfigureDialog &configureDialog) noexcept(false){
             m_dataEntryScrollBox->setWidget(linearSystemDataEntry);
 
             // replace existing NothingToShow widget with the data entry widget
-            replaceWidget(m_nothingToShow, m_dataEntryScrollBox);
+            addWidget(m_dataEntryScrollBox, UPPER);
 
             // add results widget
             auto *linearSystemResultsDisplay = new LinearSystemResultsDisplay(m_resultsScrollBox->m_scrollArea);

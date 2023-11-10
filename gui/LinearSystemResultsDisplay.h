@@ -8,16 +8,19 @@
 #include <QWidget>
 #include <QLabel>
 #include <QGridLayout>
+#include <sstream>
+#include <iomanip>
+#include <QTextEdit>
 
 #include "IntfResultsDisplay.h"
 #include "../Matrix.h"
 
-class LinearSystemResultsDisplay : public IntfResultsDisplay, public QLabel{
+class LinearSystemResultsDisplay : public IntfResultsDisplay, public QWidget{
 public:
     LinearSystemResultsDisplay() = delete;
-    LinearSystemResultsDisplay(QWidget *parent);
+    explicit LinearSystemResultsDisplay(QWidget *parent);
 
-    bool setResultsUiData(wwills2::MatrixManager &matrixManager);
+    bool setResultsUiData(wwills2::MatrixManager &matrixManager) override;
 
     const std::string m_matrixName = "matrix";
 private:
@@ -26,6 +29,7 @@ private:
     std::string getFormattedQstring(const mpq_class &element) const;
 
     size_t m_numDisplayCharacters;
+    QGridLayout *m_displayBox;
 };
 
 
