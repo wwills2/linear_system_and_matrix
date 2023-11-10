@@ -23,7 +23,6 @@ bool LinearSystemResultsDisplay::setResultsUiData(wwills2::MatrixManager &matrix
 
     calcNumDisplayCharacters(*matrixToLoad);
 
-    /*
     int i = 0;
     for (auto &element : *matrixToLoad){
         QString stringFormattedElement(getFormattedQstring(element).c_str());
@@ -43,20 +42,11 @@ bool LinearSystemResultsDisplay::setResultsUiData(wwills2::MatrixManager &matrix
             i++;
         }
     }
-     */
 
-    for (int i = 0; i < 500; i++){
-        for (int j = 0; j < 500; j++){
-            formattedDisplayString += "a";
-        }
-        formattedDisplayString += "\n";
-    }
-
-    auto *displayLabel = new QLabel;
+    auto *displayLabel = new QLabel(this);
     displayLabel->setText(formattedDisplayString);
 
     m_displayBox->addWidget(displayLabel);
-
     return true;
 }
 
