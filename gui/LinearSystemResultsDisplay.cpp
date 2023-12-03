@@ -10,7 +10,7 @@
 
 LinearSystemResultsDisplay::LinearSystemResultsDisplay(QWidget *parent) : QWidget(parent), m_numDisplayCharacters(0){
 
-    m_displayBox = new QGridLayout(parent);
+    m_displayGrid = new QGridLayout(parent);
 
     QSizePolicy qSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setSizePolicy(qSizePolicy);
@@ -44,10 +44,17 @@ bool LinearSystemResultsDisplay::setResultsUiData(wwills2::MatrixManager &matrix
         }
     }
 
-    auto *displayLabel = new QLabel(this);
+    auto *displayLayoutItem = m_displayGrid->itemAtPosition(REDUCTION_DISPLAY_LOC);
+    auto *displayLabel = new QLabel;
     displayLabel->setText(formattedDisplayString);
 
-    m_displayBox->addWidget(displayLabel, REDUCTION_DISPLAY_LOC);
+    if (displayLayoutItem) {
+        displayLayoutItem->widget()->deleteLater();
+        m_displayGrid->removeWidget(displayLayoutItem->widget());
+    }
+
+    m_displayGrid->addWidget(displayLabel, REDUCTION_DISPLAY_LOC);
+
     return true;
 }
 

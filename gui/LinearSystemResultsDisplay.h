@@ -29,7 +29,7 @@ private:
     std::string getFormattedQstring(const mpq_class &element) const;
 
     size_t m_numDisplayCharacters;
-    QGridLayout *m_displayBox;
+    QGridLayout *m_displayGrid;
 };
 
 

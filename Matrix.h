@@ -93,11 +93,17 @@ namespace wwills2{
 
         Iterator &operator++();
 
-        mpq_class &operator*() const;
+        const mpq_class &operator*() const;
 
         bool operator==(const Matrix::Iterator &rhs) const;
 
         bool operator!=(const Matrix::Iterator &rhs) const;
+
+        int getRow();
+
+        int getCol();
+
+        void setCurrentElement(mpq_class &value);
 
     private:
         friend Matrix::Iterator Matrix::end();

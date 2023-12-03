@@ -553,7 +553,7 @@ namespace wwills2{
         return *this;
     }
 
-    mpq_class &Matrix::Iterator::operator*() const {
+    const mpq_class &Matrix::Iterator::operator*() const {
         return m_matrix->m_elements[m_row][m_col];
     }
 
@@ -572,6 +572,22 @@ namespace wwills2{
 
         return true;
     }
+
+    int Matrix::Iterator::getRow() {
+        return m_row;
+    }
+
+    int Matrix::Iterator::getCol() {
+        return m_col;
+    }
+
+    void Matrix::Iterator::setCurrentElement(mpq_class &value) {
+        m_matrix->m_elements[m_row][m_col] = value;
+        m_matrix->m_pivotPositions.clear();
+        m_matrix->m_isEchelon = false;
+        m_matrix->m_isReducedEchelon = false;
+    }
+
 
 } // wwills2
 

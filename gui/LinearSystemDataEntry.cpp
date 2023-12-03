@@ -59,12 +59,14 @@ bool LinearSystemDataEntry::loadUiData(wwills2::MatrixManager &matrixManager) {
     for (/*declared above*/ ;matrixIt != matrix->end() && lineEditIt != m_lineEdits.end(); ++matrixIt, lineEditIt++){
 
         try{
-            (*matrixIt) = mpq_class((*lineEditIt)->text().toStdString());
+            mpq_class mpq((*lineEditIt)->text().toStdString());
+            matrixIt.setCurrentElement(mpq);
         }catch (std::invalid_argument &error){
 
             // value was not entered as rational, attempt to parse as decimal
             mpf_class mpf((*lineEditIt)->text().toStdString());
-            (*matrixIt) = mpq_class(mpf.get_d());
+            mpq_class mpq(mpf.get_d());
+            matrixIt.setCurrentElement(mpq);
         }
     }
 
