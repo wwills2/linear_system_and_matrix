@@ -26,6 +26,7 @@ public:
 
     bool loadUiData(wwills2::MatrixManager &matrixManager) override;
 
+    const QRegExp m_regEx;
     const std::string m_matrixName = "matrix";
 private:
 

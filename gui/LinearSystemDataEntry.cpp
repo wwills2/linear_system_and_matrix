@@ -1,12 +1,15 @@
 //
 // Created by zan on 10/20/23.
 //
+#include <QRegExpValidator>
 #include "LinearSystemDataEntry.h"
 
 #define LINE_EDIT_WIDTH 100 //pixels
+#define VALID_INPUT_REGEX "-?\\d+\\s?([\\./])?\\s?\\d*"
 
 LinearSystemDataEntry::LinearSystemDataEntry(int numEquations, int numVars, QWidget *parent) :
-        QWidget(parent), m_numEquations(numEquations), m_numEdits(numVars + 1), m_lineEdits(m_numEquations * m_numEdits) {
+        QWidget(parent), m_regEx(VALID_INPUT_REGEX), m_numEquations(numEquations), m_numEdits(numVars + 1),
+        m_lineEdits(m_numEquations * m_numEdits) {
 
     m_entryGrid = new QGridLayout(this);
 
@@ -25,6 +28,7 @@ LinearSystemDataEntry::LinearSystemDataEntry(int numEquations, int numVars, QWid
             xCoeffEdit = new QLineEdit;
             xCoeffEdit->setMinimumWidth(LINE_EDIT_WIDTH);
             xCoeffEdit->setMaximumWidth(LINE_EDIT_WIDTH);
+            xCoeffEdit->setValidator(new QRegExpValidator(m_regEx, this));
 
             // add line edit to layout and line edits vector
             m_entryGrid->addWidget(xCoeffEdit, i, j);
@@ -52,7 +56,6 @@ bool LinearSystemDataEntry::loadUiData(wwills2::MatrixManager &matrixManager) {
     }
 
     auto matrix = matrixManager.getMatrix(m_matrixName);
-
     auto matrixIt = matrix->begin();
     auto lineEditIt = m_lineEdits.begin();
 
