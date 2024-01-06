@@ -7,7 +7,7 @@
 
 #include <random>
 #include <algorithm>
-#include "../LinearSystem.h"
+#include "../MatrixManager.h"
 #include "../Matrix.h"
 
 #define LOG_FILE "./test_output.txt"
@@ -30,8 +30,7 @@ public:
     static void reducedEchelonFormTest();              //calls makeReducedEchelonForm()
 
     static void linearSysInit();                       //calls the linear system constructor, generic linear system object
-    static void addMatrixTest();                       //calls both add matrix functions
-    static void sysOverloadedElementOp();              //calls the LinearSystem overloaded [] operator
+    static void sysGetMatrix();                        //calls the MatrixManager getMatrix(std::string &) method
 
     void dotVsOverloadBench();                  //see test file
 

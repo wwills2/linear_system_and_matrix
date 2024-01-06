@@ -1,22 +1,32 @@
 /* this file is based on a QT example file.
  * the original header comment is included at the bottom for licensing purposes */
 
-#include <QApplication>
+#ifndef NOTHIINGTOSHOW_H
+#define NOTHIINGTOSHOW_H
 
-#include "gui/MainWindow.h"
-#include "MatrixManager.h"
+#include <QWidget>
 
-int main(int argc, char *argv[]) {
+QT_BEGIN_NAMESPACE
+class QLabel;
+class QVBoxLayout;
+QT_END_NAMESPACE
 
-    wwills2::MatrixManager matrixManager;
+/**
+ * @brief nothing to show widget displayed by the main grid view on startup
+ */
+class NothingToShow : public QWidget {
+    Q_OBJECT
 
-    QApplication app(argc, argv);
-    MainWindow mw(matrixManager);
-    mw.resize(1440, 810);
-    //mw.setWindowIcon(); todo: decide on what this should be
-    mw.show();
-    return app.exec();
-}
+public:
+    explicit NothingToShow(QWidget *parent = nullptr);
+
+private:
+    QLabel *descriptionLabel;
+    QVBoxLayout *m_layout;
+
+};
+
+#endif
 
 
 /****************************************************************************

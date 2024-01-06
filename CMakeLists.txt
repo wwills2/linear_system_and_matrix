@@ -1,12 +1,21 @@
 cmake_minimum_required(VERSION 3.20)
 project(matrix_operations)
 
-set(DEBUG OFF) # compile with debugging
+set(DEBUG ON) # compile with debugging
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 set(CMAKE_CXX_STANDARD 14)
-set(STATIC_LIB_DIR "/usr/lib/x86_64-linux-gnu") # set to directory where static libaries are located
+set(STATIC_LIB_DIR /usr/lib/x86_64-linux-gnu) # set to directory where static libaries are located
 set(THREADS_PREFER_PTHREAD_FLAG ON)
+set(GUI_DIR gui)
 set(TESTING_DIR test)
+file(GLOB GUI_SOURCE ${GUI_DIR}/*.cpp)
+file(GLOB GUI_HEADERS ${GUI_DIR}*.h)
+
+add_definitions( -DWINDOW_NAME="Linear System Tool")
 
 if (DEBUG)
     add_compile_options(-Wall -pedantic -g3)
@@ -15,13 +24,36 @@ else()
 endif()
 
 find_package(Threads REQUIRED)
-set(STATIC_LIBRARIES "${STATIC_LIB_DIR}/libgmpxx.a" "${STATIC_LIB_DIR}/libgmp.a" Threads::Threads)
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
 
-add_executable(matrix_operations main.cpp LinearSystem.h LinearSystem.cpp Matrix.cpp Matrix.h)
+set(STATIC_LIBRARIES
+        ${STATIC_LIB_DIR}/libgmpxx.a
+        ${STATIC_LIB_DIR}/libgmp.a
+        Threads::Threads
+        Qt5::Widgets)
 
-add_executable(testLinearSystem LinearSystem.cpp LinearSystem.h ${TESTING_DIR}/TestLinearSystem.cpp
-        ${TESTING_DIR}/TestLinearSystem.h Matrix.cpp Matrix.h)
+add_executable(qt_application
+        main.cpp
+        MatrixManager.h
+        MatrixManager.cpp
+        Matrix.cpp
+        Matrix.h
+        ${GUI_SOURCE}
+        ${GUI_HEADERS}
+        gui/IntfDataEntry.h
+        gui/LinearSystemResultsDisplay.cpp
+        gui/LinearSystemResultsDisplay.h
+        gui/IntfResultsDisplay.h
+)
+
+add_executable(testLinearSystem
+        ${TESTING_DIR}/TestLinearSystem.cpp
+        ${TESTING_DIR}/TestLinearSystem.h
+        MatrixManager.cpp
+        MatrixManager.h
+        Matrix.cpp
+        Matrix.h)
 
 target_link_libraries(testLinearSystem ${STATIC_LIBRARIES})
-target_link_libraries(matrix_operations ${STATIC_LIBRARIES})
+target_link_libraries(qt_application ${STATIC_LIBRARIES})
 

@@ -5,35 +5,6 @@
 #include "Matrix.h"
 
 namespace wwills2{
-    Matrix::Matrix() {
-
-        m_numRows = 2;
-        m_numCols = 3;
-        m_numElements = m_numRows * m_numCols;
-        m_isEchelon = false;
-        m_isReducedEchelon = false;
-        m_mxmIdentity = nullptr;
-        m_nxnIdentity = nullptr;
-
-        //allocate array of mpq_class array pointers
-        m_elements = new mpq_class *[m_numRows];
-
-        //initialize array and allocate individual m_elements
-        mpq_class num = 1;
-
-        for (int row = 0; row < m_numRows; row++){
-            m_elements[row] = new mpq_class[m_numCols];
-            for (int col = 0; col < m_numCols; col++){
-                m_elements[row][col] = num;
-                num++;
-            }
-        }
-
-        //build this matrix's identity matrices
-        buildIdentityMxM();
-        buildIdentityNxN();
-
-    }
 
     Matrix::~Matrix() {
 
@@ -79,6 +50,11 @@ namespace wwills2{
 
         m_numRows = rows;
         m_numCols = cols;
+
+        if (m_numRows < 0 || m_numCols < 0){
+            throw std::invalid_argument("matrix must have at least one row and column");
+        }
+
         m_numElements = m_numRows * m_numCols;
         m_isEchelon = isEchelon;
         m_isReducedEchelon = isReducedEchelon;
@@ -143,6 +119,14 @@ namespace wwills2{
                 }
             }
         }
+    }
+
+    std::unique_ptr<matrix_dimensions> Matrix::getDimensions() const {
+        std::unique_ptr<matrix_dimensions> matrixDims(new matrix_dimensions);
+        matrixDims->numRows = m_numRows;
+        matrixDims->numColumns = m_numCols;
+
+        return matrixDims;
     }
 
     void Matrix::print(std::ostream &output) {
@@ -356,6 +340,14 @@ namespace wwills2{
         }
     }
 
+    Matrix::Iterator Matrix::begin() {
+        return Iterator{this};
+    }
+
+    Matrix::Iterator Matrix::end() {
+        return Iterator{nullptr, -1, -1};
+    }
+
     //private + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + + +
 
     void Matrix::buildIdentityMxM() {
@@ -529,6 +521,73 @@ namespace wwills2{
 
         return false;
     }
+
+    Matrix::Iterator::Iterator(Matrix *matrix) {
+        m_matrix = matrix;
+        m_row = 0;
+        m_col = 0;
+    }
+
+    Matrix::Iterator::Iterator(Matrix *matrix, int row, int col) {
+        m_matrix = matrix;
+        m_row = row;
+        m_col = col;
+    }
+
+    Matrix::Iterator &Matrix::Iterator::operator++() {
+
+        if (m_matrix == nullptr){
+            return *this;
+        }
+
+        if (++m_col == m_matrix->m_numCols) {
+            if (++m_row == m_matrix->m_numRows){
+                m_matrix = nullptr;
+                m_row = -1;
+                m_col = -1;
+            }else{
+                m_col = 0;
+            }
+        }
+
+        return *this;
+    }
+
+    const mpq_class &Matrix::Iterator::operator*() const {
+        return m_matrix->m_elements[m_row][m_col];
+    }
+
+    bool Matrix::Iterator::operator==(const Matrix::Iterator &rhs) const {
+        if (m_row != rhs.m_row || m_col != rhs.m_col|| m_matrix != rhs.m_matrix){
+            return false;
+        }
+
+        return true;
+    }
+
+    bool Matrix::Iterator::operator!=(const Matrix::Iterator &rhs) const {
+        if (m_row == rhs.m_row || m_col == rhs.m_col|| m_matrix == rhs.m_matrix){
+            return false;
+        }
+
+        return true;
+    }
+
+    int Matrix::Iterator::getRow() {
+        return m_row;
+    }
+
+    int Matrix::Iterator::getCol() {
+        return m_col;
+    }
+
+    void Matrix::Iterator::setCurrentElement(mpq_class &value) {
+        m_matrix->m_elements[m_row][m_col] = value;
+        m_matrix->m_pivotPositions.clear();
+        m_matrix->m_isEchelon = false;
+        m_matrix->m_isReducedEchelon = false;
+    }
+
 
 } // wwills2
 

@@ -8,21 +8,31 @@
 #include <cstring>
 #include <algorithm>
 #include <iterator>
+#include <memory>
+#include <stdexcept>
 #include <gmpxx.h>
-#include "LinearSystem.h"
+#include "MatrixManager.h"
 
 namespace wwills2{
-#define ZERO_CUTOFF 1e-10
+
+    struct matrix_dimensions{
+        int numRows;
+        int numColumns;
+    };
 
     class Matrix {
     public:
 
-        Matrix();
+        class Iterator;
+
+        Matrix() = delete;
         ~Matrix();
 
         Matrix(int rows, int cols, bool isEchelon=false, bool isReducedEchelon=false);
 
         Matrix(const Matrix &rhs);
+
+        std::unique_ptr<matrix_dimensions> getDimensions() const;
 
         void print(std::ostream &output = std::cout);
 
@@ -31,6 +41,10 @@ namespace wwills2{
         void makeReducedEchelonForm();
 
         Matrix &operator=(const Matrix &rhs);
+
+        Iterator begin();
+
+        Iterator end();
 
     private:
 
@@ -66,9 +80,38 @@ namespace wwills2{
         mpq_class **m_mxmIdentity;                              //identity matrix #rows x #rows
         mpq_class **m_nxnIdentity;                              //identity matrix #cols x #cols
 
-        friend LinearSystem;
+        friend MatrixManager;
+        friend Iterator;
 
         friend TestLinearSystem;
+    };
+
+    //read only, forward iterator
+    class Matrix::Iterator {
+    public:
+        explicit Iterator(Matrix *matrix);
+
+        Iterator &operator++();
+
+        const mpq_class &operator*() const;
+
+        bool operator==(const Matrix::Iterator &rhs) const;
+
+        bool operator!=(const Matrix::Iterator &rhs) const;
+
+        int getRow();
+
+        int getCol();
+
+        void setCurrentElement(mpq_class &value);
+
+    private:
+        friend Matrix::Iterator Matrix::end();
+        explicit Iterator(Matrix *matrix, int row, int col);
+
+        Matrix *m_matrix;
+        int m_row;
+        int m_col;
     };
 
 } // wwills2

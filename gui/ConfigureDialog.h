@@ -1,22 +1,45 @@
 /* this file is based on a QT example file.
  * the original header comment is included at the bottom for licensing purposes */
 
-#include <QApplication>
+#ifndef DIALOG_H
+#define DIALOG_H
 
-#include "gui/MainWindow.h"
-#include "MatrixManager.h"
+#include <QDialog>
 
-int main(int argc, char *argv[]) {
+QT_BEGIN_NAMESPACE
+class QDialogButtonBox;
+class QGroupBox;
+class QSpinBox;
+QT_END_NAMESPACE
 
-    wwills2::MatrixManager matrixManager;
+/**
+ * @brief dialog opened to for the user to enter the number of variables and equations
+ * @extends QDialogue
+ */
+class ConfigureDialog : public QDialog
+{
+    Q_OBJECT
 
-    QApplication app(argc, argv);
-    MainWindow mw(matrixManager);
-    mw.resize(1440, 810);
-    //mw.setWindowIcon(); todo: decide on what this should be
-    mw.show();
-    return app.exec();
-}
+public:
+
+    enum Operation {NOT_CONFIGURED, ANALYZE, ARITHMETIC};
+    explicit ConfigureDialog(QWidget *parent);
+
+    Operation m_operation;
+    int m_numEquations;
+    int m_numVariables;
+
+private:
+    QGroupBox *m_configureGroupBox;
+    QSpinBox *m_varCountSpin;
+    QSpinBox *m_eqCountSpin;
+    QDialogButtonBox *m_buttonBox;
+    void createConfigureGroupBox();
+    void accept() override;
+    void reject() override;
+};
+
+#endif // DIALOG_H
 
 
 /****************************************************************************

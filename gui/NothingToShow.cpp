@@ -1,21 +1,21 @@
 /* this file is based on a QT example file.
  * the original header comment is included at the bottom for licensing purposes */
 
-#include <QApplication>
+#include "NothingToShow.h"
 
-#include "gui/MainWindow.h"
-#include "MatrixManager.h"
+#include <QtWidgets>
 
-int main(int argc, char *argv[]) {
+NothingToShow::NothingToShow(QWidget *parent)
+{
+    Q_UNUSED(parent);
 
-    wwills2::MatrixManager matrixManager;
+    descriptionLabel = new QLabel(tr("Nothing to show.\n\n"
+                                     "Select \"Configure\" under Actions on the top menu bar"));
+    descriptionLabel->setAlignment(Qt::AlignCenter);
+    m_layout = new QVBoxLayout;
+    m_layout->addWidget(descriptionLabel, Qt::AlignCenter);
 
-    QApplication app(argc, argv);
-    MainWindow mw(matrixManager);
-    mw.resize(1440, 810);
-    //mw.setWindowIcon(); todo: decide on what this should be
-    mw.show();
-    return app.exec();
+    setLayout(m_layout);
 }
 
 

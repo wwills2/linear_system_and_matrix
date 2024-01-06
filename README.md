@@ -1,5 +1,5 @@
 # Matrix and Vector Operations  Library
-## Author: Zan Wills
+## Author: William 'Zan' Wills
 
 ### Motivations
 
@@ -14,3 +14,5 @@ algebra. The code is a mix of C++ OOP paradigms and C features such as raw point
 practical in most production environments, it is employed here as an 'academic' exercise. The underlying rational type
 used for computation comes from the GNU Multiprecision Libaray.
 
+### GUI Design
+- Qt5 based UI
