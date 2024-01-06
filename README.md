@@ -1,5 +1,5 @@
 # Matrix and Vector Operations  Library
-## Author: Zan Wills
+## Author: William 'Zan' Wills
 
 ### Motivations
 
@@ -15,4 +15,3 @@ practical in most production environments, it is used here to show competency wi
 
 ### GUI Design
 - Qt5 based UI
-- Simple table view to represent the matrix and display the output of reduction.

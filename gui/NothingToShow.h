@@ -1,3 +1,34 @@
+/* this file is based on a QT example file.
+ * the original header comment is included at the bottom for licensing purposes */
+
+#ifndef NOTHIINGTOSHOW_H
+#define NOTHIINGTOSHOW_H
+
+#include <QWidget>
+
+QT_BEGIN_NAMESPACE
+class QLabel;
+class QVBoxLayout;
+QT_END_NAMESPACE
+
+/**
+ * @brief nothing to show widget displayed by the main grid view on startup
+ */
+class NothingToShow : public QWidget {
+    Q_OBJECT
+
+public:
+    explicit NothingToShow(QWidget *parent = nullptr);
+
+private:
+    QLabel *descriptionLabel;
+    QVBoxLayout *m_layout;
+
+};
+
+#endif
+
+
 /****************************************************************************
 **
 ** Copyright (C) 2016 The Qt Company Ltd.
@@ -47,31 +78,3 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
-#ifndef NOTHIINGTOSHOW_H
-#define NOTHIINGTOSHOW_H
-
-#include <QWidget>
-
-QT_BEGIN_NAMESPACE
-class QLabel;
-class QVBoxLayout;
-QT_END_NAMESPACE
-
-/**
- * @brief nothing to show widget displayed by the main grid view on startup
- */
-class NothingToShow : public QWidget {
-    Q_OBJECT
-
-public:
-    explicit NothingToShow(QWidget *parent = nullptr);
-
-private:
-    QLabel *descriptionLabel;
-    QVBoxLayout *m_layout;
-
-};
-//! [0]
-
-#endif

@@ -7,6 +7,9 @@
 
 #include "../MatrixManager.h"
 
+/**
+ * interface to be implemented by views which display the results of an operation
+ */
 class IntfResultsDisplay {
 public:
 

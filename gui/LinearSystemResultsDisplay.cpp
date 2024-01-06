@@ -26,7 +26,7 @@ bool LinearSystemResultsDisplay::setResultsUiData(wwills2::MatrixManager &matrix
 
     int i = 0;
     for (auto &element : *matrixToLoad){
-        QString stringFormattedElement(getFormattedQstring(element).c_str());
+        QString stringFormattedElement(getFormattedQString(element).c_str());
 
         if (i == 0){
             formattedDisplayString += "\t";
@@ -75,7 +75,7 @@ void LinearSystemResultsDisplay::calcNumDisplayCharacters(wwills2::Matrix &matri
     m_numDisplayCharacters = largestNumAsStringStream.str().size() + 1; // +1 to account for possible negative sign
 }
 
-std::string LinearSystemResultsDisplay::getFormattedQstring(const mpq_class &element) const {
+std::string LinearSystemResultsDisplay::getFormattedQString(const mpq_class &element) const {
 
     std::stringstream stringReprStream;
     stringReprStream << std::setprecision(NUM_DECIMAL_PLACES) << std::fixed;

@@ -7,6 +7,9 @@
 
 #include "../MatrixManager.h"
 
+/**
+ * interface to be implemented by views which take in data for a matrix operation
+ */
 class IntfDataEntry{
 public:
 

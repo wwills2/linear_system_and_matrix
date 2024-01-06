@@ -1,3 +1,47 @@
+/* this file is based on a QT example file.
+ * the original header comment is included at the bottom for licensing purposes */
+
+#ifndef DIALOG_H
+#define DIALOG_H
+
+#include <QDialog>
+
+QT_BEGIN_NAMESPACE
+class QDialogButtonBox;
+class QGroupBox;
+class QSpinBox;
+QT_END_NAMESPACE
+
+/**
+ * @brief dialog opened to for the user to enter the number of variables and equations
+ * @extends QDialogue
+ */
+class ConfigureDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+
+    enum Operation {NOT_CONFIGURED, ANALYZE, ARITHMETIC};
+    explicit ConfigureDialog(QWidget *parent);
+
+    Operation m_operation;
+    int m_numEquations;
+    int m_numVariables;
+
+private:
+    QGroupBox *m_configureGroupBox;
+    QSpinBox *m_varCountSpin;
+    QSpinBox *m_eqCountSpin;
+    QDialogButtonBox *m_buttonBox;
+    void createConfigureGroupBox();
+    void accept() override;
+    void reject() override;
+};
+
+#endif // DIALOG_H
+
+
 /****************************************************************************
 **
 ** Copyright (C) 2016 The Qt Company Ltd.
@@ -47,43 +91,3 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
-#ifndef DIALOG_H
-#define DIALOG_H
-
-#include <QDialog>
-
-QT_BEGIN_NAMESPACE
-class QDialogButtonBox;
-class QGroupBox;
-class QSpinBox;
-QT_END_NAMESPACE
-
-/**
- * @brief dialog opened to for the user to enter the number of variables and equations
- * @extends QDialogue
- */
-class ConfigureDialog : public QDialog
-{
-    Q_OBJECT
-
-public:
-
-    enum Operation {NOT_CONFIGURED, ANALYZE, ARITHMETIC};
-    explicit ConfigureDialog(QWidget *parent);
-
-    Operation m_operation;
-    int m_numEquations;
-    int m_numVariables;
-
-private:
-    QGroupBox *m_configureGroupBox;
-    QSpinBox *m_varCountSpin;
-    QSpinBox *m_eqCountSpin;
-    QDialogButtonBox *m_buttonBox;
-    void createConfigureGroupBox();
-    void accept() override;
-    void reject() override;
-};
-
-#endif // DIALOG_H

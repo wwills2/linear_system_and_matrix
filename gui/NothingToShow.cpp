@@ -1,3 +1,24 @@
+/* this file is based on a QT example file.
+ * the original header comment is included at the bottom for licensing purposes */
+
+#include "NothingToShow.h"
+
+#include <QtWidgets>
+
+NothingToShow::NothingToShow(QWidget *parent)
+{
+    Q_UNUSED(parent);
+
+    descriptionLabel = new QLabel(tr("Nothing to show.\n\n"
+                                     "Select \"Configure\" under Actions on the top menu bar"));
+    descriptionLabel->setAlignment(Qt::AlignCenter);
+    m_layout = new QVBoxLayout;
+    m_layout->addWidget(descriptionLabel, Qt::AlignCenter);
+
+    setLayout(m_layout);
+}
+
+
 /****************************************************************************
 **
 ** Copyright (C) 2016 The Qt Company Ltd.
@@ -47,20 +68,3 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
-#include "NothingToShow.h"
-
-#include <QtWidgets>
-
-NothingToShow::NothingToShow(QWidget *parent)
-{
-    Q_UNUSED(parent);
-
-    descriptionLabel = new QLabel(tr("Nothing to show.\n\n"
-                                     "Select \"Configure\" under Actions on the top menu bar"));
-    descriptionLabel->setAlignment(Qt::AlignCenter);
-    m_layout = new QVBoxLayout;
-    m_layout->addWidget(descriptionLabel, Qt::AlignCenter);
-
-    setLayout(m_layout);
-}

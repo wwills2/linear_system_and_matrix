@@ -1,3 +1,24 @@
+/* this file is based on a QT example file.
+ * the original header comment is included at the bottom for licensing purposes */
+
+#include <QApplication>
+
+#include "gui/MainWindow.h"
+#include "MatrixManager.h"
+
+int main(int argc, char *argv[]) {
+
+    wwills2::MatrixManager matrixManager;
+
+    QApplication app(argc, argv);
+    MainWindow mw(matrixManager);
+    mw.resize(1440, 810);
+    //mw.setWindowIcon(); todo: decide on what this should be
+    mw.show();
+    return app.exec();
+}
+
+
 /****************************************************************************
 **
 ** Copyright (C) 2016 The Qt Company Ltd.
@@ -47,21 +68,3 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-
-#include <QApplication>
-
-#include "gui/MainWindow.h"
-#include "MatrixManager.h"
-
-int main(int argc, char *argv[])
-{
-
-    wwills2::MatrixManager matrixManager;
-
-    QApplication app(argc, argv);
-    MainWindow mw(matrixManager);
-    mw.resize(1440, 810);
-    //mw.setWindowIcon(); todo: decide on what this should be
-    mw.show();
-    return app.exec();
-}
