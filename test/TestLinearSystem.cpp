@@ -506,10 +506,13 @@ void TestLinearSystem::buildIdentityNxNTest() {
 void TestLinearSystem::addRowsTest(){
 
     wwills2::Matrix testMatrix(2, 3);
-    int i = 1;
-    for (auto &element : testMatrix){
-        element = i;
-        i++;
+
+    int value = 1;
+    for (int i = 0; i < testMatrix.m_numRows; i++){
+        for (int j = 0; j < testMatrix.m_numCols; j++){
+            testMatrix[i][j] = value;
+            value++;
+        }
     }
 
     testMatrix.addRows(0, 1);
@@ -523,10 +526,13 @@ void TestLinearSystem::addRowsTest(){
 void TestLinearSystem::matrixOverloadedElementOp() {
 
     wwills2::Matrix testMatrix(2, 3);
-    int i = 1;
-    for (auto &element : testMatrix){
-        element = i;
-        i++;
+
+    int value = 1;
+    for (int i = 0; i < testMatrix.m_numRows; i++){
+        for (int j = 0; j < testMatrix.m_numCols; j++){
+            testMatrix[i][j] = value;
+            value++;
+        }
     }
 
     mpq_class *row = testMatrix[0];
@@ -542,10 +548,13 @@ void TestLinearSystem::matrixOverloadedElementOp() {
 void TestLinearSystem::replaceRowsTest() {
 
     wwills2::Matrix testMatrix(2, 3);
-    int i = 1;
-    for (auto &element : testMatrix){
-        element = i;
-        i++;
+
+    int value = 1;
+    for (int i = 0; i < testMatrix.m_numRows; i++){
+        for (int j = 0; j < testMatrix.m_numCols; j++){
+            testMatrix[i][j] = value;
+            value++;
+        }
     }
 
     testMatrix.replaceRows(0, 1, -2);
@@ -555,10 +564,13 @@ void TestLinearSystem::replaceRowsTest() {
 void TestLinearSystem::interchangeRowsTest() {
 
     wwills2::Matrix testMatrix(2, 3);
-    int i = 1;
-    for (auto &element : testMatrix){
-        element = i;
-        i++;
+
+    int value = 1;
+    for (int i = 0; i < testMatrix.m_numRows; i++){
+        for (int j = 0; j < testMatrix.m_numCols; j++){
+            testMatrix[i][j] = value;
+            value++;
+        }
     }
 
     testMatrix.interchangeRows(0, 1);
