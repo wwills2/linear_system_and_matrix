@@ -2,8 +2,8 @@
 // Created by zan on 10/14/23.
 //
 
-#include "MainLayout.h"
-#include "ConfigureDialog.h"
+#include "../include/MainLayout.h"
+#include "../include/ConfigureDialog.h"
 
 #define UPPER 0, 0
 #define LOWER 1, 0

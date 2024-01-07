@@ -11,7 +11,7 @@
 #include <QGroupBox>
 
 #include "IntfDataEntry.h"
-#include "../Matrix.h"
+#include "../../libmatrix/Matrix.h"
 
 /**
  * @brief Layout for entering coefficient values for a linear system

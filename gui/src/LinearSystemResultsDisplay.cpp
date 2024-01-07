@@ -2,8 +2,8 @@
 // Created by zan on 11/4/23.
 //
 
-#include "LinearSystemResultsDisplay.h"
-#include "../Matrix.h"
+#include "../include/LinearSystemResultsDisplay.h"
+#include "../../libmatrix/Matrix.h"
 
 #define NUM_DECIMAL_PLACES (char) 3
 #define REDUCTION_DISPLAY_LOC 0, 0

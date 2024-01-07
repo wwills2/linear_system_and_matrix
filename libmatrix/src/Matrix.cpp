@@ -2,7 +2,7 @@
 // Created by zan on 6/23/22.
 //
 
-#include "Matrix.h"
+#include "../Matrix.h"
 
 namespace wwills2{
 

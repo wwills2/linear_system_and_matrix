@@ -1,7 +1,7 @@
 /* this file is based on a QT example file.
  * the original header comment is included at the bottom for licensing purposes */
 
-#include "MainWindow.h"
+#include "../include/MainWindow.h"
 
 #include <QAction>
 #include <QFileDialog>

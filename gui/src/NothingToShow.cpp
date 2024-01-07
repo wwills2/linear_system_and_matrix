@@ -1,72 +1,22 @@
 /* this file is based on a QT example file.
  * the original header comment is included at the bottom for licensing purposes */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "../include/NothingToShow.h"
 
-#include <QMainWindow>
-#include "../MatrixManager.h"
-#include "MainLayout.h"
-#include "ConfigureDialog.h"
+#include <QtWidgets>
 
-/**
- * @brief main window for the application. controls configuration and macro actions
- */
-class MainWindow : public QMainWindow{
-    Q_OBJECT
+NothingToShow::NothingToShow(QWidget *parent)
+{
+    Q_UNUSED(parent);
 
-public:
-    MainWindow() = delete;
+    descriptionLabel = new QLabel(tr("Nothing to show.\n\n"
+                                     "Select \"Configure\" under Actions on the top menu bar"));
+    descriptionLabel->setAlignment(Qt::AlignCenter);
+    m_layout = new QVBoxLayout;
+    m_layout->addWidget(descriptionLabel, Qt::AlignCenter);
 
-    /**
-     * constructor for the main window. configures the window's properties and initializes the main layout
-     * to its default state
-     * @param matrixManager the matrix manager for this application
-     */
-    explicit MainWindow(wwills2::MatrixManager &matrixManager);
-
-    /**
-     * destructor. cleans up the main layout and this window's QActions
-     */
-    ~MainWindow() override;
-/**
- * slots to receive toolbar menu signals
- */
-private slots:
-    void openFile();
-    void saveFile();
-    void configure();
-    void run();
-
-private:
-
-    /**
-     * creates action toolbar drop down menus
-     */
-    void createMenus();
-
-    wwills2::MatrixManager m_matrixManager;
-    ConfigureDialog::Operation m_operation;
-
-    /**
-     * @brief the main window exists as widget containing a layout. this widget serves as a wrapper for the main layout
-     * to be set as the window's central widget
-     */
-    QWidget *m_mainLayoutWrapperWidget;
-    MainLayout *m_mainLayout;
-
-    QMenu *m_fileMenu;
-    QMenu *m_actionMenu;
-
-    QAction *m_openAct;
-    QAction *m_saveAct;
-    QAction *m_exitAct;
-    QAction *m_configureAct;
-    QAction *m_editAct;
-    QAction *m_runAct;
-};
-
-#endif // MAINWINDOW_H
+    setLayout(m_layout);
+}
 
 
 /****************************************************************************
