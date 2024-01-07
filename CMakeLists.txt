@@ -12,8 +12,8 @@ set(STATIC_LIB_DIR /usr/lib/x86_64-linux-gnu) # set to directory where static li
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 set(GUI_DIR gui)
 set(TESTING_DIR test)
-file(GLOB GUI_SOURCE ${GUI_DIR}/*.cpp)
-file(GLOB GUI_HEADERS ${GUI_DIR}*.h)
+file(GLOB GUI_SOURCE ${GUI_DIR}/src/*.cpp)
+file(GLOB GUI_HEADERS ${GUI_DIR}/include/*.h)
 
 add_definitions( -DWINDOW_NAME="Linear System Tool")
 
@@ -34,25 +34,25 @@ set(STATIC_LIBRARIES
 
 add_executable(qt_application
         main.cpp
-        MatrixManager.h
-        MatrixManager.cpp
-        Matrix.cpp
-        Matrix.h
+        libmatrix/MatrixManager.h
+        libmatrix/src/MatrixManager.cpp
+        libmatrix/src/Matrix.cpp
+        libmatrix/Matrix.h
         ${GUI_SOURCE}
         ${GUI_HEADERS}
-        gui/IntfDataEntry.h
-        gui/LinearSystemResultsDisplay.cpp
-        gui/LinearSystemResultsDisplay.h
-        gui/IntfResultsDisplay.h
+        gui/include/IntfDataEntry.h
+        gui/src/LinearSystemResultsDisplay.cpp
+        gui/include/LinearSystemResultsDisplay.h
+        gui/include/IntfResultsDisplay.h
 )
 
 add_executable(testLinearSystem
         ${TESTING_DIR}/TestLinearSystem.cpp
         ${TESTING_DIR}/TestLinearSystem.h
-        MatrixManager.cpp
-        MatrixManager.h
-        Matrix.cpp
-        Matrix.h)
+        libmatrix/src/MatrixManager.cpp
+        libmatrix/MatrixManager.h
+        libmatrix/src/Matrix.cpp
+        libmatrix/Matrix.h)
 
 target_link_libraries(testLinearSystem ${STATIC_LIBRARIES})
 target_link_libraries(qt_application ${STATIC_LIBRARIES})

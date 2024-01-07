@@ -7,8 +7,8 @@
 
 #include <random>
 #include <algorithm>
-#include "../MatrixManager.h"
-#include "../Matrix.h"
+#include "../src/libmatrix/MatrixManager.h"
+#include "../src/libmatrix/Matrix.h"
 
 #define LOG_FILE "./test_output.txt"
 class Random;
