@@ -13,7 +13,7 @@
 #include <QTextEdit>
 
 #include "IntfResultsDisplay.h"
-#include "../Matrix.h"
+#include "libmatrix/Matrix.h"
 
 /**
  * @brief Layout for displaying a reduced linear system
