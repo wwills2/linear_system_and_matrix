@@ -1,24 +1,19 @@
 cmake_minimum_required(VERSION 3.20)
-project(Linear_System_Tool)
+project(matrix_operations)
 
 set(DEBUG ON) # compile with debugging
 
-# required settings for QT compilation
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-# project settings
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_STATIC_LIBRARY_PREFIX "")
+set(STATIC_LIB_DIR /usr/lib/x86_64-linux-gnu) # set to directory where static libaries are located
 set(THREADS_PREFER_PTHREAD_FLAG ON)
-
-# project directories
-set(GUI_DIR ./gui)
-set(LIB_DIR ./lib)
-set(LIBMATRIX_DIR ${LIB_DIR}/libmatrix)
+set(GUI_DIR gui)
 set(TESTING_DIR test)
-set(STATIC_LIBRARIES ${GMP_LIB} ${GMPXX_LIB} libmatrix)
+file(GLOB GUI_SOURCE ${GUI_DIR}/*.cpp)
+file(GLOB GUI_HEADERS ${GUI_DIR}*.h)
 
 add_definitions( -DWINDOW_NAME="Linear System Tool")
 
@@ -28,39 +23,37 @@ else()
     add_compile_options(-Wall -pedantic -O3)
 endif()
 
-# declare and locate dependencies
 find_package(Threads REQUIRED)
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
-find_library(GMP_LIB NAMES gmp)
-find_library(GMPXX_LIB NAMES gmpxx)
 
-if(NOT GMP_LIB OR NOT GMPXX_LIB)
-    message(FATAL_ERROR "GMP libraries not found. Please check your installation.")
-endif()
+set(STATIC_LIBRARIES
+        ${STATIC_LIB_DIR}/libgmpxx.a
+        ${STATIC_LIB_DIR}/libgmp.a
+        Threads::Threads
+        Qt5::Widgets)
 
-# libmatrix compile config
-add_library(libmatrix STATIC
-        ${LIBMATRIX_DIR}/MatrixManager.h
-        ${LIBMATRIX_DIR}/Matrix.h
-        ${LIBMATRIX_DIR}/src/MatrixManager.cpp
-        ${LIBMATRIX_DIR}/src/Matrix.cpp
+add_executable(qt_application
+        main.cpp
+        MatrixManager.h
+        MatrixManager.cpp
+        Matrix.cpp
+        Matrix.h
+        ${GUI_SOURCE}
+        ${GUI_HEADERS}
+        gui/IntfDataEntry.h
+        gui/LinearSystemResultsDisplay.cpp
+        gui/LinearSystemResultsDisplay.h
+        gui/IntfResultsDisplay.h
 )
-target_include_directories(libmatrix PUBLIC ${LIBMATRIX_DIR})
 
-# qt gui application compilation config
-file(GLOB GUI_SOURCE ${GUI_DIR}/src/*.cpp)
-file(GLOB GUI_HEADERS ${GUI_DIR}/include/*.h)
-add_executable(qt_application main.cpp ${GUI_HEADERS} ${GUI_SOURCE})
-target_include_directories(qt_application PRIVATE ${GUI_DIR}/include lib)
-
-# test program compilation config
 add_executable(testLinearSystem
         ${TESTING_DIR}/TestLinearSystem.cpp
         ${TESTING_DIR}/TestLinearSystem.h
-)
-target_include_directories(testLinearSystem PRIVATE ${LIBMATRIX_DIR})
+        MatrixManager.cpp
+        MatrixManager.h
+        Matrix.cpp
+        Matrix.h)
 
-# linking settings
-target_link_libraries(libmatrix ${GMP_LIB} ${GMPXX_LIB})
-target_link_libraries(testLinearSystem ${STATIC_LIBRARIES} Threads::Threads)
-target_link_libraries(qt_application ${STATIC_LIBRARIES} Threads::Threads Qt5::Widgets )
+target_link_libraries(testLinearSystem ${STATIC_LIBRARIES})
+target_link_libraries(qt_application ${STATIC_LIBRARIES})
+

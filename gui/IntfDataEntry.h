@@ -5,7 +5,7 @@
 #ifndef MATRIX_OPERATIONS_INTFDATAENTRY_H
 #define MATRIX_OPERATIONS_INTFDATAENTRY_H
 
-#include "libmatrix/MatrixManager.h"
+#include "../MatrixManager.h"
 
 /**
  * interface to be implemented by views which take in data for a matrix operation

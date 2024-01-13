@@ -3,6 +3,7 @@
 //
 
 #include "MainLayout.h"
+#include "ConfigureDialog.h"
 
 #define UPPER 0, 0
 #define LOWER 1, 0

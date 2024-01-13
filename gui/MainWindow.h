@@ -5,7 +5,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "MatrixManager.h"
+#include "../MatrixManager.h"
 #include "MainLayout.h"
 #include "ConfigureDialog.h"
 
