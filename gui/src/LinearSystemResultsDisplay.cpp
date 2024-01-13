@@ -3,7 +3,7 @@
 //
 
 #include "LinearSystemResultsDisplay.h"
-#include "../Matrix.h"
+#include "Matrix.h"
 
 #define NUM_DECIMAL_PLACES (char) 3
 #define REDUCTION_DISPLAY_LOC 0, 0

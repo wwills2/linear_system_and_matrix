@@ -15,7 +15,7 @@
 #include "ConfigureDialog.h"
 #include "LinearSystemDataEntry.h"
 #include "LinearSystemResultsDisplay.h"
-#include "../MatrixManager.h"
+#include "libmatrix/MatrixManager.h"
 
 /**
  * @brief Layout instantiated in the main window
