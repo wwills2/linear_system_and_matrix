@@ -122,7 +122,7 @@ void MainWindow::run() {
 
     bool loadResult = entryLayout->loadUiData(m_matrixManager);
     if (!loadResult){
-        exit(-1);//todo
+        return;
     }
 
     m_matrixManager.getMatrix("matrix")->makeReducedEchelonForm();

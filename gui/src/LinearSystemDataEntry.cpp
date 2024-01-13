@@ -51,23 +51,37 @@ LinearSystemDataEntry::LinearSystemDataEntry(int numEquations, int numVars, QWid
 
 bool LinearSystemDataEntry::loadUiData(wwills2::MatrixManager &matrixManager) {
 
+    auto lineEditIt = m_lineEdits.begin();
+    std::string inputStr;
+
+    for (/*declared above*/; lineEditIt != m_lineEdits.end(); lineEditIt++){
+        inputStr = (*lineEditIt)->text().toStdString();
+
+        if (inputStr.empty()){
+            QMessageBox::information(this, tr("Empty Fields"),
+                                     tr("All coefficient fields must have a valid fraction or decimal value"));
+            return false;
+        }
+    }
+
     if (!matrixManager.hasMatrix("matrix")){
         matrixManager.createMatrix(m_matrixName, m_numEquations, m_numEdits);
     }
 
     auto matrix = matrixManager.getMatrix(m_matrixName);
     auto matrixIt = matrix->begin();
-    auto lineEditIt = m_lineEdits.begin();
+    lineEditIt = m_lineEdits.begin();
 
     for (/*declared above*/ ;matrixIt != matrix->end() && lineEditIt != m_lineEdits.end(); ++matrixIt, lineEditIt++){
 
+        inputStr = (*lineEditIt)->text().toStdString();
         try{
-            mpq_class mpq((*lineEditIt)->text().toStdString());
+            mpq_class mpq(inputStr);
             matrixIt.setCurrentElement(mpq);
         }catch (std::invalid_argument &error){
 
             // value was not entered as rational, attempt to parse as decimal
-            mpf_class mpf((*lineEditIt)->text().toStdString());
+            mpf_class mpf(inputStr);
             mpq_class mpq(mpf.get_d());
             matrixIt.setCurrentElement(mpq);
         }

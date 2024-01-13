@@ -211,11 +211,16 @@ namespace wwills2{
         //get the matrix in echelon form;
         if (!m_isEchelon){
             makeEchelonForm();
+
+            //if still not in echelon form, consider it a matrix which cannot be put in echelon form
+            if (!m_isEchelon){
+                return;
+            }
         }
 
         mpq_class factor = 0;
         mpq_class rowScalar = 0;
-        auto currPivot = m_pivotPositions[0];
+        std::pair<int, int> currPivot;
 
         //loop through pivot positions starting with the last one added / rightmost
         auto pivotIt = m_pivotPositions.rbegin();
