@@ -5,7 +5,7 @@
 #ifndef MATRIX_OPERATIONS_INTFRESULTSDISPLAY_H
 #define MATRIX_OPERATIONS_INTFRESULTSDISPLAY_H
 
-#include "../../libmatrix/MatrixManager.h"
+#include "libmatrix/MatrixManager.h"
 
 /**
  * interface to be implemented by views which display the results of an operation

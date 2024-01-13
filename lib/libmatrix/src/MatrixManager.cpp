@@ -2,8 +2,8 @@
 // Created by zan on 6/15/22.
 //
 
-#include "../MatrixManager.h"
-#include "../Matrix.h"
+#include "MatrixManager.h"
+#include "Matrix.h"
 
 namespace wwills2 {
 

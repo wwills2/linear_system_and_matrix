@@ -1,7 +1,7 @@
 
 #include <QtWidgets>
 
-#include "../include/ConfigureDialog.h"
+#include "ConfigureDialog.h"
 
 ConfigureDialog::ConfigureDialog(QWidget *parent) : QDialog(parent){
 

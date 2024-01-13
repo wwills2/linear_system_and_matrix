@@ -2,7 +2,7 @@
 // Created by zan on 10/20/23.
 //
 #include <QRegExpValidator>
-#include "../include/LinearSystemDataEntry.h"
+#include "LinearSystemDataEntry.h"
 
 #define LINE_EDIT_WIDTH 100 //pixels
 #define VALID_INPUT_REGEX "-?\\d+\\s?([\\./])?\\s?\\d*"

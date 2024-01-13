@@ -1,7 +1,7 @@
 /* this file is based on a QT example file.
  * the original header comment is included at the bottom for licensing purposes */
 
-#include "../include/NothingToShow.h"
+#include "NothingToShow.h"
 
 #include <QtWidgets>
 
