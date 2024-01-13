@@ -37,19 +37,22 @@ void MainLayout::setUpLayout(ConfigureDialog &configureDialog) noexcept(false){
             int equationCount = configureDialog.m_numEquations;
             int variableCount = configureDialog.m_numVariables;
             auto *linearSystemDataEntry = new LinearSystemDataEntry(equationCount, variableCount,
-                                                                                     m_dataEntryScrollBox->m_scrollArea);
+                                                                    m_dataEntryScrollBox->m_scrollArea);
+
             m_dataEntryIntf = linearSystemDataEntry;
             m_dataEntryScrollBox->setWidget(linearSystemDataEntry);
 
             // replace existing NothingToShow widget with the data entry widget
             addWidget(m_dataEntryScrollBox, UPPER);
 
-            // add results widget
-            auto *linearSystemResultsDisplay = new LinearSystemResultsDisplay(m_resultsScrollBox->m_scrollArea);
-            m_resultsDisplayIntf = linearSystemResultsDisplay;
-            m_resultsScrollBox->setWidget(linearSystemResultsDisplay);
-            addWidget(m_resultsScrollBox, LOWER);
-            m_layoutConfigured = true;
+            if (!m_layoutConfigured){
+                // add results widget
+                auto *linearSystemResultsDisplay = new LinearSystemResultsDisplay(m_resultsScrollBox->m_scrollArea);
+                m_resultsDisplayIntf = linearSystemResultsDisplay;
+                m_resultsScrollBox->setWidget(linearSystemResultsDisplay);
+                addWidget(m_resultsScrollBox, LOWER);
+                m_layoutConfigured = true;
+            }
         }
 
         case ConfigureDialog::ARITHMETIC:
@@ -90,6 +93,8 @@ void MainLayout::WrapperScrollBox::setWidget(QWidget *widget) noexcept(false){
 
     if (widget != nullptr && m_widgetSet) {
         //delete current widget and replace
+        auto oldWidget = m_scrollArea->takeWidget();
+        delete oldWidget;
         m_scrollArea->setWidget(widget);
     }else if (widget != nullptr){
         // widget has not been set, set it

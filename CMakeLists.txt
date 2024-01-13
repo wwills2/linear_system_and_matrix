@@ -50,7 +50,7 @@ target_include_directories(libmatrix PUBLIC ${LIBMATRIX_DIR})
 # qt gui application compilation config
 file(GLOB GUI_SOURCE ${GUI_DIR}/src/*.cpp)
 file(GLOB GUI_HEADERS ${GUI_DIR}/include/*.h)
-add_executable(qt_application main.cpp ${GUI_HEADERS} ${GUI_SOURCE})
+add_executable(qt_application gui/src/main.cpp ${GUI_HEADERS} ${GUI_SOURCE})
 target_include_directories(qt_application PRIVATE ${GUI_DIR}/include lib)
 
 # test program compilation config

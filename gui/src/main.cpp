@@ -3,7 +3,7 @@
 
 #include <QApplication>
 
-#include "gui/include/MainWindow.h"
+#include "MainWindow.h"
 #include "libmatrix/MatrixManager.h"
 
 int main(int argc, char *argv[]) {
