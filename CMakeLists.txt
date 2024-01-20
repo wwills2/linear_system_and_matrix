@@ -12,6 +12,11 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_STATIC_LIBRARY_PREFIX "")
 set(THREADS_PREFER_PTHREAD_FLAG ON)
+if (APPLE)
+    message(STATUS "Mac OS detected")
+    set(Qt5_DIR ~/Qt/5.15.2/clang_64/lib/cmake/Qt5)
+    include_directories(/usr/local/Cellar/gmp/6.2.1_1/include/)
+endif()
 
 # project directories
 set(GUI_DIR ./gui)
@@ -34,7 +39,9 @@ find_package(Qt5 COMPONENTS Widgets REQUIRED)
 find_library(GMP_LIB NAMES gmp)
 find_library(GMPXX_LIB NAMES gmpxx)
 
-if(NOT GMP_LIB OR NOT GMPXX_LIB)
+if(GMP_LIB OR GMPXX_LIB)
+    message(STATUS "GMP libraries found")
+elseif(NOT GMP_LIB OR NOT GMPXX_LIB)
     message(FATAL_ERROR "GMP libraries not found. Please check your installation.")
 endif()
 
@@ -50,7 +57,8 @@ target_include_directories(libmatrix PUBLIC ${LIBMATRIX_DIR})
 # qt gui application compilation config
 file(GLOB GUI_SOURCE ${GUI_DIR}/src/*.cpp)
 file(GLOB GUI_HEADERS ${GUI_DIR}/include/*.h)
-add_executable(qt_application gui/src/main.cpp ${GUI_HEADERS} ${GUI_SOURCE})
+add_executable(qt_application gui/src/main.cpp ${GUI_HEADERS} ${GUI_SOURCE}
+        gui/include/AppStrings.h)
 target_include_directories(qt_application PRIVATE ${GUI_DIR}/include lib)
 
 # test program compilation config
