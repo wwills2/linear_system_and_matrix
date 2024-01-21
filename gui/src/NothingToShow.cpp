@@ -9,8 +9,14 @@ NothingToShow::NothingToShow(QWidget *parent)
 {
     Q_UNUSED(parent);
 
+#ifdef LINUX_PLATFORM
     descriptionLabel = new QLabel(tr("Nothing to show.\n\n"
                                      "Select \"Configure\" under Actions on the top menu bar"));
+#elif defined(MACOS_PLATFORM)
+    descriptionLabel = new QLabel(tr("Nothing to show.\n\n"
+                                     "Select \"Configure\" under Preference on the application bar"));
+#endif
+
     descriptionLabel->setAlignment(Qt::AlignCenter);
     m_layout = new QVBoxLayout;
     m_layout->addWidget(descriptionLabel, Qt::AlignCenter);

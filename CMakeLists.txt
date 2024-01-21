@@ -12,10 +12,18 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_STATIC_LIBRARY_PREFIX "")
 set(THREADS_PREFER_PTHREAD_FLAG ON)
-if (APPLE)
+
+if (LINUX)
+    message(STATUS "Linux detected")
+    add_definitions(-DLINUX_PLATFORM)
+elseif (APPLE)
     message(STATUS "Mac OS detected")
+    add_definitions(-DMACOS_PLATFORM)
     set(Qt5_DIR ~/Qt/5.15.2/clang_64/lib/cmake/Qt5)
     include_directories(/usr/local/Cellar/gmp/6.2.1_1/include/)
+else()
+    message(WARNING "Unsupported platform detected. Attempting to compile using linux conditions")
+    add_definitions(-DLINUX_PLATFORM)
 endif()
 
 # project directories
@@ -57,8 +65,7 @@ target_include_directories(libmatrix PUBLIC ${LIBMATRIX_DIR})
 # qt gui application compilation config
 file(GLOB GUI_SOURCE ${GUI_DIR}/src/*.cpp)
 file(GLOB GUI_HEADERS ${GUI_DIR}/include/*.h)
-add_executable(qt_application gui/src/main.cpp ${GUI_HEADERS} ${GUI_SOURCE}
-        gui/include/AppStrings.h)
+add_executable(qt_application gui/src/main.cpp ${GUI_HEADERS} ${GUI_SOURCE})
 target_include_directories(qt_application PRIVATE ${GUI_DIR}/include lib)
 
 # test program compilation config
