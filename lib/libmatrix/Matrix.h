@@ -9,8 +9,11 @@
 #include <algorithm>
 #include <iterator>
 #include <memory>
+#include <vector>
 #include <stdexcept>
+#include <iostream>
 #include <gmpxx.h>
+#include <thread>
 #include "MatrixManager.h"
 
 namespace wwills2{
