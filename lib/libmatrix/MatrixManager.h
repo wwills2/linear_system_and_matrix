@@ -5,12 +5,10 @@
 #ifndef MATRIX_OPERATIONS_MATRIXMANAGER_H
 #define MATRIX_OPERATIONS_MATRIXMANAGER_H
 
-#include <vector>
+#include <memory>
 #include <map>
-#include <iostream>
 #include <string>
-#include <thread>
-#include <stdexcept>
+
 
 class TestLinearSystem;
 
